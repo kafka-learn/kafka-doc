@@ -1,0 +1,75 @@
+{
+    "plugins": [
+        "-search",
+        "-lunr",
+        "search-plus",
+        "toc2",
+        "splitter",
+        "tbfed-pagefooter",
+        "github",
+        "-sharing", 
+        "sharing-plus",
+        "expandable-chapters-small",
+        "anchor-navigation-ex",
+        "redirect",
+        "emphasize",
+        "todo",
+        "translated"
+    ],
+    "pluginsConfig": {
+        "translated": {
+            "regexp": "/[\u4e00-\u9fa5]/gi",
+            "tags": ["h1","h2","h3","h4","h5","h6","p","ol","ul","table"]
+        },
+        "expandable-chapters-small":{
+        },
+        "anchor-navigation-ex":{
+            "associatedWithSummary":false,
+            "showLevel":false,
+            "multipleH1":true,
+            "mode":"float",
+            "pageTop":{
+                "showLevelIcon":false,
+                "level1Icon":"fa fa-hand-o-right",
+                "level2Icon":"fa fa-hand-o-right",
+                "level3Icon":"fa fa-hand-o-right"
+            }
+        },
+        "toc2": {
+            "addClass": true,
+            "className": "toc"
+        },
+        "tbfed-pagefooter": {
+            "copyright": "&copy; apache",
+            "modify_label": "modyfied at：",
+            "modify_format": "YYYY-MM-DD HH:mm:ss"
+        },
+        "github": {
+            "url": "https://github.com/doctording/kakfa-doc"
+        },
+        "sharing": {
+            "douban": false,
+            "facebook": false,
+            "google": true,
+            "hatenaBookmark": false,
+            "instapaper": false,
+            "line": true,
+            "linkedin": true,
+            "messenger": false,
+            "pocket": false,
+            "qq": false,
+            "qzone": true,
+            "stumbleupon": false,
+            "twitter": false,
+            "viber": false,
+            "vk": false,
+            "weibo": true,
+            "whatsapp": false,
+            "all": [
+                "facebook", "google", "twitter",
+                "weibo", "instapaper", "linkedin",
+                "pocket", "stumbleupon"
+            ]
+        }
+    }
+}
