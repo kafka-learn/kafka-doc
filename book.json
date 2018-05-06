@@ -45,7 +45,7 @@
             "modify_format": "YYYY-MM-DD HH:mm:ss"
         },
         "github": {
-            "url": "https://github.com/doctording/kakfa-doc"
+            "url": "https://github.com/kafka-learn/kafka-doc"
         },
         "sharing": {
             "douban": false,
