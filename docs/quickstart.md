@@ -3,19 +3,19 @@
 
 # 快速开始
 
-This tutorial assumes you are starting fresh and have no existing Kafka or ZooKeeper data. Since Kafka console scripts are different for Unix-based and Windows platforms, on Windows platforms use bin\windows\ instead of bin/, and change the script extension to .bat.
+This tutorial assumes you are starting fresh and have no existing Kafka or ZooKeeper data. Since Kafka console scripts are different for Unix-based and Windows platforms, on Windows platforms use```bin\windows\``` instead of ```bin/```, and change the script extension to ```.bat```.
 
-本教程假定您刚开始使用Kafka并且本地没有存在的Kafka或ZooKeeper数据。由于Unix-based和Windows平台的Kafka控制台脚本是不同的，所以在Windows平台上使用 bin\windows\ 而不是 bin/，并且需要将脚本扩展名更改为.bat。
+本教程假定您刚开始使用Kafka并且本地没有存在的Kafka或ZooKeeper数据。由于Unix-based和Windows平台的Kafka控制台脚本是不同的，所以在Windows平台上使用```bin\windows\```而不是```bin/```，并且需要将脚本扩展名更改为```.bat```。
 
 ## Step 1: Download the code
 
-## 第一步：下载kafka代码
+## 第一步：下载Kafka代码
 
 [Download](https://www.apache.org/dyn/closer.cgi?path=/kafka/1.1.0/kafka_2.11-1.1.0.tgz) the 1.1.0 release and un-tar it.
 
 [下载](https://www.apache.org/dyn/closer.cgi?path=/kafka/1.1.0/kafka_2.11-1.1.0.tgz) 1.1.0 release版本，并解压它
 
-```
+```bash
 > tar -xzf kafka_2.11-1.1.0.tgz
 > cd kafka_2.11-1.1.0
 ```
@@ -24,12 +24,12 @@ This tutorial assumes you are starting fresh and have no existing Kafka or ZooKe
 
 ## 第二步：启动Kafka服务端
 
-Kafka uses ZooKeeper so you need to first start a ZooKeeper server if you don't already have one. You can use the convenience script packaged with kafka to get a quick-and-dirty single-node ZooKeeper instance.
+Kafka uses [ZooKeeper](https://zookeeper.apache.org/) so you need to first start a ZooKeeper server if you don't already have one. You can use the convenience script packaged with kafka to get a quick-and-dirty single-node ZooKeeper instance.
 
-Kafka使用了ZooKeeper，因此如果您还没有ZooKeeper服务器，您需要首先启动一个ZooKeeper服务器。您可以使用与kafka打包在一起的便捷脚本来获得快速且简单的单节点ZooKeeper实例。
+Kafka使用了[ZooKeeper](https://zookeeper.apache.org/)，因此如果您还没有ZooKeeper服务器，您需要首先启动一个ZooKeeper服务器。您可以使用与kafka打包在一起的便捷脚本来获得快速且简单的单节点ZooKeeper实例。
 
 
-```
+```bash
 > bin/zookeeper-server-start.sh config/zookeeper.properties
 [2013-04-22 15:01:37,495] INFO Reading configuration from: config/zookeeper.properties (org.apache.zookeeper.server.quorum.QuorumPeerConfig)
 ...
@@ -39,7 +39,7 @@ Now start the Kafka server:
 
 然后开启Kafka服务：
 
-```
+```bash
 > bin/kafka-server-start.sh config/server.properties
 [2013-04-22 15:01:47,028] INFO Verifying properties (kafka.utils.VerifiableProperties)
 [2013-04-22 15:01:47,051] INFO Property socket.send.buffer.bytes is overridden to 1048576 (kafka.utils.VerifiableProperties)
@@ -48,21 +48,21 @@ Now start the Kafka server:
 
 ## Step 3: Create a topic
 
-## 第三步：创建topic
+## 第三步：创建主题
 
 Let's create a topic named "test" with a single partition and only one replica:
 
-让我们创建一个名称为“test”的主题，并且其是单分区且只有一个副本
+让我们创建一个名称为“test”的主题，并且其是单分区且只有一个副本：
 
-```
+```bash
 > bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 ```
 
 We can now see that topic if we run the list topic command:
 
-我们可以通过运行如下的list topic命令查看该主题
+我们可以通过运行查看主题列表的命令来看到该主题：
 
-```
+```bash
 > bin/kafka-topics.sh --list --zookeeper localhost:2181
 test
 ```
@@ -83,7 +83,7 @@ Run the producer and then type a few messages into the console to send to the se
 
 运行生产者，然后在控制台中输入几条消息发送到服务器。
 
-```
+```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
 This is a message
 This is another message
@@ -97,7 +97,7 @@ Kafka also has a command line consumer that will dump out messages to standard o
 
 Kafka也有一个命令行消费者，能将消息转储到标准输出。
 
-```
+```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 This is a message
 This is another message
@@ -111,27 +111,26 @@ All of the command line tools have additional options; running the command with 
 
 所有的命令行工具都有附加的选项; 在没有参数的情况下运行这些命令将更详细的显示它们的使用信息。
 
-
 ## Step 6: Setting up a multi-broker cluster
 
 ## 第六步：设置多代理集群
 
 So far we have been running against a single broker, but that's no fun. For Kafka, a single broker is just a cluster of size one, so nothing much changes other than starting a few more broker instances. But just to get feel for it, let's expand our cluster to three nodes (still all on our local machine).
 
-到目前为止，我们的运行一直都是单代理，但这不太有趣。 对于Kafka来说，单代理即一个单节点的集群，所以没有太大的变化，除非启动多个代理实例。 但为了体验下多代理，我们将集群扩展为三个节点（仍然都在本地机器上）。
+到目前为止，我们的运行一直都是单代理，但这不太有趣。对于Kafka来说，单代理即一个节点的集群，所以没有太大的变化，除非启动多个代理实例。但为了体验下多代理，我们将集群扩展为三个节点（仍然都在本地机器上）。
 
-First we make a config file for each of the brokers (on Windows use the copy command instead):
+First we make a config file for each of the brokers (on Windows use the ```copy``` command instead):
 
-首先，我们为每个代理创建一个配置文件（在Windows上使用copy命令）：
+首先，我们为每个代理创建一个配置文件（在Windows上使用```copy```命令）：
 
-```
+```bash
 > cp config/server.properties config/server-1.properties
 > cp config/server.properties config/server-2.properties
 ```
 
 Now edit these new files and set the following properties:
 
-修改其中的配置内容
+修改其中的配置内容：
 
 ```
 config/server-1.properties:
@@ -149,13 +148,13 @@ config/server-2.properties:
 
 The broker.id property is the unique and permanent name of each node in the cluster. We have to override the port and log directory only because we are running these all on the same machine and we want to keep the brokers from all trying to register on the same port or overwrite each other's data.
 
-broker.id属性是集群中每个节点的唯一且永久的名称。我们还必须覆盖端口和日志目录，因为我们在同一台机器上运行这些端口和日志目录，并且我们希望让所有代理都试图在同一个端口注册或覆盖彼此的数据。
+broker.id 属性是集群中每个节点的唯一且永久的名称。我们还必须覆盖端口和日志目录，因为我们在同一台机器上运行这些端口和日志目录，并且我们希望让所有代理都试图在同一个端口注册或覆盖彼此的数据。
 
 We already have Zookeeper and our single node started, so we just need to start the two new nodes:
 
-我们已经有Zookeeper和我们的单个节点，所以我们只需要启动两个新节点：
+我们已经配置了Zookeeper并且启动了我们的单个服务器节点，所以我们只需要启动两个新节点：
 
-```
+```bash
 > bin/kafka-server-start.sh config/server-1.properties &
 ...
 > bin/kafka-server-start.sh config/server-2.properties &
@@ -166,7 +165,7 @@ Now create a new topic with a replication factor of three:
 
 现在创建一个带有三个备份因子的新主题：
 
-```
+```bash
 > bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic my-replicated-topic
 ```
 
@@ -174,7 +173,7 @@ Okay but now that we have a cluster how can we know which broker is doing what? 
 
 好吧，但现在我们有一个集群，我们怎么知道哪个代理在做什么？这需要运行“描述主题”命令去查看：
 
-```
+```bash
 > bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic
 Topic:my-replicated-topic   PartitionCount:1    ReplicationFactor:3 Configs:
     Topic: my-replicated-topic  Partition: 0    Leader: 1   Replicas: 1,2,0 Isr: 1,2,0
@@ -191,7 +190,7 @@ Here is an explanation of output. The first line gives a summary of all the part
 * "isr" is the set of "in-sync" replicas. This is the subset of the replicas list that is currently alive and caught-up to the leader.
 
 
-* "领导者”是负责给定分区的所有读写操作的节点。每个节点将随机的被选择成为某些分区的领导者。
+* “领导者”是负责给定分区的所有读写操作的节点。每个节点将随机的被选择成为某些分区的领导者。
 
 * “副本”是复制此分区日志的节点列表，无论该副本是领导者，还是当前仍存活着的。
 
@@ -203,9 +202,9 @@ Note that in my example node 1 is the leader for the only partition of the topic
 
 We can run the same command on the original topic we created to see where it is:
 
-我们可以在我们创建的最开始的那个主题上运行同样的命令，以查看它的信息：
+我们可以在最开始创建的那个主题上运行同样的命令，以查看它的信息：
 
-``` 
+```bash
 > bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic test
 Topic:test  PartitionCount:1    ReplicationFactor:1 Configs:
     Topic: test Partition: 0    Leader: 0   Replicas: 0 Isr: 0
@@ -213,13 +212,13 @@ Topic:test  PartitionCount:1    ReplicationFactor:1 Configs:
 
 So there is no surprise there—the original topic has no replicas and is on server 0, the only server in our cluster when we created it.
 
-所以在这里并不奇怪 - 最开始的那个主题没有副本，其在服务器0上，该服务器是我们创建集群时唯一的服务器。
+所以在这里并不奇怪-最开始的那个主题没有副本，其在服务器0上，该服务器是我们创建集群时唯一的服务器。
 
 Let's publish a few messages to our new topic:
 
 让我们发布一些消息给我们的新主题：
 
-```
+```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic my-replicated-topic
 ...
 my test message 1
@@ -229,9 +228,9 @@ my test message 2
 
 Now let's consume these messages:
 
-现在让我们来消费这些消息
+现在让我们来消费这些消息：
 
-```
+```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic my-replicated-topic
 ...
 my test message 1
@@ -241,9 +240,9 @@ my test message 2
 
 Now let's test out fault-tolerance. Broker 1 was acting as the leader so let's kill it:
 
-现在我们来测试容错。 代理1充当领导者，所以让我们杀死它：
+现在我们来测试容错。代理1充当领导者，所以让我们杀死它：
 
-```
+```bash
 > ps aux | grep server-1.properties
 7564 ttys002    0:15.91 /System/Library/Frameworks/JavaVM.framework/Versions/1.8/Home/bin/java...
 > kill -9 7564
@@ -253,7 +252,7 @@ Leadership has switched to one of the slaves and node 1 is no longer in the in-s
 
 领导者已切换成其中一个从属节点，并且节点1不再处于同步副本集中：
 
-```
+```bash
 > bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic
 Topic:my-replicated-topic   PartitionCount:1    ReplicationFactor:3 Configs:
     Topic: my-replicated-topic  Partition: 0    Leader: 2   Replicas: 1,2,0 Isr: 2,0
@@ -263,7 +262,7 @@ But the messages are still available for consumption even though the leader that
 
 即使原先的领导者写入失败，这些消息仍然可用于消费：
 
-```
+```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --from-beginning --topic my-replicated-topic
 ...
 my test message 1
@@ -287,15 +286,15 @@ First, we'll start by creating some seed data to test with:
 
 首先，我们将通过创建一些种子数据来开始测试：
 
-```
+```bash
 echo -e "foo\nbar" > test.txt
 ```
 
 Or on Windows:
 
-或者在Window系统上
+或者在Window系统上：
 
-```
+```bash
 > echo foo> test.txt
 > echo bar>> test.txt
 ```
@@ -304,7 +303,7 @@ Next, we'll start two connectors running in standalone mode, which means they ru
 
 接下来，我们将启动两个以独立模式运行的连接器，这意味着它们将在单个、本地的专用进程中运行。我们提供三个配置文件作为参数。首先是Kafka Connect过程的配置，包含常见的配置，例如要连接的Kafka代理和数据的序列化格式。其余的配置文件都指定了要创建的连接器。这些文件包括唯一的连接器名称，要实例化的连接器类以及连接器所需的任何其他配置。
 
-```
+```bash
 > bin/connect-standalone.sh config/connect-standalone.properties config/connect-file-source.properties config/connect-file-sink.properties
 ```
 
@@ -312,21 +311,21 @@ These sample configuration files, included with Kafka, use the default local clu
 
 Kafka附带的这些示例配置文件使用您之前启动的默认本地群集配置，并创建两个连接器：第一个源连接器，从输入文件中读取行，并将数据生产到Kafka主题，第二个连接器为接收连接器，它读取来自Kafka主题的消息，并在输出文件中将每个消息生成为一行。
 
-During startup you'll see a number of log messages, including some indicating that the connectors are being instantiated. Once the Kafka Connect process has started, the source connector should start reading lines from test.txt and producing them to the topic connect-test, and the sink connector should start reading messages from the topic connect-test and write them to the file test.sink.txt. We can verify the data has been delivered through the entire pipeline by examining the contents of the output file:
+During startup you'll see a number of log messages, including some indicating that the connectors are being instantiated. Once the Kafka Connect process has started, the source connector should start reading lines from ```test.txt``` and producing them to the topic ```connect-test```, and the sink connector should start reading messages from the topic ```connect-test``` and write them to the file ```test.sink.txt```. We can verify the data has been delivered through the entire pipeline by examining the contents of the output file:
 
-在启动过程中，您会看到许多日志消息，包括一些指示连接器正在实例化的消息。一旦Kafka Connect进程启动，源连接器会从test.txt开始读取行并将其生成到主题connect-test，并且接收连接器会开始读取主题connect-test中的消息并将它们写入文件test.sink.txt。我们可以通过检查输出文件的内容来验证通过整个数据管道的传输：
+在启动过程中，您会看到许多日志消息，包括一些指示连接器正在实例化的消息。一旦Kafka Connect进程启动，源连接器会从```test.txt```开始读取行并将其生成到主题```connect-test```，并且接收连接器会开始读取主题```connect-test```中的消息并将它们写入文件```test.sink.txt```。我们可以通过检查输出文件的内容来验证通过整个数据管道的传输：
 
-```
+```bash
 > more test.sink.txt
 foo
 bar
 ```
 
-Note that the data is being stored in the Kafka topic connect-test, so we can also run a console consumer to see the data in the topic (or use custom consumer code to process it):
+Note that the data is being stored in the Kafka topic ```connect-test```, so we can also run a console consumer to see the data in the topic (or use custom consumer code to process it):
 
-注意到数据存储在Kafka主题连接测试中，因此我们还可以运行消费者控制台以查看主题中的数据（或使用自定义的消费者代码来处理它）：
+注意到数据存储在Kafka主题```connect-test```中，因此我们还可以运行消费者控制台以查看主题中的数据（或使用自定义的消费者代码来处理它）：
 
-```
+```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic connect-test --from-beginning
 {"schema":{"type":"string","optional":false},"payload":"foo"}
 {"schema":{"type":"string","optional":false},"payload":"bar"}
@@ -337,7 +336,7 @@ The connectors continue to process data, so we can add data to the file and see 
 
 连接器继续处理数据，所以我们可以将数据添加到文件中，并能看到它在整个管道中的移动：
 
-```
+```bash
 > echo Another line>> test.txt
 ```
 

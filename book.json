@@ -1,4 +1,7 @@
 {
+    "styles": {
+        "website": "styles/website.css"
+    },
     "plugins": [
         "-search",
         "-lunr",
@@ -14,9 +17,25 @@
         "redirect",
         "emphasize",
         "todo",
-        "translated"
+        "translated",
+        "image-captions",
+        "prism",
+        "-highlight",
+        "book-summary-scroll-position-saver",
+        "include-codeblock",
+        "ace"
     ],
     "pluginsConfig": {
+        "include-codeblock": {
+            "template": "ace",
+            "unindent": true,
+            "edit": true
+        },
+        "prism": {
+            "css": [
+                "prismjs/themes/prism-tomorrow.css"
+            ]
+        },
         "translated": {
             "regexp": "/[\u4e00-\u9fa5]/gi",
             "tags": ["h1","h2","h3","h4","h5","h6","p","ol","ul","table"]
