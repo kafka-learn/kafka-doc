@@ -10,11 +10,14 @@
 * Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费
 
 ![](./imgs/intro_point_to_point.png)
+
 ### 发布/订阅：
 
 消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。
 
 ![](./imgs/intro_publish_subscribe.png)
+
+## A streaming platform has three key capabilities:
 
 ## 一个流平台有三个关键要素：
 
@@ -30,21 +33,25 @@
 
     即时处理记录流
 
-## Kafka主要应用在两类场景
+## Kafka is generally used for two broad classes of applications:
 
-1. Building real-time streaming data pipelines that reliably get data between systems or applications
+## Kafka主要应用在两类场景:
+
+* Building real-time streaming data pipelines that reliably get data between systems or applications
 
     建立实时流数据管道，可靠地在系统和应用之间获取传输数据
 
-2. Building real-time streaming applications that transform or react to the streams of data
+* Building real-time streaming applications that transform or react to the streams of data
 
     建立实时流应用，能传输和响应数据流
     
-3. 其他：活动跟踪、度量指标和日志记录、提交日志等
+* 其他：活动跟踪、度量指标和日志记录、提交日志等
 
 ---
 
-## Kafka相关概念
+## First a few concepts:
+
+## Kafka相关概念:
 
 * Kafka is run as a cluster on one or more servers that can span multiple datacenters.
 
@@ -52,7 +59,7 @@
 
 * The Kafka cluster stores streams of records in categories called topics.
 
-    Kafka 集群存储数据流记录（record）按主题分类，称之为topics
+    Kafka 集群按照主题存储数据流记录（record）
 
 * Each record consists of a key, a value, and a timestamp.
 
@@ -60,11 +67,13 @@
 
 ---
 
-## Kafka 有4个核心APIs
+## Kafka has four core APIs:
+
+## Kafka 有4个核心APIs:
 
 * The Producer API allows an application to publish a stream of records to one or more Kafka topics.
 
-    Porducer API(生产者API)允许应用发布一个流记录到一个或多个Kafka topics中
+    Porducer API(生产者API)允许应用发布一个流记录到一个或多个Kafka主题中
 
 * The Consumer API allows an application to subscribe to one or more topics and process the stream of records produced to them.
 
@@ -85,28 +94,38 @@
 Kafka客户端和服务端之间的通信是建立在简单的、高效的、语言无关的TCP协议上的。此协议带有版本且向后兼容。我们为Kafka提供了Java客户端，但是客户端可以使用多种语言。
 
 ## Kafka的一些基本术语
+
 ### Topic
+
 可以理解为一个队列，Kafka将消息种子（Feed）分门别类，每一类的消息称之为一个主题（Topic）
 
 ### Broker
+
 已发布的消息保存在一组服务器中，称之为Kafka集群。集群中的每一个服务器都是一个代理(Broker)。消费者可以订阅一个或多个主题（topic），并从Broker拉数据，从而消费这些已发布的消息。
 
 ### Producer
+
 消息生产者，就是向Kafka broker发消息的客户端
 
 ### Consumer
+
 消息消费者，就是向Kafka broker取消息的客户端
 
 ### Consumer Group （CG）
+
 这是Kafka用来实现一个topic消息的广播（发给所有的consumer）和单播（发给任意一个consumer）的手段。一个topic可以有多个CG。topic的消息会复制（不是真的复制，是概念上的）到所有的CG，但每个CG只会把消息发给该CG中的一个consumer。如果需要实现广播，只要每个consumer有一个独立的CG就可以了。要实现单播只要所有的consumer在同一个CG。用CG还可以将consumer进行自由的分组而不需要多次发送消息到不同的topic。
 
 ### Partition
+
 为了实现扩展性，一个非常大的topic可以分布到多个broker（即服务器）上，一个topic可以分为多个partition，每个partition是一个有序的队列。partition中的每条消息都会被分配一个有序的id（offset）。Kafka只保证按一个partition中的顺序将消息发给consumer，不保证一个topic的整体（多个partition间）的顺序。
 
 ### Offset
+
 Kafka的存储文件都是按照offset.Kafka来命名，用offset做名字的好处是方便查找。例如你想找位于2049的位置，只要找到2048.Kafka的文件即可。当然the first offset就是00000000000.Kafka
 
-## 主题和日志（Topics and Logs）
+## Topics and Logs
+
+## 主题和日志
 
 一个topic是一个数据流记录（records）的提供者。Kafka中的topics一般是多订阅者的，即一个Topic可以有0个，1个，多个Consumer消费者订阅。
 
@@ -136,7 +155,9 @@ The partitions in the log serve several purposes. First, they allow the log to s
 
 日志划分分区有多个目的。第一，可以处理更多的消息，不受单台服务器的限制。每一个分区partition会适应服务器的大小，一个topic可能会有多个分区，所以Kafka可以处理任意大小的数据。第二，分区可以作为并行处理的单元
 
-## 分布式(Distribution)
+## Distribution
+
+## 分布式
 
 The partitions of the log are distributed over the servers in the Kafka cluster with each server handling data and requests for a share of the partitions. Each partition is replicated across a configurable number of servers for fault tolerance.
 
@@ -146,20 +167,25 @@ Each partition has one server which acts as the "leader" and zero or more server
 
 每个分区都有一个服务器充当leader，零个或多个服务器充当follower。leader处理对分区所有的读写请求，followers就会被动复制这个leader。如果leader宕机，其中一个follower会被推举为新的leader。一台服务器可以同时是一个分区的leader，另一个分区的follower，这样可以平衡负载，避免所有请求都只让一台或者某几台处理。
 
-## 异地数据同步技术（Geo-Replication）
+## Geo-Replication
+
+## 异地数据同步技术
 
 Kafka MirrorMaker provides geo-replication support for your clusters. With MirrorMaker, messages are replicated across multiple datacenters or cloud regions. You can use this in active/passive scenarios for backup and recovery; or in active/active scenarios to place data closer to your users, or support data locality requirements.
 
 Kafka MirrorMaker为集群提供异地数据同步支持。通过MirrorMaker，消息可以跨多个数据中心或者云区域进行复制。您可以在active/passive场景中进行备份或恢复；或者在active/passive方案中将数据置于更接近用户的位置，或者支持数据本地化。
 
+## Producer
 
-## 生产者（Producer）
+## 生产者
 
 Producers publish data to the topics of their choice. The producer is responsible for choosing which record to assign to which partition within the topic. This can be done in a round-robin fashion simply to balance load or it can be done according to some semantic partition function (say based on some key in the record). More on the use of partitioning in a second!
 
 生产者向所选的主题上发布消息。生产者负责选择哪个消息分配到指定主题的哪个分区中。最简单的方式是从分区列表中轮流选择，或可以根据一些语义分区函数来确定记录到哪个分区上（例如根据消息中的key进行划分）。
 
-## 消费者 (Consumers)
+## Consumers
+
+## 消费者 
 
 Consumers label themselves with a consumer group name, and each record published to a topic is delivered to one consumer instance within each subscribing consumer group. Consumer instances can be in separate processes or on separate machines.
 
@@ -191,15 +217,17 @@ Kafka only provides a total order over records within a partition, not between d
 
 Kafka只保证同一个分区内消息的顺序，而不能确保同一个topic的不同分区间数据的顺序。因为主题分区中的消息只能由消费者组中的唯一一个消费者进行处理，所以消息肯定是按照先后顺序进行处理的。但是它也仅仅是保证主题的一个分区顺序处理，不能保证跨分区的消息先后进行处理。如果需要按顺序处理所有的消息，可以使用只有一个分区的主题，这意味着每个消费者组只能有一个消费者实例。
 
+## Multi-tenancy
 
-## 多租户架构 (Multi-tenancy)
+## 多租户架构
 
 You can deploy Kafka as a multi-tenant solution. Multi-tenancy is enabled by configuring which topics can produce or consume data. There is also operations support for quotas. Administrators can define and enforce quotas on requests to control the broker resources that are used by clients. For more information, see the **security documentation**.
 
 您可以将Kafka部署为一个多租户方案。其实现是将主题配置为既可以生产又可以消费数据。此外，还对指标进行业务支持。管理员可以定义或者请求指标来控制客户端使用的代理资源。进一步的了解，可以访问安全手册。
 
+## Guarantees
 
-## 保证（Guarantees）
+## 保证
 
 At a high-level Kafka gives the following guarantees:
 
@@ -220,7 +248,9 @@ At a high-level Kafka gives the following guarantees:
 
 ----
 
-## Kafka作为一个消息系统（Kafka as a Messaging System）
+## Kafka as a Messaging System
+
+## Kafka作为一个消息系统
 
 Messaging traditionally has two models: queuing and publish-subscribe. In a queue, a pool of consumers may read from a server and each record goes to one of them; in publish-subscribe the record is broadcast to all consumers. Each of these two models has a strength and a weakness. The strength of queuing is that it allows you to divide up the processing of data over multiple consumer instances, which lets you scale your processing. Unfortunately, queues aren't multi-subscriber—once one process reads the data it's gone. Publish-subscribe allows you broadcast data to multiple processes, but has no way of scaling processing since every message goes to every subscriber.
 
@@ -228,7 +258,7 @@ Messaging traditionally has two models: queuing and publish-subscribe. In a queu
 
 The consumer group concept in Kafka generalizes these two concepts. As with a queue the consumer group allows you to divide up processing over a collection of processes (the members of the consumer group). As with publish-subscribe, Kafka allows you to broadcast messages to multiple consumer groups.
 
-Kafka中的消费者组有两个新概念：数据处理可以通过消费者组分发给多个进程（即消费者组中的多个消费者进程，如同队列模型一样）。同时如同发布/订阅模型一样，kafk允许广播消息到多个消费者组中。
+Kafka中的消费者组有两个新概念：数据处理可以通过消费者组分发给多个进程（即消费者组中的多个消费者进程，如同队列模型一样）。同时如同发布/订阅模型一样，Kafka允许广播消息到多个消费者组中。
 
 The advantage of Kafka's model is that every topic has both these properties—it can scale processing and is also multi-subscriber—there is no need to choose one or the other.
 
@@ -236,7 +266,7 @@ Kafka 兼容了 队列 和 发布/订阅 两个模型中的优势：数据规模
 
 Kafka has stronger ordering guarantees than a traditional messaging system, too.
 
-Kafka 与传统消息模型相比，其还能确保消息的顺序
+Kafka与传统的消息模型相比，其能更好的确保消息的顺序。
 
 A traditional queue retains records in-order on the server, and if multiple consumers consume from the queue then the server hands out records in the order they are stored. However, although the server hands out records in order, the records are delivered asynchronously to consumers, so they may arrive out of order on different consumers. This effectively means the ordering of the records is lost in the presence of parallel consumption. Messaging systems often work around this by having a notion of "exclusive consumer" that allows only one process to consume from a queue, but of course this means that there is no parallelism in processing.
 
@@ -244,36 +274,42 @@ A traditional queue retains records in-order on the server, and if multiple cons
 
 Kafka does it better. By having a notion of parallelism—the partition—within the topics, Kafka is able to provide both ordering guarantees and load balancing over a pool of consumer processes. This is achieved by assigning the partitions in the topic to the consumers in the consumer group so that each partition is consumed by exactly one consumer in the group. By doing this we ensure that the consumer is the only reader of that partition and consumes the data in order. Since there are many partitions this still balances the load over many consumer instances. Note however that there cannot be more consumer instances in a consumer group than partitions.
 
-kafka做的更好。通过并行topic的parition —— kafka提供了顺序保证和负载均衡。每个partition仅由同一个消费者组中的一个消费者消费到。并确保消费者是该partition的唯一消费者，并按顺序消费数据。每个topic有多个分区，则需要对多个消费者做负载均衡，但请注意，相同的消费者组中不能有比分区更多的消费者，否则多出的消费者一直处于空等待，不会收到消息。
+Kafka在这方面做的更好。通过在主题内部使用一个并行机制-即分区（partion）, Kafka提供了顺序保证和负载均衡。每个partition仅由同一个消费者组中的一个消费者消费到。并确保消费者是该partition的唯一消费者，并按顺序消费数据。每个topic有多个分区，则需要对多个消费者做负载均衡，但请注意，相同的消费者组中不能有比分区更多的消费者，否则多出的消费者一直处于空等待，不会收到消息。
 
+## Kafka as a Storage System
 
-## Kafka作为一个存储系统（Kafka as a Storage System）
+## Kafka作为一个存储系统
 
 Any message queue that allows publishing messages decoupled from consuming them is effectively acting as a storage system for the in-flight messages. What is different about Kafka is that it is a very good storage system.
 
-所有发布消息和消费消息解耦的消息队列，实际上都充当了一个存储系统（发布的消息先存储起来）。Kafka比别的系统的优势是它是一个非常高性能的存储系统。
+只要能从其消费的消息中分离出能发布的消息，任何一个消息队列都可以有效的充当一个动态消息的存储系统。与之不同的是，Kafka是一个非常好的存储系统。
 
 Data written to Kafka is written to disk and replicated for fault-tolerance. Kafka allows producers to wait on acknowledgement so that a write isn't considered complete until it is fully replicated and guaranteed to persist even if the server written to fails.
 
-写入到Kafka的数据将写到磁盘并复制到集群中保证容错性。并允许生产者等待消息应答，直到消息完全写入。
+写入到Kafka的数据会被写入磁盘并备份到集群中以保证容错性。Kafka允许生产者等待消息确认，所以对于一次写入操作，只有当所有数据都写完，才是完整的，并且即使服务器写入失败，Kafka也能确保数据的持久性，
 
 The disk structures Kafka uses scale well—Kafka will perform the same whether you have 50 KB or 50 TB of persistent data on the server.
 
-Kafka的磁盘结构 - 无论你服务器上有50KB或50TB，执行性能是相同的。
+Kafka的磁盘结构适合处理大规模数据，无论你服务器上的持久化数据是50KB还是50TB，执行性能是相同的。
 
 As a result of taking storage seriously and allowing the clients to control their read position, you can think of Kafka as a kind of special purpose distributed filesystem dedicated to high-performance, low-latency commit log storage, replication, and propagation.
 
-客户端来控制读取数据的位置。你还可以认为Kafka是一种专用于高性能，低延迟，提交日志存储，复制，和传播特殊用途的分布式文件系统。
+由于Kafka对存储的严格要求，并且允许客户端控制数据的读取位置，所以您可以将Kafka视为一个拥有高性能、低延迟的提交日志存储，备份和传播等特点的特殊的分布式文件系统。
 
+For details about the Kafka's commit log storage and replication design, please read this page.
 
-## Kafka的流处理（Kafka for Stream Processing）
+如果想了解更多关于Kafka日志提交存储和副本设计方面的细节，请阅读此页。
+
+## Kafka for Stream Processing
+
+## Kafka的流处理
 It isn't enough to just read, write, and store streams of data, the purpose is to enable real-time processing of streams.
 
-仅仅读，写和存储是不够的，kafka的目标是实时的流处理。
+仅仅读、写和存储是不够的，kafka的目标是实时的流处理。
 
 In Kafka a stream processor is anything that takes continual streams of data from input topics, performs some processing on this input, and produces continual streams of data to output topics.
 
-在Kafka中，流处理持续获取输入主题的数据，进行处理加工，然后写入输出topic。
+在Kafka中，流处理持续获取输入主题的数据，进行处理加工，然后写入到输出主题。
 
 For example, a retail application might take in input streams of sales and shipments, and output a stream of reorders and price adjustments computed off this data.
 
@@ -281,17 +317,19 @@ For example, a retail application might take in input streams of sales and shipm
 
 It is possible to do simple processing directly using the producer and consumer APIs. However for more complex transformations Kafka provides a fully integrated Streams API. This allows building applications that do non-trivial processing that compute aggregations off of streams or join streams together.
 
-可以直接使用producer和consumer API进行简单的处理。对于复杂的转换，Kafka提供了更强大的Streams API。可构建聚合计算或连接流到一起的复杂应用程序。
+可以直接使用producer和consumer API进行简单的处理。对于复杂的转换，Kafka提供了更强大的Streams API。可以构建对流进行聚合计算或连接等复杂处理操作的应用。
 
 This facility helps solve the hard problems this type of application faces: handling out-of-order data, reprocessing input as code changes, performing stateful computations, etc.
 
-有助于解决此类应用面临的硬性问题：处理无序的数据，代码更改的再处理，执行状态计算等。
+该流处理工具有助于解决此类应用面临的硬性问题：无序的数据的处理，代码更改后的输入数据的再处理，执行状态的计算等。
 
 The streams API builds on the core primitives Kafka provides: it uses the producer and consumer APIs for input, uses Kafka for stateful storage, and uses the same group mechanism for fault tolerance among the stream processor instances.
 
-Streams API在Kafka中的核心：使用producer和consumer API作为输入，利用Kafka做状态存储，使用相同的组机制在stream处理器实例之间进行容错保障。
+Streams API构建在Kafka的核心基元上：使用producer和consumer API作为输入，利用Kafka做状态存储，使用相同的组机制在stream处理器实例之间进行容错保障。
 
-## 拼在一起（Putting the Pieces Together）
+## Putting the Pieces Together
+
+## 将碎片化数据整合
 
 This combination of messaging, storage, and stream processing may seem unusual but it is essential to Kafka's role as a streaming platform.
 
@@ -299,20 +337,20 @@ This combination of messaging, storage, and stream processing may seem unusual b
 
 A distributed file system like HDFS allows storing static files for batch processing. Effectively a system like this allows storing and processing historical data from the past.
 
-像HDFS这样的分布式文件系统允许存储静态文件进行批处理。这样的话系统可以有效地存储和处理历史数据。
+像HDFS这样的分布式文件系统允许存储静态文件进行批处理，这样的话系统可以有效地存储和处理历史数据。
 
 A traditional enterprise messaging system allows processing future messages that will arrive after you subscribe. Applications built in this way process future data as it arrives.
 
-传统企业的消息系统允许在你订阅之后处理未来的消息：在未来数据到达时处理它。
+传统企业的消息系统允许在你订阅之后处理才到达的消息：以这种方式建立的应用会在这些消息到来时去处理它。
 
 Kafka combines both of these capabilities, and the combination is critical both for Kafka usage as a platform for streaming applications as well as for streaming data pipelines.
 
-Kafka结合了这两种能力，这种组合对于kafka作为流处理应用和流数据管道平台是至关重要的。
+Kafka结合了这些优势，这种组合对于Kafka作为流处理应用和流数据管道平台是至关重要的。
 
 By combining storage and low-latency subscriptions, streaming applications can treat both past and future data the same way. That is a single application can process historical, stored data but rather than ending when it reaches the last record it can keep processing as future data arrives. This is a generalized notion of stream processing that subsumes batch processing as well as message-driven applications.
 
-批处理以及消息驱动应用程序的流处理的概念：通过组合存储和低延迟订阅，流处理应用可以用相同的方式对待过去和未来的数据。它是一个单一的应用程序，它可以处理历史的存储数据，当它处理到最后一个消息时，它进入等待未来的数据到达，而不是结束。
+批处理以及消息驱动应用程序的流处理的概念：即通过组合存储和低延迟订阅，流处理应用可以用相同的方式对待过去和还未到达的数据。它是一个单一的应用程序，即它可以处理历史的存储数据，当它处理到最后一个消息时，它进入还未到达消息的等待，而不是结束。
 
 Likewise for streaming data pipelines the combination of subscription to real-time events make it possible to use Kafka for very low-latency pipelines; but the ability to store data reliably make it possible to use it for critical data where the delivery of data must be guaranteed or for integration with offline systems that load data only periodically or may go down for extended periods of time for maintenance. The stream processing facilities make it possible to transform data as it arrives.
 
-同样，对于流数据管道，结合实时事件的订阅，可将Kafka用做低延迟的管道；但是，可靠地存储数据的能力使得它可以将其用于必须保证传递的关键数据，或与仅定期加载数据或长时间维护的离线系统集成在一起。流处理可以在数据到达时转换它。
+同样，对于流数据管道，结合实时事件的订阅，可将Kafka用做低延迟的管道；但是，可靠地存储数据的能力使得它可以用于必须传输的关键数据，或与仅定期加载数据或长时间维护的离线系统集成在一起。流处理工具可以在数据到达时转换它。
