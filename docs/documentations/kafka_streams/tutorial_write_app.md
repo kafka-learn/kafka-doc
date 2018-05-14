@@ -4,15 +4,15 @@
  
  In this guide we will start from scratch on setting up your own project to write a stream processing application using Kafka Streams. It is highly recommended to read the [quickstart](run_demo_app.md) first on how to run a Streams application written in Kafka Streams if you have not done so.
 
- 在本指南中，我们将从头开始设置您自己的项目，以使用Kafka Streams编写流处理应用程序。强烈建议您首先阅读[快速入门指南](run_demo_app.md)，了解如何运行使用Kafka Streams编写的Streams应用程序（如果您还尚未这样做过）。
+ 在本指南中，我们将从头开始设置您自己的项目，并使用Kafka Streams编写流处理应用程序。强烈建议您首先阅读[快速入门指南](run_demo_app.md)，了解如何运行使用Kafka Streams编写的流应用程序（如果您还尚未这样做过）。
 
 ## Setting up a Maven Project
 
-## 设置Maven项目
+## 建立一个Maven项目
 
 We are going to use a Kafka Streams Maven Archetype for creating a Streams project structure with the following commands:
 
-我们将使用Kafka Streams的Maven原型来创建Streams项目结构，其中包含以下命令：
+我们将使用Kafka Streams的Maven原型来创建流处理项目结构，其中包含以下命令：
 
 ```bash
 mvn archetype:generate \
@@ -46,7 +46,7 @@ streams-quickstart
 
 The ```pom.xml``` file included in the project already has the Streams dependency defined, and there are already several example programs written with Streams library under ```src/main/java```. Since we are going to start writing such programs from scratch, we can now delete these examples:
 
-项目中包含的```pom.xml```文件已经定义了Streams依赖项，并且已经有几个使用```src/main/java```下的Streams库编写的示例程序。既然我们要从头开始编写这样的程序，现在我们可以删除这些例子：
+项目中包含的```pom.xml```文件已经定义了Streams依赖项，并且已经有几个使用```src/main/java```下的Streams库编写的示例程序。由于我们要从头开始编写这样的程序，现在我们可以删除这些例子：
 
 ```bash
 > cd streams-quickstart
@@ -55,11 +55,11 @@ The ```pom.xml``` file included in the project already has the Streams dependenc
 
 ## Writing a first Streams application: Pipe
 
-## 编写第一个Streams应用程序：Pipe
+## 编写第一个Streams应用程序：管道
 
 It's coding time now! Feel free to open your favorite IDE and import this Maven project, or simply open a text editor and create a java file under ```src/main/java```. Let's name it ```Pipe.java```:
 
-现在是编码时间！随意打开您最喜欢的IDE并导入这个Maven项目，或者直接打开一个文本编辑器并在```src/main/java```下创建一个java文件。我们将其命名为```Pipe.java```：
+现在开始编码！打开您最喜欢的IDE并导入这个Maven项目，或者直接打开一个文本编辑器并在```src/main/java```下创建一个java文件。我们将其命名为```Pipe.java```：
 
 ```Java
 package myapps;
@@ -74,11 +74,11 @@ public class Pipe {
 
 We are going to fill in the ```main``` function to write this pipe program. Note that we will not list the import statements as we go since IDEs can usually add them automatically. However if you are using a text editor you need to manually add the imports, and at the end of this section we'll show the complete code snippet with import statement for you.
 
-我们将在```main```函数中编写这个pipe程序。请注意，由于IDE通常可以自动添加导入语句，因此我们不会列出导入语句。但是，如果您使用的是文本编辑器，则需要手动添加导入语句，在本节末尾，我们将为您显示带有导入语句的完整代码段。
+我们将在```main```方法中编写这个管道程序。请注意，由于IDE通常可以自动添加导入语句，因此我们不会列出导入语句。但是，如果您使用的是文本编辑器，则需要手动添加导入语句，在本节末尾，我们将为您显示带有import语句的完整代码段。
 
 The first step to write a Streams application is to create a ```java.util.Properties``` map to specify different Streams execution configuration values as defined in ```StreamsConfig```. A couple of important configuration values you need to set are: ```StreamsConfig.BOOTSTRAP_SERVERS_CONFIG```, which specifies a list of host/port pairs to use for establishing the initial connection to the Kafka cluster, and ```StreamsConfig.APPLICATION_ID_CONFIG```, which gives the unique identifier of your Streams application to distinguish itself with other applications talking to the same Kafka cluster:
 
-编写Streams应用程序的第一步是创建一个```java.util.Properties```映射来指定```StreamsConfig```中定义的不同Streams执行配置值。您需要设置的几个重要配置值是：```StreamsConfig.BOOTSTRAP_SERVERS_CONFIG```，它指定用于建立初始连接到Kafka集群的主机/端口对列表，以及```StreamsConfig.APPLICATION_ID_CONFIG```，它提供了Streams应用程序与其他应用程序进行区分的唯一标识符，用于与同一个Kafka集群进行对话：
+编写Streams应用程序的第一步是创建一个```java.util.Properties```映射来指定```StreamsConfig```中定义的不同Streams执行配置值。您需要设置的几个重要配置值是：```StreamsConfig.BOOTSTRAP_SERVERS_CONFIG```，它指定用于建立初始连接到Kafka集群的主机/端口对列表，以及```StreamsConfig.APPLICATION_ID_CONFIG```，它提供了Streams应用程序与其他应用程序进行区分的唯一标识符，用于与同一个Kafka集群进行数据交流：
 
 ```Java
 Properties props = new Properties();
@@ -142,7 +142,7 @@ final Topology topology = builder.build();
 
 And print its description to standard output as:
 
-并将其描述用标准输出来输出：
+并将其打印到标准输出中，如下：
 
 ```Java	
 System.out.println(topology.describe());
@@ -169,7 +169,7 @@ As shown above, it illustrates that the constructed topology has two processor n
 
 Note that we can always describe the topology as we did above at any given point while we are building it in the code, so as a user you can interactively "try and taste" your computational logic defined in the topology until you are happy with it. Suppose we are already done with this simple topology that just pipes data from one Kafka topic to another in an endless streaming manner, we can now construct the Streams client with the two components we have just constructed above: the configuration map and the topology object (one can also construct a ```StreamsConfig``` object from the ```props``` map and then pass that object to the constructor, ```KafkaStreams``` have overloaded constructor functions to takes either type).
 	
-请注意，当我们在代码中构建拓扑结构的时候，总是可以像上面那样在任何给定的点上描述它。因此作为用户，您可以交互式地“尝试并品尝”拓扑中定义的计算逻辑，直到您满意为止。假设我们已经完成了这个只以一种无尽的流式方式将数据从一个Kafka主题通过管道传输到另一个主题的简单的拓扑结构，我们现在就可以使用我们刚刚构建的两个组件：配置映射和拓扑对象来构建Streams客户端（也可以从```props```映射构造一个```StreamsConfig```对象，然后将该对象传递给构造函数，```KafkaStreams```重载构造函数以接受任一类型）。
+请注意，当我们在代码中构建拓扑结构的时候，总是可以像上面那样在任何给定的点上描述它。因此作为用户，您可以交互式地“尝试并品尝”拓扑中定义的计算逻辑，直到您满意为止。假设我们已经完成了这个只以一种无尽的流式方式将数据从一个Kafka主题通过管道传输到另一个主题的简单的拓扑结构，我们现在就可以使用我们刚刚构建的两个组件：配置映射和拓扑对象来构建Streams客户端（也可以从```props```映射构造一个```StreamsConfig```对象，然后将该对象传递给构造函数，```KafkaStreams```已经重载了构造函数以接受其中的任一类型）。
 
 ```Java
 final KafkaStreams streams = new KafkaStreams(topology, props);
@@ -177,7 +177,7 @@ final KafkaStreams streams = new KafkaStreams(topology, props);
 
 By calling its ```start()``` function we can trigger the execution of this client. The execution won't stop until ```close()``` is called on this client. We can, for example, add a shutdown hook with a countdown latch to capture a user interrupt and close the client upon terminating this program:
 
-通过调用它的```start()```函数，我们可以触发这个客户端的执行。在此客户端被调用```close()```之前，执行不会停止。例如，我们可以添加一个带有倒数锁存器的关闭钩子来捕获用户中断，并在终止该程序时关闭客户端：
+通过调用它的```start()```函数，我们可以触发这个客户端的执行。在此客户端被调用```close()```之前，执行不会停止。例如，我们可以添加一个带有CountDownLatch的关闭钩子来捕获用户中断，并在终止该程序时关闭客户端：
 
 ```Java
 final CountDownLatch latch = new CountDownLatch(1);
@@ -297,7 +297,7 @@ public class LineSplit {
 
 Since each of the source stream's record is a ```String``` typed key-value pair, let's treat the value string as a text line and split it into words with a ```FlatMapValues``` operator:
 
-由于每个源stream的消息都是一个```字符串```类型的键值对，因此让我们将值字符串视为文本行，并使用```FlatMapValues```运算符将其分成单词：
+由于每个源stream的消息都是一个```String```类型的键值对，因此让我们将值字符串视为文本行，并使用```FlatMapValues```运算符将其分成单词：
 
 ```Java	
 KStream<String, String> source = builder.stream("streams-plaintext-input");
@@ -320,7 +320,7 @@ KStream<String, String> words = source.flatMapValues(value -> Arrays.asList(valu
 
 And finally we can write the word stream back into another Kafka topic, say ```streams-linesplit-output```. Again, these two steps can be concatenated as the following (assuming lambda expression is used):
 	
-最后，我们可以将单词流写回另一个Kafka主题，比如说```stream-linesplit-output```。再次，这两个步骤可以如下所示连接（假设使用lambda表达式）：
+最后，我们可以将单词流写回另一个Kafka主题，比如说```stream-linesplit-output```。同样的，这两个步骤可以如下所示连接（假设使用lambda表达式）：
 
 ```Java
 KStream<String, String> source = builder.stream("streams-plaintext-input");
@@ -454,7 +454,7 @@ Note that the ```count``` operator has a ```Materialized``` parameter that speci
 
 We can also write the ```counts``` KTable's changelog stream back into another Kafka topic, say ```streams-wordcount-output```. Because the result is a changelog stream, the output topic ```streams-wordcount-output``` should be configured with log compaction enabled. Note that this time the value type is no longer ```String``` but ```Long```, so the default serialization classes are not viable for writing it to Kafka anymore. We need to provide overridden serialization methods for ```Long``` types, otherwise a runtime exception will be thrown:
 
-我们还可以将```计数值```KTable的更新日志流写回到另一个Kafka主题中，例如```streams-wordcount-output```。由于结果是更新日志流，因此应该启用日志压缩来配置输出主题```streams-wordcount-output```。请注意，这次值类型不再是```String```而是```Long```，所以默认的序列化类不再可用于将它写入Kafka。我们需要为```Long```类型提供重写的序列化方法，否则将引发运行时异常：
+我们还可以将```计数值```KTable的更新日志流写回到另一个Kafka主题中，例如```streams-wordcount-output```。由于结果是更新日志流，因此应该启用日志压缩来配置输出主题```streams-wordcount-output```。请注意，这次值类型不再是```String```而是```Long```，所以默认的序列化类不再可用于将它写入Kafka。我们需要为```Long```类型提供重写的序列化方法，否则将引发runtime exception：
 
 ```Java	
 counts.toStream().to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
@@ -475,7 +475,7 @@ source.flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault(
 
 If we again describe this augmented topology as ```System.out.println(topology.describe())```, we will get the following:
 
-如果我们再次将这种扩展拓扑描述为```System.out.println(topology.describe())```，我们将得到以下结果：
+如果我们将这种扩展拓扑描述为```System.out.println(topology.describe())```，我们将得到以下结果：
 
 ```bash
 > mvn clean package
@@ -546,7 +546,6 @@ public class WordCount {
         final CountDownLatch latch = new CountDownLatch(1);
  
         // ... same as Pipe.java above
-        // ...与上面的Pipe.java相同
     }
 }
 ```

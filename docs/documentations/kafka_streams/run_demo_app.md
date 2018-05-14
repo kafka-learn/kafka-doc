@@ -12,7 +12,7 @@ Kafka Streams是一个将输入或输出的数据存储于Kafka集群中，用�
 
 This quickstart example will demonstrate how to run a streaming application coded in this library. Here is the gist of the [WordCountDemo](https://github.com/apache/kafka/blob/1.1/streams/examples/src/main/java/org/apache/kafka/streams/examples/wordcount/WordCountDemo.java) example code (converted to use Java 8 lambda expressions for easy reading).
 
-本快速入门示例将演示如何运行一个使用该库来编写代码的流式应用程序。 以下是[WordCountDemo](https://github.com/apache/kafka/blob/1.1/streams/examples/src/main/java/org/apache/kafka/streams/examples/wordcount/WordCountDemo.java)示例代码的要点（转换为使用Java 8 lambda表达式编码以便轻松阅读）。
+本快速入门示例将演示如何运行一个使用该库编码出来的流式应用程序。以下是[WordCountDemo](https://github.com/apache/kafka/blob/1.1/streams/examples/src/main/java/org/apache/kafka/streams/examples/wordcount/WordCountDemo.java)示例代码的要点（转换为使用Java 8 lambda表达式编码以便轻松阅读）。
 
 ```Scala
 // Serializers/deserializers (serde) for String and Long types
@@ -51,7 +51,7 @@ wordCounts.toStream().to("streams-wordcount-output", Produced.with(Serdes.String
 
 As the first step, we will start Kafka (unless you already have it started) and then we will prepare input data to a Kafka topic, which will subsequently be processed by a Kafka Streams application. 
 
-在第一步中，我们将启动Kafka（除非您已经启动），然后我们将准备输入数据到Kafka主题，随后由Kafka Streams应用程序进行处理。
+在第一步中，我们将启动Kafka（除非您已经启动），然后我们会准备输入数据到一个Kafka主题中，该主题随后会由一个Kafka Streams应用程序去处理。
 
 ## Step 1: Download the code
 
@@ -97,7 +97,7 @@ Now start the Kafka server:
 
 Next, we create the input topic named **streams-plaintext-input** and the output topic named **streams-wordcount-output**:
 
-接下来，我们创建名叫**streams-plaintext-input**的输入主题和名叫**streams-wordcount-output**的输出主题。
+接下来，我们创建名叫**streams-plaintext-input**的输入主题和名叫**streams-wordcount-output**的输出主题:
 
 ```bash
 > bin/kafka-topics.sh --create \
@@ -149,7 +149,7 @@ The following command starts the WordCount demo application:
 
 The demo application will read from the input topic **streams-plaintext-input**, perform the computations of the WordCount algorithm on each of the read messages, and continuously write its current results to the output topic **streams-wordcount-output**. Hence there won't be any STDOUT output except log entries as the results are written back into in Kafka.
 
-演示应用程序将从输入主题```streams-plaintext-input```中读取，对每个读取消息执行WordCount算法的计算，并将其当前结果连续写入输出主题```streams-wordcount-output```。结果会写回到Kafka中，因此，除了日志条目外，不会有任何STDOUT输出。
+演示应用程序将从输入主题```streams-plaintext-input```中读取消息，对每个读取到的消息执行WordCount算法的计算，并将其当前结果连续不断地写入到输出主题```streams-wordcount-output```。结果会写回到Kafka中，因此，除了日志条目外，不会有任何STDOUT输出。
 
 Now we can start the console producer in a separate terminal to write some input data to this topic:
 
@@ -224,7 +224,7 @@ hello kafka streams
 
 In your other terminal in which the console consumer is running, you will observe that the WordCount application wrote new output data:
 
-在您的另一个运行着控制台消费者的终端，您将观察到WordCount应用程序编写了新的输出数据：
+在您的另一个运行着控制台消费者的终端，您将观察到WordCount应用程序已经写入了新的输出数据：
 
 ```bash	
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
@@ -296,7 +296,7 @@ The two diagrams below illustrate what is essentially happening behind the scene
 
 First the text line "all streams lead to kafka" is being processed. The `KTable` is being built up as each new word results in a new table entry (highlighted with a green background), and a corresponding change record is sent to the downstream `KStream`.
 
-首先正在处理的文本行是“all streams lead to kafka”。当每个新单词都生成一个新表格（用绿色背景突出显示），并将相应的更改记录发送到下游`KStream`的时候，`KTable`正被建立。
+首先处理的文本行是“all streams lead to kafka”。当每个新单词都生成一个新表格（用绿色背景突出显示），并将相应的更改记录发送到下游`KStream`的时候，`KTable`正被建立。
 
 When the second text line "hello kafka streams" is processed, we observe, for the first time, that existing entries in the `KTable` are being updated (here: for the words "kafka" and for "streams"). And again, change records are being sent to the output topic.
 
@@ -304,11 +304,11 @@ When the second text line "hello kafka streams" is processed, we observe, for th
 
 And so on (we skip the illustration of how the third line is being processed). This explains why the output topic has the contents we showed above, because it contains the full record of changes.
 
-等等内容（我们跳过了第三行如何处理的说明）。因为输出主题包含完整的更改记录，这也就解释了它具有上面显示的内容的原因。
+依此类推（我们跳过了第三行如何处理的说明）。因为输出主题包含完整的更改记录，这也就解释了它具有上面显示的内容的原因。
 
 Looking beyond the scope of this concrete example, what Kafka Streams is doing here is to leverage the duality between a table and a changelog stream (here: table = the KTable, changelog stream = the downstream KStream): you can publish every change of the table to a stream, and if you consume the entire changelog stream from beginning to end, you can reconstruct the contents of the table.
 
-在这个具体例子的范围之外，Kafka Streams在这里做的是利用表和更新日志流之间的对偶性（这里：table = KTable，changelog stream =下游KStream）：您可以发布表格的任意改变为一个流，并且如果您从头到尾使用整个更新日志流，则可以重新构建表格的内容。
+从这个具体例子往更高的层面上看，Kafka Streams在这里做的是利用表和更新日志流之间的对偶性（这里：table = KTable，changelog stream =下游KStream）：您可以发布表格的任意改变为一个流，并且如果您从头到尾使用整个更新日志流，则可以重新构建表格的内容。
 
 ## Step 6: Teardown the application
 
