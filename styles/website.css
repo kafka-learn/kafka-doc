@@ -2,3 +2,8 @@
 body{
     text-align: justify;
 }
+/* 表格的表头样式 */
+table thead tr th{
+    background-color: black;
+    color: white;
+}
