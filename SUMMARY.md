@@ -27,6 +27,10 @@
         * [Legacy APIs](docs/documentations/apis/legacy.md)
     
     * [Kafka Streams](docs/documentations/kafka_streams.md)
+	
+		* [Run Demo App](docs/documentations/kafka_streams/run_demo_app.md)
+		
+		* [Tutorial: Write App](docs/documentations/kafka_streams/tutorial_write_app.md)
     
     * [Kafka Connect](docs/documentations/kafka_connect.md)
     
