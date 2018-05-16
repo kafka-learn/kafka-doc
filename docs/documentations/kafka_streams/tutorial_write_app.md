@@ -165,7 +165,7 @@ Global Stores:
 
 As shown above, it illustrates that the constructed topology has two processor nodes, a source node ```KSTREAM-SOURCE-0000000000``` and a sink node ```KSTREAM-SINK-0000000001```. ```KSTREAM-SOURCE-0000000000``` continuously read records from Kafka topic ```streams-plaintext-input``` and pipe them to its downstream node ```KSTREAM-SINK-0000000001```; ```KSTREAM-SINK-0000000001``` will write each of its received record in order to another Kafka topic ```streams-pipe-output``` (the ```-->``` and ```<--``` arrows dictates the downstream and upstream processor nodes of this node, i.e. "children" and "parents" within the topology graph). It also illustrates that this simple topology has no global state stores associated with it (we will talk about state stores more in the following sections).
 
-如上所示，它说明构建的拓扑具有两个处理器节点，源节点```KSTREAM-SOURCE-0000000000```和汇聚节点```KSTREAM-SINK-0000000001```。```KSTREAM-SOURCE-0000000000```连续读取来自Kafka主题```streams-plaintext-input```的消息并将它们传送到其下游节点```KSTREAM-SINK-0000000001```; ```KSTREAM-SINK-0000000001```会将其接收到的每条消息写入另一个Kafka主题```streams-pipe-output```（```-->```和```<--```箭头指示该节点的下游和上游处理器节点，即在拓扑图中的“子节点”和“父节点”）。它还说明，这种简单的拓扑没有与之相关联的全局状态存储（我们将在后面的章节中更多地讨论状态存储）。
+如上所示，它说明构建的拓扑具有两个处理器节点，source节点```KSTREAM-SOURCE-0000000000```和sink节点```KSTREAM-SINK-0000000001```。```KSTREAM-SOURCE-0000000000```连续读取来自Kafka主题```streams-plaintext-input```的消息并将它们传送到其下游节点```KSTREAM-SINK-0000000001```; ```KSTREAM-SINK-0000000001```会将其接收到的每条消息写入另一个Kafka主题```streams-pipe-output```（```-->```和```<--```箭头指示该节点的下游和上游处理器节点，即在拓扑图中的“子节点”和“父节点”）。它还说明，这种简单的拓扑没有与之相关联的全局状态存储（我们将在后面的章节中更多地讨论状态存储）。
 
 Note that we can always describe the topology as we did above at any given point while we are building it in the code, so as a user you can interactively "try and taste" your computational logic defined in the topology until you are happy with it. Suppose we are already done with this simple topology that just pipes data from one Kafka topic to another in an endless streaming manner, we can now construct the Streams client with the two components we have just constructed above: the configuration map and the topology object (one can also construct a ```StreamsConfig``` object from the ```props``` map and then pass that object to the constructor, ```KafkaStreams``` have overloaded constructor functions to takes either type).
 	
@@ -346,7 +346,7 @@ Sub-topologies:
 
 As we can see above, a new processor node ```KSTREAM-FLATMAPVALUES-0000000001``` is injected into the topology between the original source and sink nodes. It takes the source node as its parent and the sink node as its child. In other words, each record fetched by the source node will first traverse to the newly added ```KSTREAM-FLATMAPVALUES-0000000001``` node to be processed, and one or more new records will be generated as a result. They will continue traverse down to the sink node to be written back to Kafka. Note this processor node is "stateless" as it is not associated with any stores (i.e. ```(stores: [])```).
 
-正如我们上面看到的，一个新的处理器节点```KSTREAM-FLATMAPVALUES-0000000001```被注入到原始源节点和汇聚节点之间的拓扑中。它将源节点作为其父节点，将汇聚节点作为其子节点。换句话说，源节点获取的每个消息将首先遍历新加入的```KSTREAM-FLATMAPVALUES-0000000001```节点并依次得到处理，并且最终将生成一个或多个新消息。他们将继续往下通过汇聚节点回写给Kafka。注意这个处理器节点是“无状态的”，因为它不与任何存储器相关联（即：```(stores: [])```）。
+正如我们上面看到的，一个新的处理器节点```KSTREAM-FLATMAPVALUES-0000000001```被注入到原始source节点和sink节点之间的拓扑中。它将source节点作为其父节点，将sink节点作为其子节点。换句话说，source节点获取的每个消息将首先遍历新加入的```KSTREAM-FLATMAPVALUES-0000000001```节点并依次得到处理，并且最终将生成一个或多个新消息。他们将继续往下通过sink节点回写给Kafka。注意这个处理器节点是“无状态的”，因为它不与任何存储器相关联（即：```(stores: [])```）。
 
 The complete code looks like this (assuming lambda expression is used):
 
@@ -498,11 +498,11 @@ Global Stores:
 
 As we can see above, the topology now contains two disconnected sub-topologies. The first sub-topology's sink node ```KSTREAM-SINK-0000000004``` will write to a repartition topic ```Counts-repartition```, which will be read by the second sub-topology's source node ```KSTREAM-SOURCE-0000000006```. The repartition topic is used to "shuffle" the source stream by its aggregation key, which is in this case the value string. In addition, inside the first sub-topology a stateless ```KSTREAM-FILTER-0000000005``` node is injected between the grouping ```KSTREAM-KEY-SELECT-0000000002``` node and the sink node to filter out any intermediate record whose aggregate key is empty.
 
-如上所述，拓扑结构现在包含两个断开的子拓扑。第一个子拓扑的汇聚节点```KSTREAM-SINK-0000000004```将写入一个重分区主题```Counts-repartition```，它将由第二个子拓扑的源节点```KSTREAM-SOURCE-0000000006```读取。重分区主题用于通过其聚合键“混洗”源流，在这种情况下，聚合键为值字符串。此外，在第一个子拓扑结构内部，在分组```KSTREAM-KEY-SELECT-0000000002```节点和汇聚节点之间注入无状态的```KSTREAM-FILTER-0000000005```节点，以过滤出聚合键为空的任意中间消息。  
+如上所述，拓扑结构现在包含两个断开的子拓扑。第一个子拓扑的sink节点```KSTREAM-SINK-0000000004```将写入一个重分区主题```Counts-repartition```，它将由第二个子拓扑的source节点```KSTREAM-SOURCE-0000000006```读取。重分区主题用于通过其聚合键“混洗”源流，在这种情况下，聚合键为值字符串。此外，在第一个子拓扑结构内部，在分组```KSTREAM-KEY-SELECT-0000000002```节点和sink节点之间注入无状态的```KSTREAM-FILTER-0000000005```节点，以过滤出聚合键为空的任意中间消息。  
 
 In the second sub-topology, the aggregation node ```KSTREAM-AGGREGATE-0000000003``` is associated with a state store named ```Counts``` (the name is specified by the user in the ```count``` operator). Upon receiving each record from its upcoming stream source node, the aggregation processor will first query its associated ```Counts``` store to get the current count for that key, augment by one, and then write the new count back to the store. Each updated count for the key will also be piped downstream to the ```KTABLE-TOSTREAM-0000000007``` node, which interpret this update stream as a record stream before further piping to the sink node ```KSTREAM-SINK-0000000008``` for writing back to Kafka.
 
-在第二个子拓扑中，聚合节点```KSTREAM-AGGREGATE-0000000003```与名为```Counts```的状态存储器（名称由用户在```count```运算符中指定）相关联。在从即将到来的流源节点接收到每个消息时，聚合处理器将首先查询其关联的```Counts```存储器以获得该键的当前计数值，并将其增加1，然后将新计数值写回存储器。每个更新的键计数值将被传送到```KTABLE-TOSTREAM-0000000007```节点，此节点将该更新流解释为消息流，然后再传输到汇聚节点```KSTREAM-SINK-0000000008```以写回Kafka。
+在第二个子拓扑中，聚合节点```KSTREAM-AGGREGATE-0000000003```与名为```Counts```的状态存储器（名称由用户在```count```运算符中指定）相关联。在从即将到来的流source节点接收到每个消息时，聚合处理器将首先查询其关联的```Counts```存储器以获得该键的当前计数值，并将其增加1，然后将新计数值写回存储器。每个更新的键计数值将被传送到```KTABLE-TOSTREAM-0000000007```节点，此节点将该更新流解释为消息流，然后再传输到sink节点```KSTREAM-SINK-0000000008```以写回Kafka。
 
 The complete code looks like this (assuming lambda expression is used):
 
