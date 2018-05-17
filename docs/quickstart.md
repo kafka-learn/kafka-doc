@@ -349,4 +349,4 @@ You should see the line appear in the console consumer output and in the sink fi
 
 Kafka Streams is a client library for building mission-critical real-time applications and microservices, where the input and/or output data is stored in Kafka clusters. Kafka Streams combines the simplicity of writing and deploying standard Java and Scala applications on the client side with the benefits of Kafka's server-side cluster technology to make these applications highly scalable, elastic, fault-tolerant, distributed, and much more. This [quickstart example](http://kafka.apache.org/11/documentation/streams/quickstart) will demonstrate how to run a streaming application coded in this library.
 
-Kafka Streams是一个用于构建关键任务实时应用程序和微服务的客户端库，输入、输出数据存储在Kafka集群中。Kafka Streams结合了在客户端编写和部署标准Java和Scala应用程序的简单性以及Kafka服务器端集群技术的优势，使这些应用程序具有高度可伸缩性、弹性、容错性、分布式等特性。本[快速入门示例](docs/documentations/kafka_streams/run_demo_app.md)将演示如何运行在此库中编码的流式应用程序。
+Kafka Streams是一个用于构建关键任务实时应用程序和微服务的客户端库，输入、输出数据存储在Kafka集群中。Kafka Streams结合了在客户端编写和部署标准Java和Scala应用程序的简单性以及Kafka服务器端集群技术的优势，使这些应用程序具有高度可伸缩性、弹性、容错性、分布式等特性。本[快速入门示例](./documentations/kafka_streams/run_demo_app.md)将演示如何运行在此库中编码的流式应用程序。

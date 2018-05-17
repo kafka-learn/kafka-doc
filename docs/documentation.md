@@ -12,11 +12,11 @@ Prior releases: [0.7.x](http://kafka.apache.org/07/documentation.html), [0.8.0](
 
 1. GETTING STARTED
 
-    * 1.1 Introduction
+    * [1.1 Introduction](./introduction.md)
 
-    * 1.2 Use Cases
+    * [1.2 Use Cases](./usercases.md)
     
-    * 1.3 Quick Start
+    * [1.3 Quick Start](./quickstart.md)
     
     * 1.4 Ecosystem
     
@@ -24,17 +24,17 @@ Prior releases: [0.7.x](http://kafka.apache.org/07/documentation.html), [0.8.0](
 
 2. APIS
 
-    * 2.1 Producer API
+    * [2.1 Producer API](./documentations/apis.md#producer-api)
     
-    * 2.2 Consumer API
+    * [2.2 Consumer API](./documentations/apis.md#consumer-api)
     
-    * 2.3 Streams API
+    * [2.3 Streams API](./documentations/apis.md#streams-api)
     
-    * 2.4 Connect API
+    * [2.4 Connect API](./documentations/apis.md#connect-api)
     
-    * 2.5 AdminClient API
+    * [2.5 AdminClient API](./documentations/apis.md#adminclient-api)
     
-    * 2.6 Legacy APIs
+    * [2.6 Legacy APIs](./documentations/apis.md#legacy-apis)
 
 3. CONFIGURATION
     

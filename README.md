@@ -38,6 +38,10 @@ Kafka 文档翻译,学习总结。
 https://github.com/kafka-learn/kafka-doc/wiki
 
 
-# Todo
+# 任务进展
 
 https://github.com/kafka-learn/kafka-doc/projects
+
+# 交流
+
+QQ群：698794283
