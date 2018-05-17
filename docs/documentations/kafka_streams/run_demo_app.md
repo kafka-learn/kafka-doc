@@ -124,7 +124,7 @@ Created topic "streams-wordcount-output".
 
 The created topic can be described with the same **kafka-topics** tool:
 
-创建的主题可以使用相同的```kafka主题```工具进行描述：
+创建的主题可以使用相同的**kafka主题**工具进行描述：
 
 ```bash
 > bin/kafka-topics.sh --zookeeper localhost:2181 --describe 
@@ -149,7 +149,7 @@ The following command starts the WordCount demo application:
 
 The demo application will read from the input topic **streams-plaintext-input**, perform the computations of the WordCount algorithm on each of the read messages, and continuously write its current results to the output topic **streams-wordcount-output**. Hence there won't be any STDOUT output except log entries as the results are written back into in Kafka.
 
-演示应用程序将从输入主题```streams-plaintext-input```中读取消息，对每个读取到的消息执行WordCount算法的计算，并将其当前结果连续不断地写入到输出主题```streams-wordcount-output```。结果会写回到Kafka中，因此，除了日志条目外，不会有任何STDOUT输出。
+演示应用程序将从输入主题**streams-plaintext-input**中读取消息，对每个读取到的消息执行WordCount算法的计算，并将其当前结果连续不断地写入到输出主题**streams-wordcount-output**。结果会写回到Kafka中，因此，除了日志条目外，不会有任何STDOUT输出。
 
 Now we can start the console producer in a separate terminal to write some input data to this topic:
 
@@ -178,9 +178,9 @@ and inspect the output of the WordCount demo application by reading from its out
 
 ## 第五步：处理一些数据
 
-Now let's write some message with the console producer into the input topic **streams-plaintext-input** by entering a single line of text and then hit \<RETURN\>. This will send a new message to the input topic, where the message key is null and the message value is the string encoded text line that you just entered (in practice, input data for applications will typically be streaming continuously into Kafka, rather than being manually entered as we do in this quickstart):
+Now let's write some message with the console producer into the input topic **streams-plaintext-input** by entering a single line of text and then hit &lt;RETURN&gt;. This will send a new message to the input topic, where the message key is null and the message value is the string encoded text line that you just entered (in practice, input data for applications will typically be streaming continuously into Kafka, rather than being manually entered as we do in this quickstart):
 
-现在，让我们通过输入一行文本然后按\<RETURN\>，将控制台生产者的一些消息写入输入主题**streams-plaintext-input**。这将向输入主题发送一条新消息，其中消息键为空，消息值为刚刚输入的字符串编码文本行（实际上，应用程序的输入数据通常会连续流入Kafka，而不是像我们在这个快速入门中那样手动输入）：
+现在，让我们通过在生产这控制台输入一行文本然后按&lt;RETURN&gt;键，将一些消息写入输入主题**streams-plaintext-input**。这将向输入主题发送一条新消息，其中消息键为空，消息值为刚刚输入的字符串编码文本行（实际上，应用程序的输入数据通常会持续不断地流入Kafka，而不是像我们在这个快速入门中那样手动输入）：
 
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
@@ -212,9 +212,9 @@ Here, the first column is the Kafka message key in `java.lang.String` format and
 
 这里，第一列是`java.lang.String`格式的Kafka消息键，它代表一个被计算的单词，第二列是`java.lang.Long`格式的消息值，它代表该单词最新的计数值。
 
-Now let's continue writing one more message with the console producer into the input topic **streams-plaintext-input**. Enter the text line "hello kafka streams" and hit \<RETURN\>. Your terminal should look as follows:
+Now let's continue writing one more message with the console producer into the input topic **streams-plaintext-input**. Enter the text line "hello kafka streams" and hit &lt;RETURN&gt;. Your terminal should look as follows:
 
-现在让我们继续通过控制台生产者往输入主题**streams-plaintext-input**中再写一条消息。输入文本行“hello kafka streams”并按\<RETURN\>。您的终端应该如下所示：
+现在让我们继续通过控制台生产者往输入主题**streams-plaintext-input**中再写一条消息。输入文本行“hello kafka streams”并按&lt;RETURN&gt;键。您的终端应该如下所示：
 	
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
@@ -246,9 +246,9 @@ kafka   2
 streams 2 
 ```
 
-Here the last printed lines **kafka 2** and **streams 2** indicate updates to the keys **kafka** and **streams** whose counts have been incremented from **1** to **2**. Whenever you write further input messages to the input topic, you will observe new messages being added to the **streams-wordcount-output** topic, representing the most recent word counts as computed by the WordCount application. Let's enter one final input text line "join kafka summit" and hit \<RETURN\> in the console producer to the input topic **streams-wordcount-input** before we wrap up this quickstart:
+Here the last printed lines **kafka 2** and **streams 2** indicate updates to the keys **kafka** and **streams** whose counts have been incremented from **1** to **2**. Whenever you write further input messages to the input topic, you will observe new messages being added to the **streams-wordcount-output** topic, representing the most recent word counts as computed by the WordCount application. Let's enter one final input text line "join kafka summit" and hit &lt;RETURN&gt; in the console producer to the input topic **streams-wordcount-input** before we wrap up this quickstart:
 
-这里最后打印的行**Kafka 2**和**streams 2**表示键**Kafka**和**streams**的更新，其计数值已经从**1**增加到**2**。每当您向输入主题写入更多输入消息时，您都会观察到被添加到**streams-wordcount-output**主题的新消息，表示由WordCount应用程序计算出的最新单词数。让我们在结束这个快速入门之前，在控制台生产者中最后输入一行文本“join kafka summit”，然后按\<RETURN\>，使其传送到输入主题**streams-wordcount-input**中：
+这里最后打印的行**Kafka 2**和**streams 2**表示键**Kafka**和**streams**的更新，其计数值已经从**1**增加到**2**。每当您向输入主题写入更多输入消息时，您都会观察到被添加到**streams-wordcount-output**主题的新消息，表示由WordCount应用程序计算出的最新单词数。让我们在结束这个快速入门之前，在控制台生产者中最后输入一行文本“join kafka summit”，然后按&lt;RETURN&gt;键，使其传送到输入主题**streams-wordcount-input**中：
 	
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-wordcount-input
@@ -259,7 +259,7 @@ join kafka summit
 
 The **streams-wordcount-output** topic will subsequently show the corresponding updated word counts (see last three lines):
 
-**streams-wordcount-output**主题随后将显示相应的更新计数值（请参见最后三行）：
+名称为**streams-wordcount-output**的主题随后将显示相应的更新计数值（请参见最后三行）：
 
 ```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
@@ -292,7 +292,10 @@ The two diagrams below illustrate what is essentially happening behind the scene
 
 下面的两张图阐述了背后发生的事情。第一列显示`KTable <String, Long>`当前状态的演变，它计算`count`单词出现的次数。第二列显示KTable的状态更新以及被发送到Kafka输出主题**streams-wordcount-output**的更改记录。
 
-![](../../imgs/streams-table-updates-01.png)![](../../imgs/streams-table-updates-02.png)
+<div align="center">
+<img src="../../imgs/streams-table-updates-01.png" height="330" width="190" >
+<img src="../../imgs/streams-table-updates-02.png" height="330" width="190" >
+</div>
 
 First the text line "all streams lead to kafka" is being processed. The `KTable` is being built up as each new word results in a new table entry (highlighted with a green background), and a corresponding change record is sent to the downstream `KStream`.
 
