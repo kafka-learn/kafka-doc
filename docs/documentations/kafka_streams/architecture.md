@@ -10,7 +10,9 @@ The picture below shows the anatomy of an application that uses the Kafka Stream
 
 下图显示了使用Kafka Streams库的应用程序的组织结构。我们来看看一些细节。
 
-![Kafka Streams Architecture Overview](../../imgs/streams-architecture-overview.jpg)
+<div align="center">
+<img src="../../imgs/streams-architecture-overview.jpg" height="459" width="375" >
+</div>
 
 ## Stream Partitions and Tasks
 

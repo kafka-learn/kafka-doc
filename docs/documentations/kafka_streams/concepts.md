@@ -16,27 +16,27 @@ Some highlights of Kafka Streams:
 
 * Designed as a simpintegratedle and lightweight client library, which can be easily embedded in any Java application and  with any existing packaging, deployment and operational tools that users have for their streaming applications.
 
-* 设计为简单轻量级的客户端库，可轻松嵌入任何JAVA程序中并与用户的流式应用的任何现有包，部署和操作工具集成。
+    设计为简单轻量级的客户端库，可轻松嵌入任何JAVA程序中并与用户的流式应用的任何现有包，部署和操作工具集成。
 
 * Has no external dependencies on systems other than Apache Kafka itself as the internal messaging layer; notably, it uses Kafka's partitioning model to horizontally scale processing while maintaining strong ordering guarantees.
 
-* 除了Apache Kafka本身作为内部消息传递层之外，没有外部依赖关系; 值得注意的是，它使用Kafka的分区模型来横向扩展处理，同时保持强有力的顺序保证。
+    除了Apache Kafka本身作为内部消息传递层之外，没有外部依赖关系; 值得注意的是，它使用Kafka的分区模型来横向扩展处理，同时保持强有力的顺序保证。
 
 * Supports fault-tolerant local state, which enables very fast and efficient stateful operations like windowed joins and aggregations.
 
-* 支持本地状态容错，可以实现非常快速且高效的有状态操作，如窗口连接和聚合。
+    支持本地状态容错，可以实现非常快速且高效的有状态操作，如窗口连接和聚合。
 
 * Supports exactly-once processing semantics to guarantee that each record will be processed once and only once even when there is a failure on either Streams clients or Kafka brokers in the middle of processing.
 
-* 支持一次处理语义，即使处理过程中出现任何Streams客户端或Kafka代理失败，也能确保每个记录都将被处理一次且仅处理一次。
+    支持一次处理语义，即使处理过程中出现任何Streams客户端或Kafka代理失败，也能确保每个记录都将被处理一次且仅处理一次。
 
 * Employs one-record-at-a-time processing to achieve millisecond processing latency, and supports event-time based windowing operations with late arrival of records.
 
-* 采用一次一个记录处理，以实现毫秒处理延迟。并且支持基于事件时间的窗口操作，用于记录延迟到达的记录。
+    采用一次一个记录处理，以实现毫秒处理延迟。并且支持基于事件时间的窗口操作，用于记录延迟到达的记录。
 
 * Offers necessary stream processing primitives, along with a high-level Streams DSL and a low-level Processor API.
 
-* 提供必要的流处理原语，以及高级Streams DSL和低级Processor API。
+    提供必要的流处理原语，以及高级Streams DSL和低级Processor API。
 
 We first summarize the key concepts of Kafka Streams.
 
@@ -48,33 +48,36 @@ We first summarize the key concepts of Kafka Streams.
 
 * A stream is the most important abstraction provided by Kafka Streams: it represents an unbounded, continuously updating data set. A stream is an ordered, replayable, and fault-tolerant sequence of immutable data records, where a data record is defined as a key-value pair.
 
-* 流是Kafka Streams提供的最重要的抽象：它代表一个无限的，不断更新的数据集。 流是有序的，可重放的和容错的不变数据记录序列，其中数据记录被定义为键值对。
+    流是Kafka Streams提供的最重要的抽象：它代表一个无限的，不断更新的数据集。 流是有序的，可重放的和容错的不变数据记录序列，其中数据记录被定义为键值对。
 
 * A stream processing application is any program that makes use of the Kafka Streams library. It defines its computational logic through one or more processor topologies, where a processor topology is a graph of stream processors (nodes) that are connected by streams (edges).
 
-* 流处理应用程序是使用Kafka Streams库的任何程序。它通过一个或多个处理器拓扑来定义其计算逻辑，其中处理器拓扑是通过流（边）连接的流处理器（节点）的图形。
+    流处理应用程序是使用Kafka Streams库的任何程序。它通过一个或多个处理器拓扑来定义其计算逻辑，其中处理器拓扑是通过流（边）连接的流处理器（节点）的图形。
 
 * A stream processor is a node in the processor topology; it represents a processing step to transform data in streams by receiving one input record at a time from its upstream processors in the topology, applying its operation to it, and may subsequently produce one or more output records to its downstream processors.
 
-* 流处理器是处理器拓扑中的一个节点; 它表示一个处理步骤，通过从拓扑中的上游处理器一次接收一个输入记录，将其操作应用于其中，并随后可以向其下游处理器产生一个或多个输出记录，从而变换流中的数据。
+    流处理器是处理器拓扑中的一个节点; 它表示一个处理步骤，通过从拓扑中的上游处理器一次接收一个输入记录，将其操作应用于其中，并随后可以向其下游处理器产生一个或多个输出记录，从而变换流中的数据。
 
 There are two special processors in the topology:
 
 在拓扑中有两个特殊的处理器：
 
-* Source Processor: A source processor is a special type of stream processor that does not have any upstream processors. It produces an input stream to its topology from one or multiple Kafka topics by consuming records from these topics and forwarding them to its down-stream processors.
+* **Source Processor**: A source processor is a special type of stream processor that does not have any upstream processors. It produces an input stream to its topology from one or multiple Kafka topics by consuming records from these topics and forwarding them to its down-stream processors.
 
-* `Source`处理器：`source`处理器是一种特殊类型的流处理器，没有任何上游处理器。它通过从这些主题中消耗记录并将它们转发到其下游处理器，从一个或多个Kafka主题中为其拓扑生成输入流。
+* **Sink Processor**: A sink processor is a special type of stream processor that does not have down-stream processors. It sends any received records from its up-stream processors to a specified Kafka topic.
 
-* Sink Processor: A sink processor is a special type of stream processor that does not have down-stream processors. It sends any received records from its up-stream processors to a specified Kafka topic.
 
-* `Sink`处理器：`sink`处理器是一种特殊类型的流处理器，没有下游处理器。它将来自其上游处理器的所有记录发送到指定的Kafka主题。
+* **Source处理器**：source处理器是一种特殊类型的流处理器，没有任何上游处理器。它通过从这些主题中消耗记录并将它们转发到其下游处理器，从一个或多个Kafka主题中为其拓扑生成输入流。
+
+* **Sink处理器**：sink处理器是一种特殊类型的流处理器，没有下游处理器。它将来自其上游处理器的所有记录发送到指定的Kafka主题。
 
 Note that in normal processor nodes other remote systems can also be accessed while processing the current record. Therefore the processed results can either be streamed back into Kafka or written to an external system.
 
 请注意，在正常的处理器节点中，其他远程系统也可以在处理当前记录时访问。 因此处理后的结果可以回传到 Kafka 或写入外部系统。
 
-![Kafka Streams Architecture Topology](../../imgs/streams-architecture-topology.jpg)
+<div align="center">
+<img src="../../imgs/streams-architecture-topology.jpg" height="400" width="478" >
+</div>
 
 Kafka Streams offers two ways to define the stream processing topology: the Kafka Streams DSL provides the most common data transformation operations such as map, filter, join and aggregations out of the box; the lower-level Processor API allows developers define and connect custom processors as well as to interact with state stores.
 
@@ -155,9 +158,3 @@ Kafka Streams允许通过创建状态存储的流处理应用程序外部的方�
 In stream processing, one of the most frequently asked question is "does my stream processing system guarantee that each record is processed once and only once, even if some failures are encountered in the middle of processing?" Failing to guarantee exactly-once stream processing is a deal-breaker for many applications that cannot tolerate any data-loss or data duplicates, and in that case a batch-oriented framework is usually used in addition to the stream processing pipeline, known as the Lambda Architecture. Prior to 0.11.0.0, Kafka only provides at-least-once delivery guarantees and hence any stream processing systems that leverage it as the backend storage could not guarantee end-to-end exactly-once semantics. In fact, even for those stream processing systems that claim to support exactly-once processing, as long as they are reading from / writing to Kafka as the source / sink, their applications cannot actually guarantee that no duplicates will be generated throughout the pipeline. Since the 0.11.0.0 release, Kafka has added support to allow its producers to send messages to different topic partitions in a transactional and idempotent manner, and Kafka Streams has hence added the end-to-end exactly-once processing semantics by leveraging these features. More specifically, it guarantees that for any record read from the source Kafka topics, its processing results will be reflected exactly once in the output Kafka topic as well as in the state stores for stateful operations. Note the key difference between Kafka Streams end-to-end exactly-once guarantee with other stream processing frameworks' claimed guarantees is that Kafka Streams tightly integrates with the underlying Kafka storage system and ensure that commits on the input topic offsets, updates on the state stores, and writes to the output topics will be completed atomically instead of treating Kafka as an external system that may have side-effects. To read more details on how this is done inside Kafka Streams, readers are recommended to read KIP-129. In order to achieve exactly-once semantics when running Kafka Streams applications, users can simply set the processing.guarantee config value to exactly_once (default value is at_least_once). More details can be found in the [Kafka Streams Configs]() section.
 
 在流处理中，最常见的问题之一是“我的流处理系统是否保证每个记录只处理一次，即使在处理过程中遇到一些故障？”对于许多不能容忍任何数据丢失或数据重复的应用程序来说，无法确切地保证流处理是一种破坏行为，在这种情况下，除了流处理管道之外，通常还会使用面向批处理的框架，称为Lambda架构。在0.11.0.0之前，Kafka仅提供至少一次的传递保证，因此任何利用它作为后端存储的流处理系统都不能保证端到端完全一次的语义。事实上，即使对于那些声称只支持一次处理的流处理系统，只要他们正在读/写Kafka作为 `source` / `sink`，它们的应用程序实际上不能保证在整个流水线中不会产生重复。从0.11.0.0 release版本开始，Kafka增加其制作者以事务和幂等方式向不同的主题分区发送消息的功能，因此Kafka Streams通过利用这些功能添加了端到端的精确一次处理语义。更具体地说，它保证对于从源 Kafka 主题读取的任何记录，其处理结果将在 Kafka 输出主题以及状态存储区中反映一次。请注意，Kafka Streams端到端之间的主要区别在于，一次保证与其他流处理框架保证声称的保证是Kafka Streams与底层Kafka存储系统紧密集成，并确保提交输入主题偏移量，更新状态存储和写入输出主题将以原子方式完成，而不是将Kafka视为可能有副作用的外部系统。要详细了解如何在Kafka Streams内完成此操作，建议读者阅读KIP-129。为了在运行Kafka Streams应用程序时实现恰好一次的语义，用户可以简单地将processing.guarantee配置值设置为exactly_once（默认值是at_least_once）。更多细节可以在[Kafka Streams Configs]()部分找到。
-
-
-
-
-
-

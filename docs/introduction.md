@@ -1,3 +1,5 @@
+# Apache Kafka® is a distributed streaming platform. What exactly does that mean?
+
 # Apache Kafka® 作为一个分布式的流式平台，这到底意味着什么？
 
 ## A streaming platform has three key capabilities:
@@ -14,7 +16,7 @@
 
 * Process streams of records as they occur.
 
-    即时处理记录流
+    即时的处理记录流
 
 ## Kafka is generally used for two broad classes of applications:
 
@@ -28,17 +30,17 @@
 
     建立实时流应用，能传输和响应数据流
     
-* 其他：活动跟踪、度量指标和日志记录、提交日志等
+To understand how Kafka does these things, let's dive in and explore Kafka's capabilities from the bottom up.
 
----
+要了解Kafka如何做到这些，让我们从底层开始深入分析Kafka。
 
 ## First a few concepts:
 
-## Kafka相关概念:
+## 首先是一些相关概念:
 
 * Kafka is run as a cluster on one or more servers that can span multiple datacenters.
 
-    Kafka 运行在单个或者多个服务器集群中，并且可以跨多个数据中心
+    Kafka 运行在单个或者多个服务器集群中，并且可以跨多个数据中心。
 
 * The Kafka cluster stores streams of records in categories called topics.
 
@@ -48,27 +50,25 @@
 
     每一个数据流记录（record）包括了一个key(键),value(值)和一个timestamp(时间戳)
 
----
-
 ## Kafka has four core APIs:
 
 ## Kafka 有4个核心APIs:
 
 * The [Producer API](https://kafka.apache.org/documentation.html#producerapi) allows an application to publish a stream of records to one or more Kafka topics.
 
-    [Producer API](https://kafka.apache.org/documentation.html#producerapi)(生产者API)允许应用发布一个流记录到一个或多个Kafka主题中。
+    [Producer API](./documentations/apis/producer.md)(生产者API)允许应用发布一个流记录到一个或多个Kafka主题中。
 
 * The [Consumer API](https://kafka.apache.org/documentation.html#consumerapi) allows an application to subscribe to one or more topics and process the stream of records produced to them.
 
-    [Consumer API](https://kafka.apache.org/documentation.html#consumerapi)(消费者API)允许应用订阅一个或多个主题并处理主题中的流记录(records)。
+    [Consumer API](./documentations/apis/consumer.md)(消费者API)允许应用订阅一个或多个主题并处理主题中的流记录(records)。
 
 * The [Streams API](https://kafka.apache.org/documentation/streams) allows an application to act as a stream processor, consuming an input stream from one or more topics and producing an output stream to one or more output topics, effectively transforming the input streams to output streams.
 
-    [Streams API](https://kafka.apache.org/documentation/streams)(流API)允许一个应用表现为一个流处理器，消费从一个或多个主题得到的输入流，并产生一个输出流到一个或多个输出主题，即能有效的把输入流转变为输出流。
+    [Streams API](./documentations/apis/streams.md)允许一个应用表现为一个流处理器，消费从一个或多个主题得到的输入流，并产生一个输出流到一个或多个输出主题，即能有效的把输入流转变为输出流。
 
 * The [Connector API](https://kafka.apache.org/documentation.html#connect) allows building and running reusable producers or consumers that connect Kafka topics to existing applications or data systems. For example, a connector to a relational database might capture every change to a table.
 
-    [Connector API](https://kafka.apache.org/documentation.html#connect)(连接器API)允许构建并运行可重复使用的生产者或消费者,它们可以把Kafka的主题连接到已存在的应用或数据系统中。例如，一个链接到关系数据库的Kafka主题可能会捕获数据库表的任意变化。
+    [Connector API](./documentations/apis/connect.md)允许构建并运行可重复使用的生产者或消费者,它们可以把Kafka的主题连接到已存在的应用或数据系统中。例如，一个链接到关系数据库的Kafka主题可能会捕获数据库表的任意变化。
 
 ![](imgs/Kafka-apis.png)
 
@@ -76,7 +76,6 @@ In Kafka the communication between the clients and the servers is done with a si
 
 Kafka客户端和服务端之间的通信是建立在简单的、高效的、语言无关的[TCP协议](https://kafka.apache.org/protocol.html)上的。此协议带有版本且向后兼容。我们为Kafka提供了Java客户端，但是客户端可以使用[多种语言](https://cwiki.apache.org/confluence/display/KAFKA/Clients)。
 
----
 
 ## Topics and Logs
 
@@ -128,7 +127,7 @@ The partitions of the log are distributed over the servers in the Kafka cluster 
 
 Each partition has one server which acts as the "leader" and zero or more servers which act as "followers". The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster.
 
-每个分区都有一个服务器充当leader，零个或多个服务器充当follower。leader处理对分区所有的读写请求，followers就会被动复制这个leader。如果leader宕机，其中一个follower会被推举为新的leader。一台服务器可以同时是一个分区的leader，另一个分区的follower，这样可以平衡负载，避免所有请求都只让一台或者某几台处理。
+每个分区都有一个服务器充当“leader”，零个或多个服务器充当“follower”。leader处理对分区所有的读写请求，follower就会被动复制这个leader。如果leader宕机，其中一个follower会被推举为新的leader。一台服务器可以同时是一个分区的leader，另一个分区的follower，这样可以平衡负载，避免所有请求都只让一台或者某几台处理。
 
 ## Geo-Replication
 
@@ -206,17 +205,23 @@ At a high-level Kafka gives the following guarantees:
 
 * For a topic with replication factor N, we will tolerate up to N-1 server failures without losing any records committed to the log. 
 
-    对一个复制因子是N的主题，我们可以容忍 N-1 个服务器发生宕机，而不会丢失任何已经提交到日志中的消息。
+    对一个备份因子是N的主题，我们可以容忍 N-1 个服务器发生宕机，而不会丢失任何已经提交到日志中的消息。
 
-----
+More details on these guarantees are given in the design section of the documentation.
+
+有关这些保证的更多详细信息在文档的设计部分给出了。
 
 ## Kafka as a Messaging System
 
 ## Kafka作为一个消息系统
 
+How does Kafka's notion of streams compare to a traditional enterprise messaging system?
+
+Kafka的流(streams)与传统的企业消息系统相比如何？
+
 Messaging traditionally has two models: [queuing](http://en.wikipedia.org/wiki/Message_queue) and [publish-subscribe](http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern). In a queue, a pool of consumers may read from a server and each record goes to one of them; in publish-subscribe the record is broadcast to all consumers. Each of these two models has a strength and a weakness. The strength of queuing is that it allows you to divide up the processing of data over multiple consumer instances, which lets you scale your processing. Unfortunately, queues aren't multi-subscriber—once one process reads the data it's gone. Publish-subscribe allows you broadcast data to multiple processes, but has no way of scaling processing since every message goes to every subscriber.
 
-传统的消息有两种模型： [队列](http://en.wikipedia.org/wiki/Message_queue) 和 [发布/订阅](http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)。 对于队列模型，可能有大批量的消费者从一台服务器上读取数据，并且服务器上的每一个消息都会被这些消费者读取。在发布/订阅模型中，消息会广播给所有用户。 这两个模型都有其优缺点。队列的优点是允许把数据处理分发给很多消费者实例，这将能扩大数据处理规模。但是队列不是多订阅者处理的，一旦一个进程读完，数据就消失了。发布/订阅模型允许数据广播到多个进程，但是由于所有的数据都是广播到所有的订阅者的，所以无法扩大数据处理规模。
+传统的消息有两种模型：[队列](http://en.wikipedia.org/wiki/Message_queue) 和 [发布/订阅](http://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)。 对于队列模型，可能有大批量的消费者从一台服务器上读取数据，并且服务器上的每一个消息都会被这些消费者读取。在发布/订阅模型中，消息会广播给所有用户。 这两个模型都有其优缺点。队列的优点是允许把数据处理分发给很多消费者实例，这将能扩大数据处理规模。但是队列不是多订阅者处理的，一旦一个进程读完，数据就消失了。发布/订阅模型允许数据广播到多个进程，但是由于所有的数据都是广播到所有的订阅者的，所以无法扩大数据处理规模。
 
 The consumer group concept in Kafka generalizes these two concepts. As with a queue the consumer group allows you to divide up processing over a collection of processes (the members of the consumer group). As with publish-subscribe, Kafka allows you to broadcast messages to multiple consumer groups.
 
@@ -260,7 +265,7 @@ As a result of taking storage seriously and allowing the clients to control thei
 
 For details about the Kafka's commit log storage and replication design, please read [this](https://kafka.apache.org/documentation/#design) page.
 
-如果想了解更多关于Kafka日志提交存储和副本设计方面的细节，请阅读[此页](https://kafka.apache.org/documentation/#design)。
+如果想了解更多关于Kafka日志提交存储和副本设计方面的细节，请阅读[此页](./design.md)。
 
 ## Kafka for Stream Processing
 
@@ -319,4 +324,4 @@ Likewise for streaming data pipelines the combination of subscription to real-ti
 
 For more information on the guarantees, APIs, and capabilities Kafka provides see the rest of the [documentation](https://kafka.apache.org/documentation.html).
 
-关于Kafka提供的保证，APIs，容量等更多信息，请看这个[文档](https://kafka.apache.org/documentation.html)。
+关于Kafka提供的保证，APIs，容量等更多信息，请看这个[文档](./documentation.md)。
