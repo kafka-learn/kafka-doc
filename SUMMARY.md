@@ -31,6 +31,10 @@
 		* [Run Demo App](docs/documentations/kafka_streams/run_demo_app.md)
 		
 		* [Tutorial: Write App](docs/documentations/kafka_streams/tutorial_write_app.md)
+
+		* [Concepts](docs/documentations/kafka_streams/concepts.md)
+		
+        * [Architecture](docs/documentations/kafka_streams/architecture.md)
     
     * [Kafka Connect](docs/documentations/kafka_connect.md)
     
