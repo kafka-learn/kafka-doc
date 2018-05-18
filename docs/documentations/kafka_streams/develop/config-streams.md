@@ -8,9 +8,15 @@ Kafka and Kafka Streams configuration options must be configured before using St
 
 1.  Create a ```java.util.Properties``` instance.
 
+1.  创建一个```java.util.Properties```实例。
+
 2.  Set the [parameters](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-required-configs).
 
+2.  设置[参数](config-streams.md)。
+
 3.  Construct a ```StreamsConfig``` instance from the ```Properties``` instance. For example:
+
+3.  从```Properties```实例构造一个```StreamsConfig```实例。 例如：
 
 
  ```java
@@ -19,108 +25,192 @@ import org.apache.kafka.streams.StreamsConfig;
 
 Properties settings = new Properties();
 // Set a few key parameters
+// 设置一些关键参数
 settings.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-first-streams-application");
 settings.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-broker1:9092");
 // Any further settings
+// 进一步设置
 settings.put(... , ...);
 
 // Create an instance of StreamsConfig from the Properties instance
+// 从Properties实例创建一个StreamsConfig的实例
 StreamsConfig config = new StreamsConfig(settings);
 ```
 
 ## CONFIGURATION PARAMETER REFERENCE
 
-This section contains the most common Streams configuration parameters. For a full reference, see the Streams Javadocs.
+## 配置参数参考
+
+This section contains the most common Streams configuration parameters. For a full reference, see the [Streams](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsConfig.html) Javadocs.
+
+本节包含最常见的Streams配置参数。有关完整参考，请参阅[Streams](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsConfig.html) Javadocs。
 
 * Required configuration parameters
+
+* 必选的配置参数
+
     * application.id
+
     * bootstrap.servers
+
 * Optional configuration parameters
+
+* 可选的配置参数
+
     * default.deserialization.exception.handler
+
     * default.production.exception.handler
+
     * default.key.serde
+
     * default.value.serde
+
     * num.standby.replicas
+
     * num.stream.threads
+
     * partition.grouper
+
     * replication.factor
+
     * state.dir
+
     * timestamp.extractor
+
 * Kafka consumers and producer configuration parameters
+
+* Kafka消费者和生产者配置参数
+
     * Naming
+
     * Default Values
+
     * enable.auto.commit
+
     * rocksdb.config.setter
+
 * Recommended configuration parameters for resiliency
+
+* 推荐的弹性配置参数
+
     * acks
+
     * replication.factor
 
 ## Required configuration parameters
+
+## 必选的配置参数
+
 Here are the required Streams configuration parameters.
 
-Parameter Name	Importance	Description	Default Value
-application.id	Required	An identifier for the stream processing application. Must be unique within the Kafka cluster.	None
-bootstrap.servers	Required	A list of host/port pairs to use for establishing the initial connection to the Kafka cluster.	None
+以下是必选的Streams配置参数。
 
-## application.id
+Parameter Name | Importance	| Description | Default Value
+--- | --- | --- | ---
+application.id | Required |	An identifier for the stream processing application. Must be unique within the Kafka cluster. | None
+bootstrap.servers | Required | A list of host/port pairs to use for establishing the initial connection to the Kafka cluster. | None
+
+参数名称 | 重要性 | 描述 | 默认值
+--- | --- | --- | ---
+application.id | 必选 |	流处理应用程序的标识符。在Kafka集群中必须是唯一的。 | None
+bootstrap.servers | 必选 | 用于建立到Kafka集群的初始连接的主机/端口对列表。 | None
+
+### application.id
+
+### application.id
 
 (Required) The application ID. Each stream processing application must have a unique ID. The same ID must be given to all instances of the application. It is recommended to use only alphanumeric characters, ```.``` (dot), ```-``` (hyphen), and ```_``` (underscore). Examples: ```"hello_world"```, ```"hello_world-v1.0.0"```
 
+（必填）应用程序ID。每个流处理应用程序必须具有唯一的ID。必须为应用程序的所有实例提供相同的ID。建议仅使用字母数字字符```.```（点），```-```（连字符）和```_```（下划线）。例如：```"hello_world"```，```"hello_world-v1.0.0"```
+
 This ID is used in the following places to isolate resources used by the application from others:
 
-* As the default Kafka consumer and producer client.id prefix
+此ID用于以下情况中将应用程序使用的资源与其他资源隔离开来：
 
-* As the Kafka consumer group.id for coordination
+* As the default Kafka consumer and producer ```client.id``` prefix
 
-* As the name of the subdirectory in the state directory (cf. state.dir)
+* 作为默认的Kafka消费者和生产者```client.id```前缀
+
+* As the Kafka consumer ```group.id``` for coordination
+
+* 作为Kafka消费者```group.id```进行协调
+
+* As the name of the subdirectory in the state directory (cf. ```state.dir```)
+
+* 作为状态目录中的子目录的名称（参看```state.dir```）
 
 * As the prefix of internal Kafka topic names
 
+* 作为内部Kafka主题名称的前缀
+
 Tip:
+
+提示：
 
 When an application is updated, the ```application.id``` should be changed unless you want to reuse the existing data in internal topics and state stores. For example, you could embed the version information within ```application.id```, as ```my-app-v1.0.0``` and ```my-app-v1.0.2```.
 
-## bootstrap.servers
+更新应用程序时，除非要在内部主题和状态存储器中重新使用现有数据，否则应更改```application.id```。例如，您可以在```application.id```中嵌入版本信息，例如```my-app-v1.0.0```和```my-app-v1.0.2```。
+
+### bootstrap.servers
+
+### bootstrap.servers
 
 (Required) The Kafka bootstrap servers. This is the same [setting](http://kafka.apache.org/documentation.html#producerconfigs) that is used by the underlying producer and consumer clients to connect to the Kafka cluster. Example: ```"kafka-broker1:9092,kafka-broker2:9092"```.
 
+（必需）Kafka引导程序服务器。这与基础生产者和消费者客户端用于连接到Kafka集群的[设置](http://kafka.apache.org/documentation.html#producerconfigs)相同。 例如：```"kafka-broker1：9092，kafka-broker2：9092"```。
+
 Tip:
+
+提示：
 
 Kafka Streams applications can only communicate with a single Kafka cluster specified by this config value. Future versions of Kafka Streams will support connecting to different Kafka clusters for reading input streams and writing output streams.
 
+Kafka Streams应用程序只能与由此配置值指定的单个Kafka集群进行通信。未来版本的Kafka Streams将支持连接到不同的Kafka集群，以读取输入流并输出到输出流。
+
 ## Optional configuration parameters
+
+## 可选的配置参数
 
 Here are the optional [Streams](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsConfig.html) javadocs, sorted by level of importance:
 
+以下是可选的[Streams](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsConfig.html) javadocs，按重要性排序：
+
 * High: These parameters can have a significant impact on performance. Take care when deciding the values of these parameters.
+
+* 重要：这些参数可能会对性能产生重大影响。在决定这些参数的值时要小心。
 
 * Medium: These parameters can have some impact on performance. Your specific environment will determine how much tuning effort should be focused on these parameters.
 
+* 中等：这些参数可能会对性能产生一些影响。您的具体环境将决定您应该集中在这些参数上做多大的调整。
+
 * Low: These parameters have a less general or less significant impact on performance.
 
-Parameter Name	Importance	Description	Default Value
-application.server	Low	A host:port pair pointing to an embedded user defined endpoint that can be used for discovering the locations of state stores within a single Kafka Streams application. The value of this must be different for each instance of the application.	the empty string
-buffered.records.per.partition	Low	The maximum number of records to buffer per partition.	1000
-cache.max.bytes.buffering	Medium	Maximum number of memory bytes to be used for record caches across all threads.	10485760 bytes
-client.id	Medium	An ID string to pass to the server when making requests. (This setting is passed to the consumer/producer clients used internally by Kafka Streams.)	the empty string
-commit.interval.ms	Low	The frequency with which to save the position (offsets in source topics) of tasks.	30000 milliseconds
-default.deserialization.exception.handler	Medium	Exception handling class that implements the DeserializationExceptionHandler interface.	LogAndContinueExceptionHandler
-default.production.exception.handler	Medium	Exception handling class that implements the ProductionExceptionHandler interface.	DefaultProductionExceptionHandler
-key.serde	Medium	Default serializer/deserializer class for record keys, implements the Serde interface (see also value.serde).	Serdes.ByteArray().getClass().getName()
-metric.reporters	Low	A list of classes to use as metrics reporters.	the empty list
-metrics.num.samples	Low	The number of samples maintained to compute metrics.	2
-metrics.recording.level	Low	The highest recording level for metrics.	INFO
-metrics.sample.window.ms	Low	The window of time a metrics sample is computed over.	30000 milliseconds
-num.standby.replicas	Medium	The number of standby replicas for each task.	0
-num.stream.threads	Medium	The number of threads to execute stream processing.	1
-partition.grouper	Low	Partition grouper class that implements the PartitionGrouper interface.	See Partition Grouper
-poll.ms	Low	The amount of time in milliseconds to block waiting for input.	100 milliseconds
-replication.factor	High	The replication factor for changelog topics and repartition topics created by the application.	1
-state.cleanup.delay.ms	Low	The amount of time in milliseconds to wait before deleting state when a partition has migrated.	6000000 milliseconds
-state.dir	High	Directory location for state stores.	/var/lib/kafka-streams
-timestamp.extractor	Medium	Timestamp extractor class that implements the TimestampExtractor interface.	See Timestamp Extractor
-value.serde	Medium	Default serializer/deserializer class for record values, implements the Serde interface (see also key.serde).	Serdes.ByteArray().getClass().getName()
-windowstore.changelog.additional.retention.ms	Low	Added to a windows maintainMs to ensure data is not deleted from the log prematurely. Allows for clock drift.	86400000 milliseconds = 1 day
+* 低：这些参数对性能影响较小或较不显着。
+
+Parameter Name | Importance | Description |	Default Value
+--- | --- | --- | ---
+application.server | Low | A host:port pair pointing to an embedded user defined endpoint that can be used for discovering the locations of state stores within a single Kafka Streams application. The value of this must be different for each instance of the application. | the empty string
+buffered.records.per.partition | Low | The maximum number of records to buffer per partition. | 1000
+cache.max.bytes.buffering | Medium | Maximum number of memory bytes to be used for record caches across all threads. | 10485760 bytes
+client.id | Medium | An ID string to pass to the server when making requests. (This setting is passed to the consumer/producer clients used internally by Kafka Streams.) | the empty string
+commit.interval.ms | Low | The frequency with which to save the position (offsets in source topics) of tasks. | 30000 milliseconds
+default.deserialization.exception.handler | Medium | Exception handling class that implements the ```DeserializationExceptionHandler``` interface. | ```LogAndContinueExceptionHandler```
+default.production.exception.handler | Medium | Exception handling class that implements the ```ProductionExceptionHandler``` interface. | ```DefaultProductionExceptionHandler```
+key.serde | Medium | Default serializer/deserializer class for record keys, implements the ```Serde``` interface (see also value.serde). | ```Serdes.ByteArray().getClass().getName()```
+metric.reporters | Low | A list of classes to use as metrics reporters. | the empty list
+metrics.num.samples | Low | The number of samples maintained to compute metrics. | 2
+metrics.recording.level | Low | The highest recording level for metrics. | ```INFO```
+metrics.sample.window.ms | Low | The window of time a metrics sample is computed over. | 30000 milliseconds
+num.standby.replicas | Medium | The number of standby replicas for each task. | 0
+num.stream.threads | Medium | The number of threads to execute stream processing. | 1
+partition.grouper | Low | Partition grouper class that implements the ```PartitionGrouper``` interface. | See [Partition Grouper](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-partition-grouper)
+poll.ms | Low | The amount of time in milliseconds to block waiting for input. | 100 milliseconds
+replication.factor | High | The replication factor for changelog topics and repartition topics created by the application. | 1
+state.cleanup.delay.ms | Low | The amount of time in milliseconds to wait before deleting state when a partition has migrated. | 6000000 milliseconds
+state.dir | High | Directory location for state stores.	 | ```/var/lib/kafka-streams```
+timestamp.extractor | Medium | Timestamp extractor class that implements the ```TimestampExtractor``` interface. | See [Timestamp Extractor](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-timestamp-extractor)
+value.serde | Medium | Default serializer/deserializer class for record values, implements the ```Serde``` interface (see also key.serde). | ```Serdes.ByteArray().getClass().getName()``` 
+windowstore.changelog.additional.retention.ms |	Low | Added to a windows maintainMs to ensure data is not deleted from the log prematurely. Allows for clock drift. | 86400000 milliseconds = 1 day
 
 ## default.deserialization.exception.handler
 
