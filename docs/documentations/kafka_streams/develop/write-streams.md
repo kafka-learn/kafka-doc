@@ -8,9 +8,10 @@
 
 * [Libraries and Maven artifacts](http://kafka.apache.org/11/documentation/streams/developer-guide/write-streams.html#libraries-and-maven-artifacts)
 
-* [库和Maven artifacts](write-streams.md)
-
 * [Using Kafka Streams within your application code](http://kafka.apache.org/11/documentation/streams/developer-guide/write-streams.html#using-kafka-streams-within-your-application-code)
+
+
+* [库和Maven artifacts](write-streams.md)
 
 * [在应用程序代码中使用Kafka Streams](write-streams.md)
 
@@ -22,9 +23,7 @@ You can define the processor topology with the Kafka Streams APIs:
 
 您可以使用Kafka Streams API定义处理器拓扑：
 
-[Kafka Streams DSL](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl)
-
-[Kafka Streams DSL](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl)
+[Kafka Streams DSL](dsl-api.md)
 
 A high-level API that provides provides the most common data transformation operations such as ```map```, ```filter```, ```join```, and ```aggregations``` out of the box. The DSL is the recommended starting point for developers new to Kafka Streams, and should cover many use cases and stream processing needs.
 
@@ -32,7 +31,7 @@ A high-level API that provides provides the most common data transformation oper
 
 [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api)
 
-[处理器API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api)
+[处理器API](processor-api.md)
 
 A low-level API that lets you add and connect processors as well as interact directly with state stores. The Processor API provides you with even more flexibility than the DSL but at the expense of requiring more manual work on the side of the application developer (e.g., more lines of code).
 
@@ -51,8 +50,8 @@ You can define dependencies on the following libraries for your Kafka Streams ap
 您可以为Kafka Streams应用程序定义以下库的依赖关系。
 
  Group ID | Artifact ID | Version | Description 
- --- | --- | --- | --- 
- ```org.apache.kafka``` | ```kafka-streams``` | ```1.1.0``` | (Required) Base library for Kafka Streams. |
+--- | --- | --- | --- 
+ ```org.apache.kafka``` | ```kafka-streams``` | ```1.1.0``` | (Required) Base library for Kafka Streams. 
  ```org.apache.kafka``` | ```kafka-clients``` | ```1.1.0``` | (Required) Kafka client library. Contains built-in serializers/deserializers.
 
   组ID | 工件ID | 版本 | 描述 
@@ -95,22 +94,23 @@ You can call Kafka Streams from anywhere in your application code, but usually t
 
 First, you must create an instance of ```KafkaStreams```.
 
-首先，你必须创建一个```KafkaStreams```的实例。
+首先，您必须创建一个```KafkaStreams```的实例。
 
-The first argument of the ```KafkaStreams``` constructor takes a topology (either ```StreamsBuilder#build()``` for the [DSL](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl) or ```Topology``` for the [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api)) that is used to define a topology.
+* The first argument of the ```KafkaStreams``` constructor takes a topology (either ```StreamsBuilder#build()``` for the [DSL](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl) or ```Topology``` for the [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api)) that is used to define a topology.
 
-```KafkaStreams```构造方法的第一个参数需要一个拓扑（用于[DSL](dsl-api.md)的```StreamsBuilder＃build()```或用于[处理器API](processor-api.md)的```拓扑```）用于定义拓扑。
+* The second argument is an instance of ```StreamsConfig```, which defines the configuration for this specific topology.
 
-The second argument is an instance of ```StreamsConfig```, which defines the configuration for this specific topology.
 
-第二个参数是```StreamsConfig```的一个实例，它定义了这个特定拓扑的配置。
+* ```KafkaStreams```构造方法的第一个参数需要一个拓扑（用于[DSL](dsl-api.md)的```StreamsBuilder＃build()```或用于[处理器API](processor-api.md)的```拓扑```）用于定义拓扑。
+
+* 第二个参数是```StreamsConfig```的一个实例，它定义了这个特定拓扑的配置。
 
 Code example:
 
 代码示例：
 
 ```java
-mport org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.StreamsBuilder;
 import org.apache.kafka.streams.processor.Topology;
@@ -194,27 +194,27 @@ To allow your application to gracefully shutdown in response to SIGTERM, it is r
 
 * Here is a shutdown hook example in Java 8+:
 
-* 这是Java 8+中的关闭钩子的示例：
+    这是Java 8+中的关闭钩子的示例：
 
 ```java
 // Add shutdown hook to stop the Kafka Streams threads.
 // You can optionally provide a timeout to `close`.
 
 // 添加关闭钩子以停止Kafka Streams线程。
-// 你可以选择提供一个时间限额来关闭。
+// 您可以选择提供一个时间限额来关闭。
 Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 ```
 
 * Here is a shutdown hook example in Java 7:
 
-* Java 7中的关闭钩子示例如下：
+    这是Java 7中的关闭钩子示例：
 
 ```java
 // Add shutdown hook to stop the Kafka Streams threads.
 // You can optionally provide a timeout to `close`.
 
 // 添加关闭钩子以停止Kafka Streams线程。
-// 你可以选择提供一个时间限额来关闭。
+// 您可以选择提供一个时间限额来关闭。
 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
   @Override
   public void run() {
@@ -225,4 +225,4 @@ Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 
 After an application is stopped, Kafka Streams will migrate any tasks that had been running in this instance to available remaining instances.
 
-在应用程序停止后，Kafka Streams会将在此实例中运行的所有任务迁移到可用的剩余实例中。
+在应用程序停止后，Kafka Streams会将在此实例中运行的所有任务迁移到剩余可用的实例中。

@@ -8,18 +8,18 @@ Kafka and Kafka Streams configuration options must be configured before using St
 
 1.  Create a ```java.util.Properties``` instance.
 
-1.  创建一个```java.util.Properties```实例。
-
 2.  Set the [parameters](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-required-configs).
-
-2.  设置[参数](config-streams.md)。
 
 3.  Construct a ```StreamsConfig``` instance from the ```Properties``` instance. For example:
 
+
+1.  创建一个```java.util.Properties```实例。
+
+2.  设置[参数](config-streams.md)。
+
 3.  从```Properties```实例构造一个```StreamsConfig```实例。 例如：
 
-
- ```java
+```java
 import java.util.Properties;
 import org.apache.kafka.streams.StreamsConfig;
 
@@ -47,7 +47,7 @@ This section contains the most common Streams configuration parameters. For a fu
 
 * Required configuration parameters
 
-* 必选的配置参数
+    必选的配置参数
 
     * application.id
 
@@ -55,7 +55,7 @@ This section contains the most common Streams configuration parameters. For a fu
 
 * Optional configuration parameters
 
-* 可选的配置参数
+    可选的配置参数
 
     * default.deserialization.exception.handler
 
@@ -79,7 +79,7 @@ This section contains the most common Streams configuration parameters. For a fu
 
 * Kafka consumers and producer configuration parameters
 
-* Kafka消费者和生产者配置参数
+    Kafka消费者和生产者配置参数
 
     * Naming
 
@@ -91,7 +91,7 @@ This section contains the most common Streams configuration parameters. For a fu
 
 * Recommended configuration parameters for resiliency
 
-* 推荐的弹性配置参数
+    推荐的弹性配置参数
 
     * acks
 
@@ -119,7 +119,7 @@ bootstrap.servers | 必选 | 用于建立到Kafka集群的初始连接的主机/
 
 (Required) The application ID. Each stream processing application must have a unique ID. The same ID must be given to all instances of the application. It is recommended to use only alphanumeric characters, ```.``` (dot), ```-``` (hyphen), and ```_``` (underscore). Examples: ```"hello_world"```, ```"hello_world-v1.0.0"```
 
-（必填）应用程序ID。每个流处理应用程序必须具有唯一的ID。必须为应用程序的所有实例提供相同的ID。建议仅使用字母数字字符```.```（点），```-```（连字符）和```_```（下划线）。例如：```"hello_world"```，```"hello_world-v1.0.0"```
+（必填）应用程序ID。每个流处理应用程序必须具有唯一的ID。必须为同一应用程序的所有实例提供相同的ID。建议仅使用字母数字字符```.```（点），```-```（连字符）和```_```（下划线）。例如：```"hello_world"```，```"hello_world-v1.0.0"```
 
 This ID is used in the following places to isolate resources used by the application from others:
 
@@ -127,17 +127,18 @@ This ID is used in the following places to isolate resources used by the applica
 
 * As the default Kafka consumer and producer ```client.id``` prefix
 
-* 作为默认的Kafka消费者和生产者```client.id```前缀
-
 * As the Kafka consumer ```group.id``` for coordination
-
-* 作为Kafka消费者```group.id```进行协调
 
 * As the name of the subdirectory in the state directory (cf. ```state.dir```)
 
-* 作为状态目录中的子目录的名称（参看```state.dir```）
-
 * As the prefix of internal Kafka topic names
+
+
+* 作为默认的Kafka消费者和生产者```client.id```前缀
+
+* 作为Kafka消费者```group.id```进行协调
+
+* 作为状态目录中的子目录的名称（参看```state.dir```）
 
 * 作为内部Kafka主题名称的前缀
 
@@ -147,13 +148,13 @@ Tip:
 
 When an application is updated, the ```application.id``` should be changed unless you want to reuse the existing data in internal topics and state stores. For example, you could embed the version information within ```application.id```, as ```my-app-v1.0.0``` and ```my-app-v1.0.2```.
 
-更新应用程序时，除非要在内部主题和状态存储器中重新使用现有数据，否则应更改```application.id```。例如，您可以在```application.id```中嵌入版本信息，例如```my-app-v1.0.0```和```my-app-v1.0.2```。
+更新应用程序时，除非要在内部主题和状态存储器中重用现有数据，否则应更改```application.id```。例如，您可以在```application.id```中嵌入版本信息，例如```my-app-v1.0.0```和```my-app-v1.0.2```。
 
 ### bootstrap.servers
 
 (Required) The Kafka bootstrap servers. This is the same [setting](http://kafka.apache.org/documentation.html#producerconfigs) that is used by the underlying producer and consumer clients to connect to the Kafka cluster. Example: ```"kafka-broker1:9092,kafka-broker2:9092"```.
 
-（必需）Kafka引导程序服务器。这与基础生产者和消费者客户端用于连接到Kafka集群的[设置](http://kafka.apache.org/documentation.html#producerconfigs)相同。 例如：```"kafka-broker1：9092，kafka-broker2：9092"```。
+（必需）Kafka引导程序服务器。这与基础生产者和消费者客户端用于连接到Kafka集群的[设置](../../../documentation.md)相同。 例如：```"kafka-broker1：9092，kafka-broker2：9092"```。
 
 Tip:
 
@@ -173,15 +174,16 @@ Here are the optional [Streams](http://kafka.apache.org/11/javadoc/org/apache/ka
 
 * High: These parameters can have a significant impact on performance. Take care when deciding the values of these parameters.
 
-* 重要：这些参数可能会对性能产生重大影响。在决定这些参数的值时要小心。
-
 * Medium: These parameters can have some impact on performance. Your specific environment will determine how much tuning effort should be focused on these parameters.
-
-* 中等：这些参数可能会对性能产生一些影响。您的具体环境将决定您应该集中在这些参数上做多大的调整。
 
 * Low: These parameters have a less general or less significant impact on performance.
 
-* 低：这些参数对性能影响较小或较不显着。
+
+* 高：这些参数可能会对性能产生重大影响。在决定这些参数的值时要谨慎。
+
+* 中：这些参数可能会对性能产生一些影响。您的具体环境将决定您应该在这些参数上做多大的调整。
+
+* 低：这些参数对性能影响较小或较不显著。
 
 Parameter Name | Importance | Description |	Default Value
 --- | --- | --- | ---
@@ -208,6 +210,31 @@ timestamp.extractor | Medium | Timestamp extractor class that implements the ```
 value.serde | Medium | Default serializer/deserializer class for record values, implements the ```Serde``` interface (see also key.serde). | ```Serdes.ByteArray().getClass().getName()``` 
 windowstore.changelog.additional.retention.ms |	Low | Added to a windows maintainMs to ensure data is not deleted from the log prematurely. Allows for clock drift. | 86400000 milliseconds = 1 day
 
+参数名称 | 重要性 | 描述 |	默认值
+--- | --- | --- | ---
+application.server | 低 | 指向内嵌用户定义端口的主机：端口对，可用于发现单个Kafka Streams应用程序中状态存储器的位置。对于应用程序的每个实例，这个值必须不同。 | 空字符串
+buffered.records.per.partition | 低 | 每个分区缓冲的最大消息数。 | 1000
+cache.max.bytes.buffering | 中 | 所有线程上用于记录缓存的最大内存字节数。 | 10485760 bytes
+client.id | 中 | 发出请求时传递给服务器的ID字符串。（此设置传递给由Kafka Streams内部使用的消费者/生产者客户端。） | 空字符串
+commit.interval.ms | 低 | 用于保存任务的位置（source主题中的offsets）的频率。 | 30000 milliseconds
+default.deserialization.exception.handler | 中 | 实现```DeserializationExceptionHandler```接口的异常处理类。 | ```LogAndContinueExceptionHandler```
+default.production.exception.handler | 中 | 实现```ProductionExceptionHandler```接口的异常处理类。 | ```DefaultProductionExceptionHandler```
+key.serde | 中 | 实现了```Serde```接口的消息键的默认序列化/反序列化器类（另请参阅value.serde）。 | ```Serdes.ByteArray().getClass().getName()```
+metric.reporters | 低 | 用作度量记录的类的列表。 | 空列表
+metrics.num.samples | 低 | 维持用于计算度量标准的样本数量。 | 2
+metrics.recording.level | 低 | 度量的最高记录级别。 | ```INFO```
+metrics.sample.window.ms | 低 | 计算指标样本的时间窗口。 | 30000 milliseconds
+num.standby.replicas | 中 | 每个任务的备用副本数量。 | 0
+num.stream.threads | 中 | 执行流处理的线程数。 | 1
+partition.grouper | 低 | 实现```PartitionGrouper```接口的分区分组类。 | 参见[Partition Grouper](config-streams.md)
+poll.ms | 低 | 阻塞等待输入的时间量（以毫秒为单位）。 | 100 milliseconds
+replication.factor | 高 | 更新日志主题和应用程序创建的重新分区主题的复制因子。 | 1
+state.cleanup.delay.ms | 低 | 在删除分区迁移后的状态之前要等待的时间（以毫秒为单位）。 | 6000000 milliseconds
+state.dir | 高 | 状态存储器的目录位置。 | ```/var/lib/kafka-streams```
+timestamp.extractor | 中 | 实现```TimestampExtractor```接口的时间戳提取器类。 | 参见[Timestamp Extractor](config-streams.md)
+value.serde | 中 | 实现了```Serde```接口的消息值的默认序列化/反序列化器类（另请参阅key.serde）。 | ```Serdes.ByteArray().getClass().getName()``` 
+windowstore.changelog.additional.retention.ms |	低 | 添加到Windows maintainMs中以确保数据不会过早从日志中删除。允许时钟浮动。 | 86400000 milliseconds = 1 day
+
 ### default.deserialization.exception.handler
 
 The default deserialization exception handler allows you to manage record exceptions that fail to deserialize. This can be caused by corrupt data, incorrect serialization logic, or unhandled record types. These exception handlers are available:
@@ -216,9 +243,10 @@ The default deserialization exception handler allows you to manage record except
 
 * [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html): This handler logs the deserialization exception and then signals the processing pipeline to continue processing more records. This log-and-skip strategy allows Kafka Streams to make progress instead of failing if there are records that fail to deserialize.
 
-* [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html)：该处理程序记录反序列化异常，然后通知处理管道继续处理更多消息。如果存在无法反序列化的消息，此记录和跳过策略允许Kafka Streams继续处理，而不是失效。
-
 * [LogAndFailExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndFailExceptionHandler.html). This handler logs the deserialization exception and then signals the processing pipeline to stop processing more records.
+
+
+* [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html)：该处理程序记录反序列化异常，然后通知处理管道继续处理更多消息。如果存在无法反序列化的消息，此记录和跳过策略允许Kafka Streams继续处理，而不是失效。
 
 * [LogAndFailExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndFailExceptionHandler.html).此处理程序记录反序列化异常，然后通知处理管道停止处理更多消息。
 
@@ -229,6 +257,8 @@ The default production exception handler allows you to manage exceptions trigger
 默认生产异常处理程序允许您管理尝试与代理进行交互时触发的异常，例如尝试生产过大的消息。默认情况下，Kafka提供并使用的是在发生这些异常时总是失效的[DefaultProductionExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/DefaultProductionExceptionHandler.html)。
 
 Each exception handler can return a ```FAIL``` or ```CONTINUE``` depending on the record and the exception thrown. Returning ```FAIL``` will signal that Streams should shut down and ```CONTINUE``` will signal that Streams should ignore the issue and continue processing. If you want to provide an exception handler that always ignores records that are too large, you could implement something like the following:
+
+每个异常处理程序都可以返回```FAIL```或```CONTINUE```，具体取决于消息和抛出的异常。返回```FAIL```将表示Streams应该关闭，返回```CONTINUE```将表示Streams应该忽略问题并继续处理。 如果您想提供一个总是忽略过大的消息的异常处理程序，您可以参照如下实现：
 
 ```java
 import java.util.Properties;
@@ -267,9 +297,10 @@ The default Serializer/Deserializer class for record keys. Serialization and des
 
 * Whenever data is read from or written to a *Kafka topic* (e.g., via the ```StreamsBuilder#stream()``` and ```KStream#to()``` methods).
 
-* 无论何时读取或写入*Kafka主题*的数据（例如，通过```StreamsBuilder＃stream()```和```KStream＃to()```方法）。
-
 * Whenever data is read from or written to a *state store*.
+
+
+* 无论何时读取或写入*Kafka主题*的数据（例如，通过```StreamsBuilder＃stream()```和```KStream＃to()```方法）。
 
 * 无论何时从*状态存储器*中读取或写入数据。
 
@@ -285,9 +316,10 @@ The default Serializer/Deserializer class for record values. Serialization and d
 
 * Whenever data is read from or written to a *Kafka topic* (e.g., via the ```StreamsBuilder#stream()``` and ```KStream#to()``` methods).
 
-* 无论何时读取或写入*Kafka主题*的数据（例如，通过```StreamsBuilder＃stream()```和```KStream＃to()```方法）。
-
 * Whenever data is read from or written to a *state store*.
+
+
+* 无论何时读取或写入*Kafka主题*的数据（例如，通过```StreamsBuilder＃stream()```和```KStream＃to()```方法）。
 
 * 无论何时从*状态存储器*中读取或写入数据。
 
@@ -345,9 +377,10 @@ The default extractor is [FailOnInvalidTimestamp](http://kafka.apache.org/11/jav
 
 * **event-time** processing semantics if ```log.message.timestamp.type``` is set to ```CreateTime``` aka “producer time” (which is the default). This represents the time when a Kafka producer sent the original message. If you use Kafka’s official producer client, the timestamp represents milliseconds since the epoch.
 
-* 如果```log.message.timestamp.type```被设置为```CreateTime```又名“生产者时间”（这是默认值），则可以使用**event-time**处理语义。这代表了Kafka生产者发送原始消息的时间。如果您使用Kafka的官方生产者客户端，则时间戳表示自该时期以来的毫秒数。
-
 * **ingestion-time** processing semantics if ```log.message.timestamp.type``` is set to ```LogAppendTime``` aka “broker time”. This represents the time when the Kafka broker received the original message, in milliseconds since the epoch.
+
+
+* 如果```log.message.timestamp.type```被设置为```CreateTime```又名“生产者时间”（这是默认值），则可以使用**event-time**处理语义。这代表了Kafka生产者发送原始消息的时间。如果您使用Kafka的官方生产者客户端，则时间戳表示自该时期以来的毫秒数。
 
 * 如果将```log.message.timestamp.type```设置为```LogAppendTime```又名“代理时间”，则可以使用**ingestion-time**处理语义。这表示Kafka代理收到原始消息的时间，单位是自该时期以来的毫秒数。
 
@@ -361,9 +394,10 @@ If you have data with invalid timestamps and want to process it, then there are 
 
 * [LogAndSkipOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/LogAndSkipOnInvalidTimestamp.html): This extractor logs a warn message and returns the invalid timestamp to Kafka Streams, which will not process but silently drop the record. This log-and-skip strategy allows Kafka Streams to make progress instead of failing if there are records with an invalid built-in timestamp in your input data.
 
-* [LogAndSkipOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/LogAndSkipOnInvalidTimestamp.html)：此提取器记录警告消息并将无效时间戳返回给Kafka Streams，Kafka Streams将不会处理，但会自动丢弃消息。此记录和跳过策略允许Kafka Streams在输入数据中存在无效内置时间戳的消息的情况下继续处理，而不是失效。
-
 * [UsePreviousTimeOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/UsePreviousTimeOnInvalidTimestamp.html). This extractor returns the record’s built-in timestamp if it is valid (i.e. not negative). If the record does not have a valid built-in timestamps, the extractor returns the previously extracted valid timestamp from a record of the same topic partition as the current record as a timestamp estimation. In case that no timestamp can be estimated, it throws an exception.
+
+
+* [LogAndSkipOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/LogAndSkipOnInvalidTimestamp.html)：此提取器记录警告消息并将无效时间戳返回给Kafka Streams，Kafka Streams将不会处理，但会自动丢弃消息。此记录和跳过策略允许Kafka Streams在输入数据中存在无效内置时间戳的消息的情况下继续处理，而不是失效。
 
 * [UsePreviousTimeOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/UsePreviousTimeOnInvalidTimestamp.html)。如果消息有效的话（即不是负数），这个提取器返回它的内置时间戳。如果消息没有有效的内置时间戳，那么提取器将先前从与当前消息相同的主题分区中提取的一条消息的有效时间戳返回为预测时间戳。如果没有时间戳可以作为预测时间戳，它会抛出一个异常。
 
@@ -537,17 +571,18 @@ Notes for example:
 
 1. ```BlockBasedTableConfig tableConfig = new org.rocksdb.BlockBasedTableConfig();``` Reduce block cache size from the default, shown [here](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L81), as the total number of store RocksDB databases is partitions (40) * segments (3) = 120.
 
-1. ```BlockBasedTableConfig tableConfig = new org.rocksdb.BlockBasedTableConfig();```由于存储RocksDB数据库的总数是分区（40）*段（3）= 120，因此请将块缓存大小从默认值降低，如[此处](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L81)所示。
-
 2. ```tableConfig.setBlockSize(16 * 1024L);``` Modify the default [block size](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L82) per these instructions from the [RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB#indexes-and-filter-blocks).
-
-2. ```tableConfig.setBlockSize(16 * 1024L);```根据[RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB#indexes-and-filter-blocks)的这些指令修改默认[块大小](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L82)。
 
 3. ```tableConfig.setCacheIndexAndFilterBlocks(true);``` Do not let the index and filter blocks grow unbounded. For more information, see the [RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Block-Cache#caching-index-and-filter-blocks).
 
-3. ```tableConfig.setCacheIndexAndFilterBlocks(true);```不要让索引和过滤器块无限制地增长。有关更多信息，请参阅[RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Block-Cache#caching-index-and-filter-blocks)。
-
 4. ```options.setMaxWriteBufferNumber(2);``` See the advanced options in the [RocksDB GitHub](https://github.com/facebook/rocksdb/blob/8dee8cad9ee6b70fd6e1a5989a8156650a70c04f/include/rocksdb/advanced_options.h#L103).
+
+
+1. ```BlockBasedTableConfig tableConfig = new org.rocksdb.BlockBasedTableConfig();```由于存储RocksDB数据库的总数是分区（40）*段（3）= 120，因此请将块缓存大小从默认值降低，如[此处](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L81)所示。
+
+2. ```tableConfig.setBlockSize(16 * 1024L);```根据[RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB#indexes-and-filter-blocks)的这些指令修改默认[块大小](https://github.com/apache/kafka/blob/1.0/streams/src/main/java/org/apache/kafka/streams/state/internals/RocksDBStore.java#L82)。
+
+3. ```tableConfig.setCacheIndexAndFilterBlocks(true);```不要让索引和过滤器块无限制地增长。有关更多信息，请参阅[RocksDB GitHub](https://github.com/facebook/rocksdb/wiki/Block-Cache#caching-index-and-filter-blocks)。
 
 4. ```options.setMaxWriteBufferNumber(2);```请参阅[RocksDB GitHub](https://github.com/facebook/rocksdb/blob/8dee8cad9ee6b70fd6e1a5989a8156650a70c04f/include/rocksdb/advanced_options.h#L103)中的高级选项。
 
@@ -583,13 +618,14 @@ The number of acknowledgments that the leader must have received before consider
 
 * ```acks=0``` The producer does not wait for acknowledgment from the server and the record is immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the ```retries``` configuration will not take effect (as the client won’t generally know of any failures). The offset returned for each record will always be set to ```-1```.
 
-*  ```acks = 0```生产者不等待来自服务器的确认，且该消息立即被添加到套接字缓冲区并被认为已经被发送。 在这种情况下，不能保证服务器已经收到消息，并且```retries```配置不会生效（因为客户端通常不会知道任何故障）。为每条消息返回的偏移量将始终设置为```-1```。
-
 * ```acks=1``` The leader writes the record to its local log and responds without waiting for full acknowledgement from all followers. If the leader immediately fails after acknowledging the record, but before the followers have replicated it, then the record will be lost.
 
-* ```acks = 1```领导者将消息写入其本地日志并作出响应，无需等待所有追随者的完整确认。如果领导者在确认消息后，但在追随者复制之前，立即失效，则消息将丢失。
-
 * ```acks=all``` The leader waits for the full set of in-sync replicas to acknowledge the record. This guarantees that the record will not be lost if there is at least one in-sync replica alive. This is the strongest available guarantee.
+
+
+*  ```acks = 0```生产者不等待来自服务器的确认，且该消息立即被添加到套接字缓冲区并被认为已经被发送。 在这种情况下，不能保证服务器已经收到消息，并且```retries```配置不会生效（因为客户端通常不会知道任何故障）。为每条消息返回的偏移量将始终设置为```-1```。
+
+* ```acks = 1```领导者将消息写入其本地日志并作出响应，无需等待所有追随者的完整确认。如果领导者在确认消息后，但在追随者复制之前，立即失效，则消息将丢失。
 
 * ```acks = all```领导者等待所有同步副本确认消息。这保证了如果至少有一个同步副本处于活动状态，则该消息不会丢失。这是最可靠的保证。
 
