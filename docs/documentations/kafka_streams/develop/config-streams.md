@@ -17,7 +17,7 @@ Kafka and Kafka Streams configuration options must be configured before using St
 
 2.  设置[参数](config-streams.md)。
 
-3.  从```Properties```实例构造一个```StreamsConfig```实例。 例如：
+3.  从```Properties```实例构造一个```StreamsConfig```实例。例如：
 
 ```java
 import java.util.Properties;
@@ -162,7 +162,7 @@ Tip:
 
 Kafka Streams applications can only communicate with a single Kafka cluster specified by this config value. Future versions of Kafka Streams will support connecting to different Kafka clusters for reading input streams and writing output streams.
 
-Kafka Streams应用程序只能与由此配置值指定的单个Kafka集群进行通信。未来版本的Kafka Streams将支持连接到不同的Kafka集群，以读取输入流并输出到输出流。
+Kafka Streams应用程序只能与由此配置值指定的单个Kafka集群进行通信。后续版本的Kafka Streams将支持连接到不同的Kafka集群，以读取输入流并输出到输出流。
 
 ## Optional configuration parameters
 
@@ -212,15 +212,15 @@ windowstore.changelog.additional.retention.ms |	Low | Added to a windows maintai
 
 参数名称 | 重要性 | 描述 |	默认值
 --- | --- | --- | ---
-application.server | 低 | 指向内嵌用户定义端口的主机：端口对，可用于发现单个Kafka Streams应用程序中状态存储器的位置。对于应用程序的每个实例，这个值必须不同。 | 空字符串
+application.server | 低 | 指向内嵌用户定义端口的主机：端口对，可用于发现单个Kafka Streams应用程序中状态存储器的位置。对于应用程序的每个实例，这个值必须不同。 | the empty string
 buffered.records.per.partition | 低 | 每个分区缓冲的最大消息数。 | 1000
 cache.max.bytes.buffering | 中 | 所有线程上用于记录缓存的最大内存字节数。 | 10485760 bytes
-client.id | 中 | 发出请求时传递给服务器的ID字符串。（此设置传递给由Kafka Streams内部使用的消费者/生产者客户端。） | 空字符串
+client.id | 中 | 发出请求时传递给服务器的ID字符串。（此设置传递给由Kafka Streams内部使用的消费者/生产者客户端。） | the empty string
 commit.interval.ms | 低 | 用于保存任务的位置（source主题中的offsets）的频率。 | 30000 milliseconds
 default.deserialization.exception.handler | 中 | 实现```DeserializationExceptionHandler```接口的异常处理类。 | ```LogAndContinueExceptionHandler```
 default.production.exception.handler | 中 | 实现```ProductionExceptionHandler```接口的异常处理类。 | ```DefaultProductionExceptionHandler```
 key.serde | 中 | 实现了```Serde```接口的消息键的默认序列化/反序列化器类（另请参阅value.serde）。 | ```Serdes.ByteArray().getClass().getName()```
-metric.reporters | 低 | 用作度量记录的类的列表。 | 空列表
+metric.reporters | 低 | 用作度量记录的类的列表。 | the empty list
 metrics.num.samples | 低 | 维持用于计算度量标准的样本数量。 | 2
 metrics.recording.level | 低 | 度量的最高记录级别。 | ```INFO```
 metrics.sample.window.ms | 低 | 计算指标样本的时间窗口。 | 30000 milliseconds
@@ -228,10 +228,10 @@ num.standby.replicas | 中 | 每个任务的备用副本数量。 | 0
 num.stream.threads | 中 | 执行流处理的线程数。 | 1
 partition.grouper | 低 | 实现```PartitionGrouper```接口的分区分组类。 | 参见[Partition Grouper](config-streams.md)
 poll.ms | 低 | 阻塞等待输入的时间量（以毫秒为单位）。 | 100 milliseconds
-replication.factor | 高 | 更新日志主题和应用程序创建的重新分区主题的复制因子。 | 1
+replication.factor | 高 | 更新日志主题和应用程序创建的重新分区主题的备份因子。 | 1
 state.cleanup.delay.ms | 低 | 在删除分区迁移后的状态之前要等待的时间（以毫秒为单位）。 | 6000000 milliseconds
 state.dir | 高 | 状态存储器的目录位置。 | ```/var/lib/kafka-streams```
-timestamp.extractor | 中 | 实现```TimestampExtractor```接口的时间戳提取器类。 | 参见[Timestamp Extractor](config-streams.md)
+timestamp.extractor | 中 | 实现```TimestampExtractor```接口的时间戳提取器(timestamp.extractor)类。 | 参见[Timestamp Extractor](config-streams.md)
 value.serde | 中 | 实现了```Serde```接口的消息值的默认序列化/反序列化器类（另请参阅key.serde）。 | ```Serdes.ByteArray().getClass().getName()``` 
 windowstore.changelog.additional.retention.ms |	低 | 添加到Windows maintainMs中以确保数据不会过早从日志中删除。允许时钟浮动。 | 86400000 milliseconds = 1 day
 
@@ -239,14 +239,14 @@ windowstore.changelog.additional.retention.ms |	低 | 添加到Windows maintainM
 
 The default deserialization exception handler allows you to manage record exceptions that fail to deserialize. This can be caused by corrupt data, incorrect serialization logic, or unhandled record types. These exception handlers are available:
 
-默认的反序列化异常处理程序允许您管理无法反序列化的消息异常。这可能是由数据损坏，序列化逻辑错误或未处理的消息类型造成的。这些异常处理程序可供选择：
+默认的反序列化异常处理程序允许您管理无法反序列化的消息(record)异常。这可能是由数据损坏，序列化逻辑错误或未处理的消息(record)类型造成的。这些异常处理程序可供选择：
 
 * [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html): This handler logs the deserialization exception and then signals the processing pipeline to continue processing more records. This log-and-skip strategy allows Kafka Streams to make progress instead of failing if there are records that fail to deserialize.
 
 * [LogAndFailExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndFailExceptionHandler.html). This handler logs the deserialization exception and then signals the processing pipeline to stop processing more records.
 
 
-* [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html)：该处理程序记录反序列化异常，然后通知处理管道继续处理更多消息。如果存在无法反序列化的消息，此记录和跳过策略允许Kafka Streams继续处理，而不是失效。
+* [LogAndContinueExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndContinueExceptionHandler.html)：该处理程序记录反序列化异常，然后通知处理管道继续处理更多消息。如果存在无法反序列化的消息，此记录和跳过(log-and-skip)策略允许Kafka Streams继续处理，而不是失效。
 
 * [LogAndFailExceptionHandler](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/errors/LogAndFailExceptionHandler.html).此处理程序记录反序列化异常，然后通知处理管道停止处理更多消息。
 
@@ -258,7 +258,7 @@ The default production exception handler allows you to manage exceptions trigger
 
 Each exception handler can return a ```FAIL``` or ```CONTINUE``` depending on the record and the exception thrown. Returning ```FAIL``` will signal that Streams should shut down and ```CONTINUE``` will signal that Streams should ignore the issue and continue processing. If you want to provide an exception handler that always ignores records that are too large, you could implement something like the following:
 
-每个异常处理程序都可以返回```FAIL```或```CONTINUE```，具体取决于消息和抛出的异常。返回```FAIL```将表示Streams应该关闭，返回```CONTINUE```将表示Streams应该忽略问题并继续处理。 如果您想提供一个总是忽略过大的消息的异常处理程序，您可以参照如下实现：
+每个异常处理程序都可以返回```FAIL```或```CONTINUE```，具体取决于消息(record)和抛出的异常。返回```FAIL```表示Streams应该关闭，返回```CONTINUE```表示Streams应该忽略问题并继续处理。 如果您想提供一个总是忽略过大的消息(record)的异常处理程序，您可以参照如下实现：
 
 ```java
 import java.util.Properties;
@@ -331,7 +331,7 @@ This is discussed in more detail in [Data types and serialization](http://kafka.
 
 The number of standby replicas. Standby replicas are shadow copies of local state stores. Kafka Streams attempts to create the specified number of replicas and keep them up to date as long as there are enough instances running. Standby replicas are used to minimize the latency of task failover. A task that was previously running on a failed instance is preferred to restart on an instance that has standby replicas so that the local state store restoration process from its changelog can be minimized. Details about how Kafka Streams makes use of the standby replicas to minimize the cost of resuming tasks on failover can be found in the [State](http://kafka.apache.org/11/documentation/streams/architecture.html#streams-architecture-state) section.
 
-备用副本的数量。备用副本是本地状态存储器的影子副本。只要有足够的实例在运行，Kafka Streams就会尝试创建指定数量的副本并保持最新状态。备用副本用于最小化任务故障转移的延迟。先前在失效实例上运行的任务优先于具有备用副本的实例重新启动，以便将本地状态存储器从更新日志中恢复的过程最小化。有关Kafka Streams如何利用备用副本来最大限度地减少故障恢复时恢复任务的成本的详细信息，请参阅[State](../architecture.md)部分。
+备用副本的数量。备用副本是本地状态存储器的影子副本。只要有足够的实例在运行，Kafka Streams就会尝试创建指定数量的副本并保持最新状态。备用副本用于最小化故障转移任务的延迟。先前在失效实例上运行的任务优先于具有备用副本的实例重新启动，以便将本地状态存储器从更新日志中恢复的过程最小化。有关Kafka Streams如何利用备用副本来最大限度地减少故障恢复时恢复任务的成本的详细信息，请参阅[State](../architecture.md)部分。
 
 ### num.stream.threads
 
@@ -349,7 +349,7 @@ A partition grouper creates a list of stream tasks from the partitions of source
 
 This specifies the replication factor of internal topics that Kafka Streams creates when local states are used or a stream is repartitioned for aggregation. Replication is important for fault tolerance. Without replication even a single broker failure may prevent progress of the stream processing application. It is recommended to use a similar replication factor as source topics.
 
-这指定了在使用本地状态或重新分区流进行聚合时Kafka Streams创建的内部主题的复制因子。复制对容错非常重要。即使单个代理失效，也不会复制流处理应用程序的进度。建议使用与source主题类似的复制因子。
+这指定了在使用本地状态或重新分区流进行聚合时Kafka Streams创建的内部主题的备份因子。复制对容错非常重要。即使单个代理失效，也不会复制流处理应用程序的进度。建议使用与source主题类似的备份因子。
 
 Recommendation:
 
@@ -357,7 +357,7 @@ Recommendation:
 
 Increase the replication factor to 3 to ensure that the internal Kafka Streams topic can tolerate up to 2 broker failures. Note that you will require more storage space as well (3 times more with the replication factor of 3).
 
-将复制因子提高到3以确保内部Kafka Streams主题最多可以容忍2个代理失效。请注意，您还需要更多的存储空间（复制因子为3时需要3倍的空间）。
+将备份因子提高到3以确保内部Kafka Streams主题最多可以容忍2个代理失效。请注意，您还需要更多的存储空间（备份因子为3时需要3倍的空间）。
 
 ### state.dir
 
@@ -369,7 +369,7 @@ The state directory. Kafka Streams persists local states under the state directo
 
 A timestamp extractor pulls a timestamp from an instance of [ConsumerRecord](http://kafka.apache.org/11/javadoc/org/apache/kafka/clients/consumer/ConsumerRecord.html). Timestamps are used to control the progress of streams.
 
-时间戳提取器从[ConsumerRecord](http://kafka.apache.org/11/javadoc/org/apache/kafka/clients/consumer/ConsumerRecord.html)的实例中提取时间戳。时间戳用于控制流的进度。
+时间戳提取器(timestamp.extractor)从[ConsumerRecord](http://kafka.apache.org/11/javadoc/org/apache/kafka/clients/consumer/ConsumerRecord.html)的实例中提取时间戳。时间戳用于控制流的进度。
 
 The default extractor is [FailOnInvalidTimestamp](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/processor/FailOnInvalidTimestamp.html). This extractor retrieves built-in timestamps that are automatically embedded into Kafka messages by the Kafka producer client since [Kafka version 0.10](https://cwiki.apache.org/confluence/display/KAFKA/KIP-32+-+Add+timestamps+to+Kafka+message). Depending on the setting of Kafka’s server-side ```log.message.timestamp.type``` broker and ```message.timestamp.type``` topic parameters, this extractor provides you with:
 
@@ -407,7 +407,7 @@ Another built-in extractor is [WallclockTimestampExtractor](http://kafka.apache.
 
 You can also provide your own timestamp extractors, for instance to retrieve timestamps embedded in the payload of messages. If you cannot extract a valid timestamp, you can either throw an exception, return a negative timestamp, or estimate a timestamp. Returning a negative timestamp will result in data loss – the corresponding record will not be processed but silently dropped. If you want to estimate a new timestamp, you can use the value provided via ```previousTimestamp``` (i.e., a Kafka Streams timestamp estimation). Here is an example of a custom ```TimestampExtractor``` implementation:
 
-您也可以规定自己的时间戳提取器，例如检索嵌入到消息负载中的时间戳。如果无法提取有效的时间戳，则可以抛出异常，返回负值时间戳或预测时间戳。返回负值时间戳会导致数据丢失——相应的消息将不会被处理，而会自动丢弃。如果您想预测新的时间戳，则可以使用由```previousTimestamp```提供的值（即，Kafka Streams时间戳预测）。以下是自定义```TimestampExtractor```实现的示例：
+您也可以规定自己的时间戳提取器(timestamp.extractor)，例如检索嵌入到消息负载中的时间戳。如果无法提取有效的时间戳，则可以抛出异常，返回负值时间戳或预测时间戳。返回负值时间戳会导致数据丢失——相应的消息将不会被处理，而会自动丢弃。如果您想预测新的时间戳，则可以使用由```previousTimestamp```提供的值（即，Kafka Streams时间戳预测）。以下是自定义```TimestampExtractor```实现的示例：
 
 ```java
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -445,7 +445,7 @@ public class MyEventTimeExtractor implements TimestampExtractor {
 
 You would then define the custom timestamp extractor in your Streams configuration as follows:
 
-然后，您将在Streams配置中定义自定义时间戳提取器，如下所示：
+然后，您将在Streams配置中定义自定义时间戳提取器(timestamp.extractor)，如下所示：
 
 ```java
 import java.util.Properties;
@@ -531,7 +531,7 @@ rocksdb.config.setter | 消费者 |
 
 The consumer auto commit. To guarantee at-least-once processing semantics and turn off auto commits, Kafka Streams overrides this consumer config value to ```false```. Consumers will only commit explicitly via *commitSync* calls when the Kafka Streams library or a user decides to commit the current processing state.
 
-消费者自动提交。为了保证至少处理一次处理语义并关闭自动提交，Kafka Streams将此消费者配置值重写为```false```。当Kafka Streams库或用户决定提交当前处理状态时，消费者只能通过*commitSync*调用显式提交。
+消费者自动提交。为了保证至少处理一次(at-least-once)处理语义并关闭自动提交，Kafka Streams将此消费者配置值重写为```false```。当Kafka Streams库或用户决定提交当前处理状态时，消费者只能通过*commitSync*调用显式提交。
 
 ### rocksdb.config.setter
 
@@ -608,13 +608,13 @@ min.insync.replicas | 代理 | ```1``` | ```2```
 
 Increasing the replication factor to 3 ensures that the internal Kafka Streams topic can tolerate up to 2 broker failures. Changing the acks setting to “all” guarantees that a record will not be lost as long as one replica is alive. The tradeoff from moving to the default values to the recommended ones is that some performance and more storage space (3x with the replication factor of 3) are sacrificed for more resiliency.
 
-将复制因子增加到3可确保内部Kafka Streams主题最多可容忍2个代理失效。将acks设置更改为“all”可以保证只要一个副本处于活动状态，消息就不会丢失。从默认值转换为推荐值的权衡是牺牲一些性能和更多的存储空间（复制因子为3时是3倍）以提高弹性。
+将备份因子增加到3可确保内部Kafka Streams主题最多可容忍2个代理失效。将acks设置更改为“all”可以保证只要一个副本处于活动状态，消息就不会丢失。从默认值转换为推荐值的权衡是牺牲一些性能和更多的存储空间（备份因子为3时是3倍）以提高弹性。
 
 ### acks
 
 The number of acknowledgments that the leader must have received before considering a request complete. This controls the durability of records that are sent. The possible values are:
 
-在衡量一个请求是否完成前，领导者已经收到的确认的数量。这将控制发送的消息的持久性。可能的值是：
+在衡量一个请求是否完成前，leader已经收到的确认的数量。这将控制发送的消息的持久性。可能的值是：
 
 * ```acks=0``` The producer does not wait for acknowledgment from the server and the record is immediately added to the socket buffer and considered sent. No guarantee can be made that the server has received the record in this case, and the ```retries``` configuration will not take effect (as the client won’t generally know of any failures). The offset returned for each record will always be set to ```-1```.
 
@@ -625,9 +625,9 @@ The number of acknowledgments that the leader must have received before consider
 
 *  ```acks = 0```生产者不等待来自服务器的确认，且该消息立即被添加到套接字缓冲区并被认为已经被发送。 在这种情况下，不能保证服务器已经收到消息，并且```retries```配置不会生效（因为客户端通常不会知道任何故障）。为每条消息返回的偏移量将始终设置为```-1```。
 
-* ```acks = 1```领导者将消息写入其本地日志并作出响应，无需等待所有追随者的完整确认。如果领导者在确认消息后，但在追随者复制之前，立即失效，则消息将丢失。
+* ```acks = 1```leader将消息写入其本地日志并作出响应，无需等待所有followers的完整确认。如果leader在确认消息后，但在followers复制之前，立即失效，则消息将丢失。
 
-* ```acks = all```领导者等待所有同步副本确认消息。这保证了如果至少有一个同步副本处于活动状态，则该消息不会丢失。这是最可靠的保证。
+* ```acks = all```leader等待所有同步副本确认消息。这保证了如果至少有一个同步副本处于活动状态，则该消息不会丢失。这是最可靠的保证。
 
 For more information, see the [Kafka Producer documentation](https://kafka.apache.org/documentation/#producerconfigs).
 
