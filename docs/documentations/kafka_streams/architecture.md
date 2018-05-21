@@ -24,15 +24,15 @@ Kafka 的消息传输层用于储存和运输它分区的数据。Kafka Streams 
 
 * Each stream partition is a totally ordered sequence of data records and maps to a Kafka topic partition.
 
-* 每个流分区都是完全有序的数据记录序列，并映射到Kafka主题分区。
+    每个流分区都是完全有序的数据记录序列，并映射到Kafka主题分区。
 
 * A data record in the stream maps to a Kafka message from that topic.
 
-* 流中的数据记录映射到该主题的Kafka消息。
+    流中的数据记录映射到该主题的Kafka消息。
 
 * The keys of data records determine the partitioning of data in both Kafka and Kafka Streams, i.e., how data is routed to specific partitions within topics.
 
-* 数据记录的 `keys` 决定了Kafka和Kafka Stream中数据的分区，即数据如何路由到主题中的特定分区。
+    数据记录的 keys 决定了Kafka和Kafka Stream中数据的分区，即数据如何路由到主题中的特定分区。
 
 An application's processor topology is scaled by breaking it into multiple tasks. More specifically, Kafka Streams creates a fixed number of tasks based on the input stream partitions for the application, with each task assigned a list of partitions from the input streams (i.e., Kafka topics). The assignment of partitions to tasks never changes so that each task is a fixed unit of parallelism of the application. Tasks can then instantiate their own processor topology based on the assigned partitions; they also maintain a buffer for each of its assigned partitions and process messages one-at-a-time from these record buffers. As a result stream tasks can be processed independently and in parallel without manual intervention.
 
@@ -72,7 +72,7 @@ As we described above, scaling your stream processing application with Kafka Str
 
 Kafka Streams provides so-called state stores, which can be used by stream processing applications to store and query data, which is an important capability when implementing stateful operations. The Kafka Streams DSL, for example, automatically creates and manages such state stores when you are calling stateful operators such as join() or aggregate(), or when you are windowing a stream.
 
-Kafka Streams提供了所谓的状态存储，流处理应用程序可以使用它来存储和查询数据，这是实现有状态操作时的重要功能。例如，Kafka Streams DSL在您调用诸如`join()`或`aggregate()`之类的有状态运算符时，或者当您正在对流进行窗口化时，会自动创建和管理这些状态存储。
+Kafka Streams提供了所谓的状态存储，流处理应用程序可以使用它来存储和查询数据，这是实现有状态操作时的重要功能。例如，Kafka Streams DSL在您调用诸如join()或aggregate()之类的有状态运算符时，或者当您正在对流进行窗口化时，会自动创建和管理这些状态存储。
 
 Every stream task in a Kafka Streams application may embed one or more local state stores that can be accessed via APIs to store and query data required for processing. Kafka Streams offers fault-tolerance and automatic recovery for such local state stores.
 
