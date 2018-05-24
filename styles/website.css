@@ -1,6 +1,9 @@
 /* 设置文档的两端对齐 */
 body{
     text-align: justify;
+    word-wrap: break-word;
+    word-break: break-all; /*单词允许分割*/
+    overflow-wrap: break-word;
 }
 /* 表格的表头样式 */
 /*table thead tr th{

@@ -29,13 +29,13 @@ Kafka Connect 的特点包括：
 
 * **分布式(Distrubuted)和独立(standalone)模式** - 扩展到支持整个组织的大型集中管理服务，或者向下扩展开发、测试和小型生产部署
 
-* **REST 接口** - 通过使用简单的REST API来向Kafka Connect群集提交和管理connector
+* **REST 接口** - 通过使用简单的REST API来向Kafka Connect集群提交和管理connector
 
-* **自动偏移(automatic offset)管理** - 只需从connector获取一些信息，Kafka Connect就可以自动管理偏移提交过程，因此connector开发人员无需担心这个错误会成为connector开发的一部分
+* **自动偏移(automatic offset)管理** - 只需从connector获取一些信息，Kafka Connect就可以自动管理偏移提交过程，因此connector开发人员无需担心在connector开发中出现错误
 
 * **默认分布式和可扩展** - Kafka Connect基于现有的组管理协议构建。可以添加更多工作线程来扩展Kafka Connect集群。
 
-* **流/批处理整合** - 利用Kafka现有的功能，Kafka Connect是桥接流和批量数据系统的理想解决方案
+* **流/批处理整合** - 基于Kafka现有的功能，Kafka Connect是桥接流和批量数据系统的理想解决方案
 
 ## User Guide
 
@@ -63,31 +63,33 @@ In standalone mode all work is performed in a single process. This configuration
 
 The first parameter is the configuration for the worker. This includes settings such as the Kafka connection parameters, serialization format, and how frequently to commit offsets. The provided example should work well with a local cluster running with the default configuration provided by ```config/server.properties```. It will require tweaking to use with a different configuration or production deployment. All workers (both standalone and distributed) require a few configs:
 
-第一个参数是工作线程的配置。这包括诸如Kafka连接参数，序列化格式以及提交偏移的频率等设置。提供的示例可以在使用由```config/server.properties```提供的默认配置运行的本地群集上正常工作。它需要调整以配合不同的配置或生产部署。所有工作线程（包括独立的和分布式的模式）都需要一些配置：
+第一个参数是工作线程的配置。这包括诸如Kafka连接参数，序列化格式以及提交偏移的频率等设置。提供的示例可以在使用由```config/server.properties```提供的默认配置运行的本地集群上正常工作。它需要调整以配合不同的配置或生产部署。所有工作线程（包括独立的和分布式的模式）都需要一些配置：
 
-* bootstrap.servers - List of Kafka servers used to bootstrap connections to Kafka
+* ```bootstrap.servers``` - List of Kafka servers used to bootstrap connections to Kafka
 
-    bootstrap.servers - 用于引导Kafka connector的服务器列表
+* ```key.converter``` - Converter class used to convert between Kafka Connect format and the serialized form that is written to Kafka. This controls the format of the keys in messages written to or read from Kafka, and since this is independent of connectors it allows any connector to work with any serialization format. Examples of common formats include JSON and Avro.
 
-* key.converter - Converter class used to convert between Kafka Connect format and the serialized form that is written to Kafka. This controls the format of the keys in messages written to or read from Kafka, and since this is independent of connectors it allows any connector to work with any serialization format. Examples of common formats include JSON and Avro.
+* ```value.converter``` - Converter class used to convert between Kafka Connect format and the serialized form that is written to Kafka. This controls the format of the values in messages written to or read from Kafka, and since this is independent of connectors it allows any connector to work with any serialization format. Examples of common formats include JSON and Avro.
 
-    key.converter - 转换类，通常用于在Kafka Connect格式和写入Kafka的序列化表单之间进行转换。这将控制写入Kafka或从Kafka读取的消息中的键(key)格式，因为这与connector无关，所以它允许任何connector使用任意的序列化格式。常见的格式包括JSON和Avro。
 
-* value.converter - Converter class used to convert between Kafka Connect format and the serialized form that is written to Kafka. This controls the format of the values in messages written to or read from Kafka, and since this is independent of connectors it allows any connector to work with any serialization format. Examples of common formats include JSON and Avro.
+* ```bootstrap.servers``` - 用于引导与Kafka连接的服务器列表
 
-    value.converter - 转换类，通常用于在Kafka Connect格式和写入Kafka的序列化表单之间进行转换。这将控制写入Kafka或从Kafka读取的消息中的值(value)的格式，因为这与connecotr无关，所以它允许任何connector使用任何序列化格式。常见格式的例子包括JSON和Avro。
+* ```key.converter``` - 转换类，通常用于在Kafka Connect格式和写入Kafka的序列化表单之间进行转换。这将控制写入Kafka或从Kafka读取的消息中的键(key)格式，因为这与connector无关，所以它允许任何connector使用任意的序列化格式。常见的格式包括JSON和Avro。
+
+* ```value.converter``` - 转换类，通常用于在Kafka Connect格式和写入Kafka的序列化表单之间进行转换。这将控制写入Kafka或从Kafka读取的消息中的值(value)的格式，因为这与connecotr无关，所以它允许任何connector使用任何序列化格式。常见格式的例子包括JSON和Avro。
 
 The important configuration options specific to standalone mode are:
 
 独立模式下的重要配置选项是：
 
-* offset.storage.file.filename - File to store offset data in
+* ```offset.storage.file.filename``` - File to store offset data in
 
-    offset.storage.file.filename - 用来存储写入数据偏移的文件
+
+* ```offset.storage.file.filename``` - 用来存储写入数据偏移的文件
 
 The parameters that are configured here are intended for producers and consumers used by Kafka Connect to access the configuration, offset and status topics. For configuration of Kafka source and Kafka sink tasks, the same parameters can be used but need to be prefixed with ```consumer.``` and ```producer.``` respectively. The only parameter that is inherited from the worker configuration is ```bootstrap.servers```, which in most cases will be sufficient, since the same cluster is often used for all purposes. A notable exeption is a secured cluster, which requires extra parameters to allow connections. These parameters will need to be set up to three times in the worker configuration, once for management access, once for Kafka sinks and once for Kafka sources.
 
-此处配置的参数被Kafka Connect使用的生产者和消费者用来访问配置、数据偏移和各种状态的主题。对于Kafka的source和sink任务(task)配置，可以使用相同的参数，但需要分别以```consumer.```和```producer.```为前缀。从工作线程配置继承来的唯一参数是```bootstrap.servers```，在大多数情况下这是足够的，因为同一个群集通常用于所有操作目标。一个值得注意的例外是安全集群，它需要额外的参数来允许连接。这些参数需要在工作线程的配置中设置三次，一次用于管理访问，一次用于Kafka sink，还有一次用于Kafka source。
+此处配置的参数被Kafka Connect使用的生产者和消费者用来访问配置、数据偏移和各种状态的主题。对于Kafka的source和sink任务(task)配置，可以使用相同的参数，但需要分别以```consumer.```和```producer.```为前缀。从工作线程配置继承来的唯一参数是```bootstrap.servers```，在大多数情况下这是足够的，因为同一个集群通常用于所有操作目标。一个值得注意的例外是安全集群，它需要额外的参数来允许连接。这些参数需要在工作线程的配置中设置三次，一次用于管理访问，一次用于Kafka sink，还有一次用于Kafka source。
 
 The remaining parameters are connector configuration files. You may include as many as you want, but all will execute within the same process (on different threads).
 
@@ -103,28 +105,28 @@ Distributed mode handles automatic balancing of work, allows you to scale up (or
 
 The difference is in the class which is started and the configuration parameters which change how the Kafka Connect process decides where to store configurations, how to assign work, and where to store offsets and task statues. In the distributed mode, Kafka Connect stores the offsets, configs and task statuses in Kafka topics. It is recommended to manually create the topics for offset, configs and statuses in order to achieve the desired the number of partitions and replication factors. If the topics are not yet created when starting Kafka Connect, the topics will be auto created with default number of partitions and replication factor, which may not be best suited for its usage.
 
-不同之处在于启动的类以及一些配置参数，这些参数包括了Kafka Connect处理过程如何决定存储配置位置、如何分配工作、哪里存储偏移量和任务状态。在分布式模式下，Kafka Connect将偏移量、配置和任务状态存储在Kafka主题中。建议手动创建偏移量、配置和状态的主题以实现所需的分区数量和备份因子。如果在启动Kafka Connect时还未创建主题，则会使用默认的分区数和备份因子自动创建主题，但这可能不是Kafka Connedct的最佳使用。
+不同之处在于启动的类以及一些配置参数，这些参数包括了Kafka Connect处理过程如何决定存储配置位置、如何分配工作、哪里存储偏移量和任务状态。在分布式模式下，Kafka Connect将偏移量、配置和任务状态存储在Kafka主题中。建议手动创建偏移量、配置和状态的主题以实现所需的分区数量和备份因子。如果在启动Kafka Connect时还未创建主题，则会使用默认的分区数和备份因子自动创建主题，但这可能不是Kafka Connect的最佳使用。
 
 In particular, the following configuration parameters, in addition to the common settings mentioned above, are critical to set before starting your cluster:
 
 除了上面提到的常用设置之外，在启动集群之前，以下参数的设置是至关重要的：
 
-* group.id (default ```connect-cluster```) - unique name for the cluster, used in forming the Connect cluster group; note that this **must not conflict** with consumer group IDs
+* ```group.id``` (default ```connect-cluster```) - unique name for the cluster, used in forming the Connect cluster group; note that this **must not conflict** with consumer group IDs
 
-* config.storage.topic (default ```connect-configs```) - topic to use for storing connector and task configurations; note that this should be a single partition, highly replicated, compacted topic. You may need to manually create the topic to ensure the correct configuration as auto created topics may have multiple partitions or be automatically configured for deletion rather than compaction
+* ```config.storage.topic``` (default ```connect-configs```) - topic to use for storing connector and task configurations; note that this should be a single partition, highly replicated, compacted topic. You may need to manually create the topic to ensure the correct configuration as auto created topics may have multiple partitions or be automatically configured for deletion rather than compaction
 
-* offset.storage.topic (default ```connect-offsets```) - topic to use for storing offsets; this topic should have many partitions, be replicated, and be configured for compaction
+* ```offset.storage.topic``` (default ```connect-offsets```) - topic to use for storing offsets; this topic should have many partitions, be replicated, and be configured for compaction
 
-* status.storage.topic (default ```connect-status```) - topic to use for storing statuses; this topic can have multiple partitions, and should be replicated and configured for compaction
+* ```status.storage.topic``` (default ```connect-status```) - topic to use for storing statuses; this topic can have multiple partitions, and should be replicated and configured for compaction
 
 
-* group.id(默认为```connect-cluster```) - 集群的唯一名称，用于形成Connect集群组；请注意，这**不得与消费者组的Id相冲突**
+* ```group.id```(默认为```connect-cluster```) - 集群的唯一名称，用于形成Connect集群组；请注意，这**不得与消费者组的ID相冲突**
 
-* config.storage.topic（默认为```connect-configs```） - 用于存储connector和任务配置的主题；请注意，这应该是一个单分区的、高度备份的、压缩的主题。您可能需要手动创建主题以确保正确的配置，因为自动创建的主题可能有多个分区，或者会自动配置删除而不是压缩形式的主题
+* ```config.storage.topic```（默认为```connect-configs```） - 用于存储connector和任务配置的主题；请注意，这应该是一个单分区的、高度备份的、压缩的主题。您可能需要手动创建主题以确保正确的配置，因为自动创建的主题可能有多个分区，或者会自动配置删除而不是压缩形式的主题
 
-* offset.storage.topic（默认为```connect-offsets```） - 用于存储偏移量的主题；这个主题应该有许多分区，被备份，并被配置为压缩
+* ```offset.storage.topic```（默认为```connect-offsets```） - 用于存储偏移量的主题；这个主题应该有许多分区，被备份，并被配置为压缩
 
-* status.storage.topic（默认为```connect-status```） - 用于存储状态的主题；此主题可以有多个分区，并且应该进行备份和配置以进行压缩
+* ```status.storage.topic```（默认为```connect-status```） - 用于存储状态的主题；此主题可以有多个分区，并且应该进行备份和配置以进行压缩
 
 Note that in distributed mode the connector configurations are not passed on the command line. Instead, use the REST API described below to create, modify, and destroy connectors.
 
@@ -169,6 +171,10 @@ sink connector 还有一些额外的选项来控制其输入。每个sink connec
 
 * ```topics``` - 以逗号分隔的主题列表，并作为该connector的输入
 * ```topics.regex```  - 用Java正则表达式表示的一系列主题，并作为该connector的输入
+
+For any other options, you should consult the documentation for the connector.
+
+对于任何的其他选项，您可以查阅文档中的connect部分。
 
 ### Transformations
 
@@ -239,7 +245,7 @@ All the lines starting with ```transforms``` were added for the transformations.
 
 When we ran the file source connector on my sample file without the transformations, and then read them using ```kafka-console-consumer.sh```, the results were:
 
-当我们不使用转换器，直接使用文件source connector运行样例时，然后使用```kafka-console-consumer.sh```读取它们时，结果如下：
+当我们不使用转换器，直接使用文件source connector运行样例，然后使用```kafka-console-consumer.sh```读取它们时，结果如下：
 
 ```
 "foo"
@@ -339,7 +345,7 @@ Use the concrete transformation type designed for the record key
 NAME	| DESCRIPTION	| TYPE	| DEFAULT	| VALID VALUES	| IMPORTANCE
 --- | --- | --- | --- | --- | --- 
 blacklist |	Fields to exclude. This takes precedence over the whitelist.	|list| "" | | medium
-renames	| Field rename mappings.	| list	| ""	|list of colon-delimited pairs, e.g. foo:bar,abc:xyz	| medium
+renames	| Field rename mappings.	| list	| ""	|list of colon-delimited pairs, e.g. ```foo:bar,abc:xyz```	| medium
 whitelist |	Fields to include. If specified, only these fields will be used.| list| ""|	| medium
 
 名称 | 描述	| 类型	| 默认值 |	有效值 | 重要性
@@ -456,7 +462,7 @@ Update the record's topic field as a function of the original topic value and th
 
 This is mainly useful for sink connectors, since the topic field is often used to determine the equivalent entity name in the destination system(e.g. database table or search index name).
 
-其主要用于斯sink connector，由于主题字段通常用于确定目标系统中的等效实体名称(例如数据库表或搜索索引名称)。
+其主要用于sink connector，由于主题字段通常用于确定目标系统中的等效实体名称(例如数据库表或搜索索引名称)。
 
 NAME |	DESCRIPTION	| TYPE	| DEFAULT |	VALID VALUES | IMPORTANCE
 --- | --- | --- | --- | --- | ---
@@ -514,7 +520,7 @@ delimiter | 在生成输出记录的字段名称时，从输入记录的字段�
 
 Cast fields or the entire key or value to a specific type, e.g. to force an integer field to a smaller width. Only simple primitive types are supported -- integers, floats, boolean, and string.
 
-将字段或整个键或值转换为特定类型，例如,强制整数字段的宽度更小。只支持简单的基本类型 - 整数，浮点数，布尔值和字符串。
+将字段或整个键或值转换为特定类型，例如，强制整数字段的宽度更小。只支持简单的基本类型 - 整数、浮点数、布尔值和字符串。
 
 Use the concrete transformation type designed for the record key 
 
@@ -526,11 +532,11 @@ Use the concrete transformation type designed for the record key
 
 NAME |	DESCRIPTION	| TYPE	| DEFAULT |	VALID VALUES | IMPORTANCE
 --- | --- | --- | --- | --- | ---
-spec| List of fields and the type to cast them to of the form field1:type,field2:type to cast fields of Maps or Structs. A single type to cast the entire value. Valid types are int8, int16, int32, int64, float32, float64, boolean, and string.	| list | |	list of colon-delimited pairs, e.g. foo:bar,abc:xyz	| high
+spec| List of fields and the type to cast them to of the form field1:type,field2:type to cast fields of Maps or Structs. A single type to cast the entire value. Valid types are int8, int16, int32, int64, float32, float64, boolean, and string.	| list | |	list of colon-delimited pairs, e.g. ```foo:bar,abc:xyz```	| high
 
 名称 | 描述	| 类型	| 默认值 |	有效值 | 重要性
 --- | --- | --- | --- | --- | --- 
-spec| 字段列表以及将其转换为 field1:type,field2:type 用于封装成Map或Struct类型。一个类型来映射整个值。有效的类型是int8，int16，int32，int64，float32，float64，boolean和string	| list | |	list of colon-delimited pairs, e.g. foo:bar,abc:xyz	| high
+spec| 字段列表以及将其转换为 field1:type,field2:type 用于封装成Map或Struct类型。一个类型来映射整个值。有效的类型是int8，int16，int32，int64，float32，float64，boolean和string	| list | |	list of colon-delimited pairs, e.g. ```foo:bar,abc:xyz```	| high
 
 **org.apache.kafka.connect.transforms.TimestampConverter**
 
@@ -554,7 +560,7 @@ format	| A SimpleDateFormat-compatible format for the timestamp. Used to generat
 
 名称 | 描述	| 类型	| 默认值 |	有效值 | 重要性
 --- | --- | --- | --- | --- | --- 
-target.type	| 所需的时间戳记表示形式：string，unix，Date，Time或Timestamp	| string	| | |	high
+target.type	| 所需的时间戳表示形式：string，unix，Date，Time或Timestamp	| string	| | |	high
 field	| 包含时间戳的字段，如果整个值是时间戳，则为空	| string	| ""	|	| high
 format	| 时间戳的SimpleDateFormat兼容格式。用于在type=string时生成输出或用于在输入是字符串时解析输入。| string	| ""	|	| medium
 
@@ -589,9 +595,9 @@ By default, if no ```listeners``` are specified, the REST server runs on port 80
 * ```ssl.endpoint.identification.algorithm```
 * ```ssl.client.auth```
 
-The REST API is used not only by users to monitor / manage Kafka Connect. It is also used for the Kafka Connect cross-cluster communication. Requests received on the follower nodes REST API will be forwarded to the leader node REST API. In case the URI under which is given host reachable is different from the URI which it listens on, the configuration options rest.advertised.host.name, rest.advertised.port and rest.advertised.listener can be used to change the URI which will be used by the follower nodes to connect with the leader. When using both HTTP and HTTPS listeners, the ```rest.advertised.listener``` option can be also used to define which listener will be used for the cross-cluster communication. When using HTTPS for communication between nodes, the same ```ssl.*``` or ```listeners.https``` options will be used to configure the HTTPS client.
+The REST API is used not only by users to monitor / manage Kafka Connect. It is also used for the Kafka Connect cross-cluster communication. Requests received on the follower nodes REST API will be forwarded to the leader node REST API. In case the URI under which is given host reachable is different from the URI which it listens on, the configuration options ```rest.advertised.host.name```, ```rest.advertised.port``` and ```rest.advertised.listener``` can be used to change the URI which will be used by the follower nodes to connect with the leader. When using both HTTP and HTTPS listeners, the ```rest.advertised.listener``` option can be also used to define which listener will be used for the cross-cluster communication. When using HTTPS for communication between nodes, the same ```ssl.*``` or ```listeners.https``` options will be used to configure the HTTPS client.
 
-Rest API不仅被用户用来监视/管理Kafka Connect。它也用于Kafka Connect跨集群通信。在follower节点的Rest API上接收到的请求会被转发到leader节点的Rest API上。如果给定主机可达的URI与它所监听的URI不同，配置选项rest.advertised.host.name，rest.advertised.port和rest.advertised.listener可用于更改follower节点与leader连接使用的URI。同时使用HTTP和HTTPS的listener时，还可以使用```rest.advertised.listener```选项来定义哪个listener将用于跨集群通信。当使用HTTPS进行节点之间的通信时，将使用相同的```ssl.*```或```listeners.https```选项来配置HTTPS客户端。
+REST API不仅被用户用来监视/管理Kafka Connect。它也用于Kafka Connect跨集群通信。在follower节点的REST API上接收到的请求会被转发到leader节点的REST API上。如果给定主机可达的URI与它所监听的URI不同，配置选项```rest.advertised.host.name```，```rest.advertised.port```和```rest.advertised.listener```可用于更改follower节点与leader连接使用的URI。同时使用HTTP和HTTPS的listener时，还可以使用```rest.advertised.listener```选项来定义哪个listener将用于跨集群通信。当使用HTTPS进行节点之间的通信时，将使用相同的```ssl.*```或```listeners.https```选项来配置HTTPS客户端。
 
 The following are the currently supported REST API endpoints:
 
@@ -634,8 +640,8 @@ Kafka Connect还提供了用于获取有关connector插件信息的REST API:
 * ```PUT /connector-plugins/{connector-type}/config/validate``` - validate the provided configuration values against the configuration definition. This API performs per config validation, returns suggested values and error messages during validation.
 
 
-* ```GET /connector-plugins``` - 返回安装在Kafka Connect集群中的connector插件列表。请注意，该API仅检查能处理请求的工作线程上的connector，这意味着您可能会看到不一致的结果，尤其是在滚动升级期间，如果添加新的connector jar
-* ```PUT /connector-plugins/{connector-type}/config/validate``` - 根据配置定义验证提供的配置值。此API执行每个配置验证，在验证期间返回建议值和错误消息
+* ```GET /connector-plugins``` - 返回安装在Kafka Connect集群中的connector插件列表。请注意，该API仅检查能处理请求的工作线程上的connector，这意味着如果添加新的connector jar，您可能会看到不一致的结果，尤其是在滚动升级期间。
+* ```PUT /connector-plugins/{connector-type}/config/validate``` - 根据配置定义验证提供的配置值。此API执行每个配置验证，在验证期间返回建议值和错误消息。
 
 ## Connector Development Guide
 
@@ -657,13 +663,13 @@ To copy data between Kafka and another system, users create a ```Connector``` fo
 
 要在Kafka和另一个系统之间复制数据，用户需要为他们想要从中提取数据或将数据推送到的系统创建一个```Connector```。Connector有两种类型：```SourceConnectors```，从另一个系统导入数据(例如，```JDBCSourceConnector```会将关系数据库导入到Kafka中)；```SinkConnector```，导出数据(例如```HDFSSinkConnector```会将Kafka主题的内容导出到HDFS文件中)。
 
-Connectors do not perform any data copying themselves: their configuration describes the data to be copied, and the ```Connector``` is responsible for breaking that job into a set of ```Tasks``` that can be distributed to workers. These Tasks also come in two corresponding flavors: ```SourceTask``` and ```SinkTask```.
+```Connectors``` do not perform any data copying themselves: their configuration describes the data to be copied, and the ```Connector``` is responsible for breaking that job into a set of ```Tasks``` that can be distributed to workers. These ```Tasks``` also come in two corresponding flavors: ```SourceTask``` and ```SinkTask```.
 
-Connector 本身不会执行任何数据复制操作：它的配置描述了要复制的数据，```Connector```负责将这个任务分解为一组```Tasks```，其可以分发给工作线程。这些任务(Task)也有两种相应的风格：```SourceTask```和```SinkTask```。
+```Connector``` 本身不会执行任何数据复制操作：它的配置描述了要复制的数据，```Connector```负责将这个任务分解为一组```Tasks```，其可以分发给工作线程。这些```Task```也有两种相应的风格：```SourceTask```和```SinkTask```。
 
 With an assignment in hand, each ```Task``` must copy its subset of the data to or from Kafka. In Kafka Connect, it should always be possible to frame these assignments as a set of input and output streams consisting of records with consistent schemas. Sometimes this mapping is obvious: each file in a set of log files can be considered a stream with each parsed line forming a record using the same schema and offsets stored as byte offsets in the file. In other cases it may require more effort to map to this model: a JDBC connector can map each table to a stream, but the offset is less clear. One possible mapping uses a timestamp column to generate queries incrementally returning new data, and the last queried timestamp can be used as the offset.
 
-注备好分配任务后，每个```Task```必须将数据的子集复制到Kafka或从Kafka复制。在Kafka Connect中，应始终可以将这些分配框架化为一组输入和输出流，这些输入和输出流由具有一致schema的记录组成。有时候这种映射是显而易见的：一组日志文件中的每个文件可以被认为是一个流，每条解析的行使用相同的schema和偏移量作为字节偏移量存储在文件中。在其他情况下，可能需要更多努力来映射到此模型：一个JDBC connector可将每个表映射到流，但偏移量不太清晰。一个可能的映射使用时间戳列来生成增量返回新数据的查询，最后查询的时间戳可以用作偏移量。
+分配好任务后，每个```Task```必须将数据的子集复制到Kafka或从Kafka复制。在Kafka Connect中，应始终可以将这些分配框架转化为一组输入和输出流，这些输入和输出流由具有一致schema的记录组成。有时候这种映射是显而易见的：一组日志文件中的每个文件可以被认为是一个流，每条解析的行使用相同的schema和偏移量作为字节偏移量存储在文件中。在其他情况下，可能需要更多努力来映射到此模型：一个JDBC connector可将每个表映射到流，但偏移量不太清晰。一个可能的映射使用时间戳列来生成增量返回新数据的查询，最后查询的时间戳可以用作偏移量。
 
 #### Streams and Records
 
@@ -675,15 +681,15 @@ Each stream should be a sequence of key-value records. Both the keys and values 
 
 In addition to the key and value, records (both those generated by sources and those delivered to sinks) have associated stream IDs and offsets. These are used by the framework to periodically commit the offsets of data that have been processed so that in the event of failures, processing can resume from the last committed offsets, avoiding unnecessary reprocessing and duplication of events.
 
-除了key(键)和value(值)之外，记录(包括由source产生和传送到sink的记录)都有相关的流Id和偏移量。框架会定期的提交已处理数据的偏移量，以便在发生故障时，可以从最后一次提交的偏移量恢复处理，以避免不必要的重新处理和事件拷贝。
+除了key(键)和value(值)之外，记录(包括由source产生和传送到sink的记录)都有相关的流ID和偏移量。框架会定期的提交已处理数据的偏移量，以便在发生故障时，可以从最后一次提交的偏移量恢复处理，以避免不必要的重新处理和事件拷贝。
 
 #### Dynamic Connectors
 
 #### 动态 Connector
 
-Not all jobs are static, so ```Connector``` implementations are also responsible for monitoring the external system for any changes that might require reconfiguration. For example, in the ```JDBCSourceConnector``` example, the ```Connector``` might assign a set of tables to each ```Task```. When a new table is created, it must discover this so it can assign the new table to one of the ```Tasks``` by updating its configuration. When it notices a change that requires reconfiguration (or a change in the number of ```Tasks```), it notifies the framework and the framework updates any corresponding Tasks
+Not all jobs are static, so ```Connector``` implementations are also responsible for monitoring the external system for any changes that might require reconfiguration. For example, in the ```JDBCSourceConnector``` example, the ```Connector``` might assign a set of tables to each ```Task```. When a new table is created, it must discover this so it can assign the new table to one of the ```Tasks``` by updating its configuration. When it notices a change that requires reconfiguration (or a change in the number of ```Tasks```), it notifies the framework and the framework updates any corresponding ```Tasks```.
 
-并非所有的任务都是静态的，因此```Connector```实现还负责监视外部系统是否有可能需要重新配置的更改。例如，在```JDBCSourceConnector```示例中，```Connector```可能会为每个```Task```分配一组表。当创建新表时，必须能发现它，以便通过更新其配置来将新表分配给其中一个```Task```。当发现需要重新配置的变更(或```Task```数量的变化)时，它会通知框架更新相应的任务。
+并非所有的任务都是静态的，因此```Connector```实现还负责监视外部系统是否有可能需要重新更改配置。例如，在```JDBCSourceConnector```示例中，```Connector```可能会为每个```Task```分配一组表。当创建新表时，必须能发现它，以便通过更新其配置来将新表分配给其中一个```Task```。当发现需要重新配置的变更(或```Task```数量的变化)时，它会通知框架更新相应的```Task```。
 
 ### Developing a Simple Connector
 
@@ -764,7 +770,7 @@ Although not used in the example, ```SourceTask``` also provides two APIs to com
 
 Even with multiple tasks, this method implementation is usually pretty simple. It just has to determine the number of input tasks, which may require contacting the remote service it is pulling data from, and then divvy them up. Because some patterns for splitting work among tasks are so common, some utilities are provided in ```ConnectorUtils``` to simplify these cases.
 
-即使有多个任务，这个方法实现通常也很简单。它只需确定输入任务的数量，这可能需要联系远程服务，然后将它们分解。由于某些用于在任务之间分割工作的模式非常普遍，因此```ConnectorUtils```中提供了一些实用程序来简化这些情况。
+即使有多个任务，这个方法实现通常也很简单。它只需确定输入任务的数量， 这可能需要联系它从中提取数据的远程服务，然后将它们分解。由于某些用于在任务之间分割工作的模式非常普遍，因此```ConnectorUtils```中提供了一些实用程序来简化这些情况。
 
 Note that this simple example does not include dynamic input. See the discussion in the next section for how to trigger updates to task configs.
 
@@ -803,7 +809,7 @@ public class FileStreamSourceTask extends SourceTask {
 
 These are slightly simplified versions, but show that these methods should be relatively simple and the only work they should perform is allocating or freeing resources. There are two points to note about this implementation. First, the ```start()``` method does not yet handle resuming from a previous offset, which will be addressed in a later section. Second, the ```stop()``` method is synchronized. This will be necessary because ```SourceTasks``` are given a dedicated thread which they can block indefinitely, so they need to be stopped with a call from a different thread in the Worker.
 
-这都是稍微简化的版本，但是说明了这些方法是相对简单的，他们执行的唯一工作是分配或释放资源。这个实现有两点需要注意。首先，```start()```方法还没有处理从先前的偏移量恢复，这将在后面的章节中解决。其次，```stop()```方法是同步的。这是必要的，因为``SourceTask``有一个专用的线程，它们可以无限期地阻塞，所以它们需要被不同线程的调用去停止。
+这都是稍微简化的版本，但是说明了这些方法是相对简单的，他们执行的唯一工作是分配或释放资源。这个实现有两点需要注意。首先，```start()```方法还没有处理从先前的偏移量恢复，这将在后面的章节中解决。其次，```stop()```方法是同步的。这是必要的，因为```SourceTask```有一个专用的线程，它们可以无限期地阻塞，所以它们需要被不同线程的调用去停止。
 
 Next, we implement the main functionality of the task, the ```poll()``` method which gets events from the input system and returns a ```List<SourceRecord>```:
 
@@ -865,7 +871,7 @@ SinkTask文档包含完整的细节，但该接口几乎与```SourceTask```一�
 
 The flush() method is used during the offset commit process, which allows tasks to recover from failures and resume from a safe point such that no events will be missed. The method should push any outstanding data to the destination system and then block until the write has been acknowledged. The ```offsets``` parameter can often be ignored, but is useful in some cases where implementations want to store offset information in the destination store to provide exactly-once delivery. For example, an HDFS connector could do this and use atomic move operations to make sure the ```flush()``` operation atomically commits the data and offsets to a final location in HDFS.
 
-flush() 方法在偏移提交过程中使用，它允许任务从失败中恢复并从安全点恢复，从而不会丢失任何事件。该方法应该将任何未完成的数据推送到目标系统，然后阻塞，直到写入已被确认。```offsets```参数通常可以忽略，但在某些情况下，实现需要在目标存储中存储偏移量信息以提供精确的一次传送。 例如，一个HDFS connector可以做到这一点，并使用原子移动操作来确保```flush()```操作自动将数据和偏移量提交到HDFS中的最终位置。
+flush() 方法在偏移提交过程中使用，它允许任务从失败中恢复并从安全点恢复，从而不会丢失任何事件。该方法应该将任何未完成的数据推送到目标系统，然后阻塞，直到写入已被确认。```offsets```参数通常可以忽略，但在某些情况下，实现需要在目标存储中存储偏移量信息以提供精确的一次传送。例如，一个HDFS connector可以做到这一点，并使用原子移动操作来确保```flush()```操作自动将数据和偏移量提交到HDFS中的最终位置。
 
 #### Resuming from Previous Offsets
 
@@ -903,7 +909,7 @@ Kafka Connect旨在定义批量数据复制作业，例如复制整个数据库�
 
 Source connectors need to monitor the source system for changes, e.g. table additions/deletions in a database. When they pick up changes, they should notify the framework via the ```ConnectorContext``` object that reconfiguration is necessary. For example, in a ```SourceConnector```:
 
-soruce connector 需要监视源系统的变化，例如 数据库中的表增加/删除。当他们选择更改时，他们应通过```ConnectorContext```对象通知框架需要重新配置。例如，在一个```SourceConnector```中：
+Soruce connector需要监视源系统的变化，例如 数据库中的表增加/删除。当他们选择更改时，他们应通过```ConnectorContext```对象通知框架需要重新配置。例如，在一个```SourceConnector```中：
 
 ```java
 if (inputsChanged())
@@ -916,11 +922,11 @@ The framework will promptly request new configuration information and update the
 
 Ideally this code for monitoring changes would be isolated to the ```Connector``` and tasks would not need to worry about them. However, changes can also affect tasks, most commonly when one of their input streams is destroyed in the input system, e.g. if a table is dropped from a database. If the ```Task``` encounters the issue before the ```Connector```, which will be common if the ```Connector``` needs to poll for changes, the ```Task``` will need to handle the subsequent error. Thankfully, this can usually be handled simply by catching and handling the appropriate exception.
 
-理想情况下，这个用于监控变化的代码将被隔离到```Connector```上，任务不需要担心。然而，改变也会影响任务，最常见的是当其输入流之一在输入系统中被破坏时，例如，如果一个表从数据库中删除。如果```Task```在```Connector```之前遇到问题，如果```Connector```需要轮询修改，那么```Task```将需要处理后续错误。但这通常可以通过捕捉和处理适当的例外来处理。
+理想情况下，这个用于监控变化的代码将被隔离到```Connector```上，任务不需要担心。然而，改变也会影响任务，最常见的是当其输入流之一在输入系统中被破坏时，例如，如果一个表从数据库中删除。如果```Task```在```Connector```之前遇到问题，如果```Connector```需要轮询修改，那么```Task```将需要处理后续错误。但这通常可以通过捕捉和处理适当的异常来处理。
 
-SinkConnectors usually only have to handle the addition of streams, which may translate to new entries in their outputs (e.g., a new database table). The framework manages any changes to the Kafka input, such as when the set of input topics changes because of a regex subscription. ```SinkTasks``` should expect new input streams, which may require creating new resources in the downstream system, such as a new table in a database. The trickiest situation to handle in these cases may be conflicts between multiple ```SinkTasks``` seeing a new input stream for the first time and simultaneously trying to create the new resource. ```SinkConnectors```, on the other hand, will generally require no special code for handling a dynamic set of streams.
+```SinkConnectors``` usually only have to handle the addition of streams, which may translate to new entries in their outputs (e.g., a new database table). The framework manages any changes to the Kafka input, such as when the set of input topics changes because of a regex subscription. ```SinkTasks``` should expect new input streams, which may require creating new resources in the downstream system, such as a new table in a database. The trickiest situation to handle in these cases may be conflicts between multiple ```SinkTasks``` seeing a new input stream for the first time and simultaneously trying to create the new resource. ```SinkConnectors```, on the other hand, will generally require no special code for handling a dynamic set of streams.
 
-SinkConnector 通常只需要处理流的添加，这可能会转化为输出中的新条目（例如新的数据库表）。该框架管理对Kafka输入的任何更改，例如，由于正则表达式订阅而导致输入主题集发生更改时。```SinkTasks```应该期待新的输入流，这可能需要在下游系统中创建新的资源，比如数据库中的新表。在这些情况下处理最棘手的情况可能是多个```SinkTasks```第一次看到一个新输入流并同时尝试创建新资源。另一方面，```SinkConnectors```通常不需要特殊的代码来处理一组动态的流。
+```SinkConnector``` 通常只需要处理流的新增数据，这些数据可能会转化为输出中的新条目（例如新的数据库表）。该框架管理对Kafka输入的任何更改，例如，由于正则表达式订阅而导致输入主题集发生更改时。```SinkTasks```应该期待新的输入流，这可能需要在下游系统中创建新的资源，比如数据库中的新表。在这些情况下处理最棘手的情况可能是多个```SinkTasks```第一次看到一个新输入流并同时尝试创建新资源。另一方面，```SinkConnectors```通常不需要特殊的代码来处理一组动态的流。
 
 ### Connect Configuration Validation
 
@@ -998,11 +1004,11 @@ Sink Connector通常更简单，因为它们消耗数据，因此不需要创建
 
 Kafka Connect's [REST layer](#rest-api) provides a set of APIs to enable administration of the cluster. This includes APIs to view the configuration of connectors and the status of their tasks, as well as to alter their current behavior (e.g. changing configuration and restarting tasks).
 
-Kafka Connect的[REST层](#rest-api)提供了一组API来启用群集管理。这包括查看connector配置和任务状态的API，以及改变其当前行为（例如更改配置和重新启动任务）的API。
+Kafka Connect的[REST层](#rest-api)提供了一组API来启用集群管理。这包括查看connector配置和任务状态的API，以及改变其当前行为（例如更改配置和重新启动任务）的API。
 
 When a connector is first submitted to the cluster, the workers rebalance the full set of connectors in the cluster and their tasks so that each worker has approximately the same amount of work. This same rebalancing procedure is also used when connectors increase or decrease the number of tasks they require, or when a connector's configuration is changed. You can use the REST API to view the current status of a connector and its tasks, including the id of the worker to which each was assigned. For example, querying the status of a file source (using ```GET /connectors/file-source/status```) might produce output like the following:
 
-当connector首次提交到群集时，工作线程将重新平衡集群中的全部connector及其任务，以便每个工作线程的工作量大致相同。当connector增加或减少它们需要的任务数量或connector的配置发生变化时，也使用相同的重新平衡过程。您可以使用REST API来查看connector及其任务的当前状态，包括每个connector分配的工作者的ID。例如，查询文件源的状态（使用```GET /connectors/file-source/status```）可能会产生如下输出：
+当connector首次提交到集群时，工作线程将重新平衡集群中的全部connector及其任务，以便每个工作线程的工作量大致相同。当connector增加或减少它们需要的任务数量或connector的配置发生变化时，也使用相同的重新平衡过程。您可以使用REST API来查看connector及其任务的当前状态，包括每个connector分配的工作者的ID。例如，查询文件源的状态（使用```GET /connectors/file-source/status```）可能会产生如下输出：
 
 ```json
 {
@@ -1038,9 +1044,9 @@ Connector及其任务将状态更新发布到集群中所有工作线程监视�
 
 In most cases, connector and task states will match, though they may be different for short periods of time when changes are occurring or if tasks have failed. For example, when a connector is first started, there may be a noticeable delay before the connector and its tasks have all transitioned to the RUNNING state. States will also diverge when tasks fail since Connect does not automatically restart failed tasks. To restart a connector/task manually, you can use the restart APIs listed above. Note that if you try to restart a task while a rebalance is taking place, Connect will return a 409 (Conflict) status code. You can retry after the rebalance completes, but it might not be necessary since rebalances effectively restart all the connectors and tasks in the cluster.
 
-在大多数情况下，connector和任务状态都会匹配，尽管在它们发生更改或任务失败时，connector和任务状态在短时间内可能会有所不同。例如，首次启动connector时，connector及其任务全部转换为RUNNING状态之前可能会有明显的延迟。由于Connect不会自动重启失败的任务，因此任务失败时状态也会发生变化。要手动重新启动connector/任务，可以使用上面列出的重新启动API。请注意，如果尝试在重新调整平衡时重新启动任务，connect将返回409(冲突)状态码。您可以在重新调整平衡完成后重试，但这可能没有必要，因为重新调整平衡后会重新启动群集中的所有connector和任务。
+在大多数情况下，connector和任务状态都会匹配，尽管在它们发生更改或任务失败时，connector和任务状态在短时间内可能会有所不同。例如，首次启动connector时，connector及其任务全部转换为RUNNING状态之前可能会有明显的延迟。由于Connect不会自动重启失败的任务，因此任务失败时状态也会发生变化。要手动重新启动connector/任务，可以使用上面列出的重新启动API。请注意，如果尝试在重新调整平衡时重新启动任务，connect将返回409(冲突)状态码。您可以在重新调整平衡完成后重试，但这可能没有必要，因为重新调整平衡后会重新启动集群中的所有connector和任务。
 
 It's sometimes useful to temporarily stop the message processing of a connector. For example, if the remote system is undergoing maintenance, it would be preferable for source connectors to stop polling it for new data instead of filling logs with exception spam. For this use case, Connect offers a pause/resume API. While a source connector is paused, Connect will stop polling it for additional records. While a sink connector is paused, Connect will stop pushing new messages to it. The pause state is persistent, so even if you restart the cluster, the connector will not begin message processing again until the task has been resumed. Note that there may be a delay before all of a connector's tasks have transitioned to the PAUSED state since it may take time for them to finish whatever processing they were in the middle of when being paused. Additionally, failed tasks will not transition to the PAUSED state until they have been restarted.
 
-暂时停止connector的消息处理有时会很有用。例如，如果远程系统正在进行维护，则source connector最好停止轮询它以获取新数据，而不是使用例外垃圾邮件填充日志。对于这个用例，Connect提供了一个暂停/恢复API。source connector暂停时，Connect将停止轮询它以获取其它多记录(record)。当sink connector暂停时，Connect将停止向其发送新消息。暂停状态是持久的，因此即使重新启动群集，connector也不会再次开始消息处理，直到任务(task)恢复。请注意，在所有connector的任务转换到PAUSED状态之前可能会有延迟，
+暂时停止connector的消息处理有时会很有用。例如，如果远程系统正在进行维护，则source connector最好停止轮询它以获取新数据，而不是使用例外垃圾邮件填充日志。对于这个用例，Connect提供了一个暂停/恢复API。source connector暂停时，Connect将停止轮询它以获取其它多记录(record)。当sink connector暂停时，Connect将停止向其发送新消息。暂停状态是持久的，因此即使重新启动集群，connector也不会再次开始消息处理，直到任务(task)恢复。请注意，在所有connector的任务转换到PAUSED状态之前可能会有延迟，
 因为它们在被暂停的过程中可能需要一些时间完成一些操作。另外，失败的任务在重新启动之前不会转换到PAUSED状态。
