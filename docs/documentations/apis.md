@@ -15,15 +15,15 @@ Kafka 包含以下五个核心apis:
 5. The [AdminClient](http://kafka.apache.org/documentation/#adminapi) API allows managing and inspecting topics, brokers, and other Kafka objects.
 
 
-1. [Producer](.\apis\producer.md) API 允许应用发送数据流到Kafka集群中的主题(topics)。
+1. [Producer](./apis/producer.md) API 允许应用发送数据流到Kafka集群中的主题(topics)。
 
-2. [Consumer](.\apis\consumer.md) API 允许应用从Kafka集群的主题(topics)中获取数据流。
+2. [Consumer](./apis/consumer.md) API 允许应用从Kafka集群的主题(topics)中获取数据流。
 
-3. [Streams](.\apis\streams.md) API 允许从数据流从输入主题(topics)传送到输出主题(topics)。
+3. [Streams](./apis/streams.md) API 允许从数据流从输入主题(topics)传送到输出主题(topics)。
 
-4. [Connect](.\apis\connect.md) API 允许实现连接器，不断的从一些源系统或应用拉取数据到Kafka，或者从Kafka推送数据到一些汇聚系统（sink system）或应用。
+4. [Connect](./apis/connect.md) API 允许实现连接器，不断的从一些源系统或应用拉取数据到Kafka，或者从Kafka推送数据到一些汇聚系统（sink system）或应用。
 
-5. [AdminClient](.\apis\admin_client.md) API 允许管理、检查主题(topics)，代理和其他Kafka对象。
+5. [AdminClient](./apis/admin_client.md) API 允许管理、检查主题(topics)，代理和其他Kafka对象。
 
 
 Kafka exposes all its functionality over a language independent protocol which has clients available in many programming languages. However only the Java clients are maintained as part of the main Kafka project, the others are available as independent open source projects. A list of non-Java clients is available [here](https://cwiki.apache.org/confluence/display/KAFKA/Clients).
@@ -92,7 +92,7 @@ Examples showing how to use this library are given in the [javadocs](http://kafk
 
 Additional documentation on using the Streams API is available [here](http://kafka.apache.org/11/documentation/streams).
 
-更多关于Streams API的文档在[这里](.\kafka_streams\)。
+更多关于Streams API的文档在[这里](./kafka_streams/introduction.md)。
 
 To use Kafka Streams you can use the following maven dependency:
 
@@ -116,7 +116,7 @@ Connect API 允许实现连接器，不断的从一些源系统或应用拉取�
 
 Many users of Connect won't need to use this API directly, though, they can use pre-built connectors without needing to write any code. Additional information on using Connect is available [here](http://kafka.apache.org/documentation.html#connect).
 
-很多使用连接器的用户不需要直接使用此API，可以直接使用预先构建的连接器而不需要编写任何代码。更多关于连接器的文档在[这里](.\kafka_connect.md)。
+很多使用连接器的用户不需要直接使用此API，可以直接使用预先构建的连接器而不需要编写任何代码。更多关于连接器的文档在[这里](./kafka_connect.md)。
 
 Those who want to implement custom connectors can see the [javadoc](http://kafka.apache.org/11/javadoc/overview-summary.html).
 
