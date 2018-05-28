@@ -71,7 +71,7 @@ To understand how Kafka does these things, let's dive in and explore Kafka's cap
     [Connector API](./documentations/apis/connect.md)允许构建并运行可重复使用的生产者或消费者,它们可以把Kafka的主题链接到已存在的应用或数据系统中。例如，一个链接到关系数据库的Kafka主题可能会捕获数据库表的任意变化。
 
 <div align="center">
-<img src="imgs/Kafka-apis.png" height="400" width="530" >
+<img src="imgs/Kafka-apis.png" height="450" width="530" >
 </div>
 
 
@@ -171,7 +171,7 @@ If all the consumer instances have different consumer groups, then each record w
 
 
 <div align="center">
-<img src="./imgs/consumer-groups.png" height="300" width="520" >
+<img src="./imgs/consumer-groups.png" height="280" width="520" >
 </div>
 
 A two server Kafka cluster hosting four partitions (P0-P3) with two consumer groups. Consumer group A has two consumer instances and group B has four.
