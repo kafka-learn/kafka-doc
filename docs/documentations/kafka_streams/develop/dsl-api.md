@@ -37,7 +37,7 @@ Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这
 
         * [聚合](dsl-api.md)
 
-        * [联结](dsl-api.md)
+        * [连接](dsl-api.md)
 
             * [Join co-partitioning requirements](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#join-co-partitioning-requirements)
 
@@ -52,17 +52,17 @@ Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这
 
             * [连接共分区(co-partitioning)要求](dsl-api.md)
 
-            * [KStream-KStream联结](dsl-api.md)
+            * [KStream-KStream连接](dsl-api.md)
 
-            * [KTable-KTable联结](dsl-api.md)
+            * [KTable-KTable连接](dsl-api.md)
 
-            * [KStream-KTable联结](dsl-api.md)
+            * [KStream-KTable连接](dsl-api.md)
 
-            * [KStream-GlobalKTable联结](dsl-api.md)
-
-        * [Windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
+            * [KStream-GlobalKTable连接](dsl-api.md)
 
         * [Windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
+
+        * [窗口](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
             * [Tumbling time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#tumbling-time-windows)
 
             * [Hopping time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#hopping-time-windows)
@@ -82,7 +82,7 @@ Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这
 
     * [Applying processors and transformers (Processor API integration)](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration)
 
-    * [使用处理器和变换器(处理器API集成)](dsl-api.md)
+    * [使用处理器和转换器(处理器API集成)](dsl-api.md)
 
 * [Writing streams back to Kafka](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#writing-streams-back-to-kafka)
 
@@ -94,20 +94,19 @@ Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这
 
 In comparison to the [Processor API](http://kafka.apache.org/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api), only the DSL supports:
 
-与[处理器API](processor-api.md)相比，只有DSL支持的情况是：
+与[处理器API](processor-api.md)相比，只有DSL才支持的情形是：
 
 * Built-in abstractions for [streams and tables](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-duality) in the form of [KStream](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-kstream), [KTable](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-ktable), and [GlobalKTable](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-globalktable). Having first-class support for streams and tables is crucial because, in practice, most use cases require not just either streams or databases/tables, but a combination of both. For example, if your use case is to create a customer 360-degree view that is updated in real-time, what your application will be doing is transforming many input streams of customer-related events into an output table that contains a continuously updated 360-degree view of your customers.
 
-* 内置抽象的[KStream](../concepts.md)，[KTable](../concepts.md)和[GlobalKTable](../concepts.md)形式的[流和表(streams and tables)](../concepts.md)。对流和表(streams and tables)提供一流的支持是非常重要的，因为在实践中，大多数用例不仅需要流或数据库/表，而且还需要两者的组合。例如，如果您的用例是创建实时更新的360度客户视图，那么您的应用程序将要做的是将许多与客户相关的事件输入流转换为包含不断更新的360的输出表 客户的视角。
+* 内置抽象的[KStream](../concepts.md)，[KTable](../concepts.md)和[GlobalKTable](../concepts.md)形式的[流和表(streams and tables)](../concepts.md)。对流和表(streams and tables)提供一流的支持是非常重要的，因为在实践中，大多数用例不仅需要流或数据库/表，而且还需要两者的组合。例如，如果您的用例是创建实时更新的360度的客户视图，那么您的应用程序将要做的是将许多与客户相关的事件输入流转换为包含不断更新的360度的客户视图的输出表。
 
 * Declarative, functional programming style with [stateless transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateless) (e.g. ```map``` and ```filter```) as well as [stateful transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateful) such as [aggregations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-aggregating) (e.g. ```count``` and ```reduce```), [joins](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins) (e.g. ```leftJoin```), and [windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-windowing) (e.g. [session windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing-session)).
 
-* 具有无状态转换（例如```map```和 ```filter```）以及诸如聚合（例如```count```和 ```reduce```），联接（例如```leftJoin```）和窗口（例如会话窗口（session windows））这些特征的有状态转换的声明性和函数式编程风格。
+* 具有无状态转换（例如```map```和 ```filter```）以及诸如聚合（例如```count```和 ```reduce```），连接（例如```leftJoin```）和窗口（例如会话窗口（session windows））这些特征的有状态转换的声明性和函数式编程风格。
 
 With the DSL, you can define [processor topologies](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-processor-topology) (i.e., the logical processing plan) in your application. The steps to accomplish this are:
 
-使用DSL，您可以在应用程序中定义[处理器拓扑]
-(../concepts.md)（即逻辑处理计划）。完成此步骤的步骤是：
+您可以在应用程序中通过DSL来定义[处理器拓扑](../concepts.md)（即逻辑处理计划）。完成此计划的步骤是：
 
 1. Specify [one or more input streams that are read from Kafka topics](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-sources).
 
@@ -116,15 +115,15 @@ With the DSL, you can define [processor topologies](http://kafka.apache.org/docu
 3. Write the [resulting output streams back to Kafka topics](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-destinations), or expose the processing results of your application directly to other applications through [interactive queries](http://kafka.apache.org/documentation/streams/developer-guide/interactive-queries.html#streams-developer-guide-interactive-queries) (e.g., via a REST API).
 
 
-1. 指定[一个或多个从Kafka主题读取的输入流](dsl-api.md)。
+1. 指定[一个或多个从Kafka主题中读取的输入流](dsl-api.md)。
 
-2. 组合这些流的[转换](jsl-api.md)。
+2. 组合这些流的[转换](dsl-api.md)。
 
 3. 将[结果输出流写回Kafka主题](dsl-api.md)，或通过[交互式查询](interactive-queries.md)（例如，通过REST API）将应用程序的处理结果直接公开给其他应用程序。
 
 After the application is run, the defined processor topologies are continuously executed (i.e., the processing plan is put into action). A step-by-step guide for writing a stream processing application using the DSL is provided below.
 
-应用程序运行后，定义的处理器拓扑将不断执行（即处理计划付诸实施）。以下提供了使用DSL编写流处理应用程序的分步指南。
+应用程序运行后，定义的处理器拓扑将不断执行（也就是将处理计划付诸实施）。下面提供了使用DSL编写流处理应用程序的分步指南。
 
 For a complete list of available API functionality, see also the [Streams](http://kafka.apache.org/javadoc/org/apache/kafka/streams/package-summary.html) API docs.
 
@@ -140,15 +139,24 @@ You can easily read data from Kafka topics into your application. The following 
 
 * **Reading from Kafka**
 
+* **从Kafka中读取数据**
+
     * **Stream**
 
         * *input topics* → KStream
 
             * **Description**
 
+            * **描述**
+
                 Creates a [KStream](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-kstream) from the specified Kafka input topics and interprets the data as a [record stream](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-kstream). A `KStream` represents a partitioned record stream. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#stream(java.lang.String))
+
+                根据指定的Kafka输入主题创建`KStream`，并将数据解释为`消息流`。 `KStream`表示分区的消息流。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#stream(java.lang.String))
                 
                 In the case of a KStream, the local KStream instance of every application instance will be populated with data from only **a subset** of the partitions of the input topic. Collectively, across all application instances, all input topic partitions are read and processed.
+
+                在KStream的情况下，每个应用程序实例的本地KStream实例将仅填充来自输入主题分区的`子集`的数据。总而言之，在所有应用程序实例中，都会读取和处理所有的输入主题分区。
+
                 ```java
                 import org.apache.kafka.common.serialization.Serdes;
                 import org.apache.kafka.streams.StreamsBuilder;
@@ -166,9 +174,15 @@ You can easily read data from Kafka topics into your application. The following 
 
                 If you do not specify SerDes explicitly, the default SerDes from the [configuration](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-configuration) are used.
 
+                如果您没有明确指定SerDes，则使用[配置](config-streams.md)中的默认SerDes。
+
                 You **must specify SerDes explicitly** if the key or value types of the records in the Kafka input topics do not match the configured default SerDes. For information about configuring default SerDes, available SerDes, and implementing your own custom SerDes see [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes).
 
+                如果Kafka输入主题中消息的键或值的类型与配置中的默认SerDes不匹配，则**必须明确指定SerDes**。有关配置默认SerDes，可用SerDes和实现自己的自定义SerDes的信息，请参阅[数据类型和序列化](datatypes.md)。
+
                 Several variants of `stream` exist, for example to specify a regex pattern for input topics to read from).
+
+                存在多种`流`的变体，例如为输入主题指定一种正则表达式模式以供读取）。
     
     * **Table**
 
@@ -1423,154 +1437,176 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
   );
 ```
 
-Transformation	Description
-Inner Join (windowed)
+* **Transformation**
 
-(KStream, KStream) → KStream
-Performs an INNER JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type KStream<K, ...> rather than KStream<Windowed<K>, ...>. (details)
+    * **Inner Join (windowed)**
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+        * (KStream, KStream) → KStream
 
-Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).
+            * **Description**
+	
+                Performs an INNER JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type `KStream<K, ...>` rather than `KStream<Windowed<K>, ...>`. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.KStream-org.apache.kafka.streams.kstream.ValueJoiner-org.apache.kafka.streams.kstream.JoinWindows-))
 
-Several variants of join exists, see the Javadocs for details.
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-import java.util.concurrent.TimeUnit;
-KStream<String, Long> left = ...;
-KStream<String, Double> right = ...;
+                **Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).**
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.join(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
+                Several variants of `join` exists, see the Javadocs for details.
 
-// Java 7 example
-KStream<String, String> joined = left.join(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    },
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
-Detailed behavior:
+                ```java
+                import java.util.concurrent.TimeUnit;
+                KStream<String, Long> left = ...;
+                KStream<String, Double> right = ...;
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied JoinWindows, i.e. the window defines an additional join predicate over the record timestamps.
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.join(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                // Java 7 example
+                KStream<String, String> joined = left.join(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    },
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
+                ```
 
-Input records with a null key or a null value are ignored and do not trigger the join.
-See the semantics overview at the bottom of this section for a detailed description.
+                Detailed behavior:
 
-Left Join (windowed)
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
 
-(KStream, KStream) → KStream
-Performs a LEFT JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type KStream<K, ...> rather than KStream<Windowed<K>, ...>. (details)
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+                    * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
 
-Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).
+                See the semantics overview at the bottom of this section for a detailed description.
 
-Several variants of leftJoin exists, see the Javadocs for details.
+    * **Left Join (windowed)**
 
-import java.util.concurrent.TimeUnit;
-KStream<String, Long> left = ...;
-KStream<String, Double> right = ...;
+        * (KStream, KStream) → KStream
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.leftJoin(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
+            * **Description**
 
-// Java 7 example
-KStream<String, String> joined = left.leftJoin(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    },
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
-Detailed behavior:
+                Performs a LEFT JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type `KStream<K, ...>` rather than `KStream<Windowed<K>, ...>`. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#leftJoin-org.apache.kafka.streams.kstream.KStream-org.apache.kafka.streams.kstream.ValueJoiner-org.apache.kafka.streams.kstream.JoinWindows-))
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied JoinWindows, i.e. the window defines an additional join predicate over the record timestamps.
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                **Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).**
 
-Input records with a null key or a null value are ignored and do not trigger the join.
-For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null); this explains the row with timestamp=3 in the table below, which lists [A, null] in the LEFT JOIN column.
+                Several variants of `leftJoin` exists, see the Javadocs for details.
 
-See the semantics overview at the bottom of this section for a detailed description.
+                ```java
+                import java.util.concurrent.TimeUnit;
+                KStream<String, Long> left = ...;
+                KStream<String, Double> right = ...;
 
-Outer Join (windowed)
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.leftJoin(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
 
-(KStream, KStream) → KStream
-Performs an OUTER JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type KStream<K, ...> rather than KStream<Windowed<K>, ...>. (details)
+                // Java 7 example
+                KStream<String, String> joined = left.leftJoin(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    },
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
+                ```
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+                Detailed behavior:
 
-Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
 
-Several variants of outerJoin exists, see the Javadocs for details.
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-import java.util.concurrent.TimeUnit;
-KStream<String, Long> left = ...;
-KStream<String, Double> right = ...;
+                    * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.outerJoin(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
+                * For each input record on the left side that does not have any match on the right side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)`; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the LEFT JOIN column.
 
-// Java 7 example
-KStream<String, String> joined = left.outerJoin(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    },
-    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
-    Joined.with(
-      Serdes.String(), /* key */
-      Serdes.Long(),   /* left value */
-      Serdes.Double())  /* right value */
-  );
-Detailed behavior:
+                See the semantics overview at the bottom of this section for a detailed description.
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied JoinWindows, i.e. the window defines an additional join predicate over the record timestamps.
+    * **Outer Join (windowed)**
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+        * (KStream, KStream) → KStream
 
-Input records with a null key or a null value are ignored and do not trigger the join.
-For each input record on one side that does not have any match on the other side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null) or ValueJoiner#apply(null, rightRecord.value), respectively; this explains the row with timestamp=3 in the table below, which lists [A, null] in the OUTER JOIN column (unlike LEFT JOIN, [null, x] is possible, too, but no such example is shown in the table).
+            * **Description**
 
-See the semantics overview at the bottom of this section for a detailed description.
+                Performs an OUTER JOIN of this stream with another stream. Even though this operation is windowed, the joined stream will be of type `KStream<K, ...>` rather than `KStream<Windowed<K>, ...>`. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#outerJoin-org.apache.kafka.streams.kstream.KStream-org.apache.kafka.streams.kstream.ValueJoiner-org.apache.kafka.streams.kstream.JoinWindows-)
+
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
+
+                **Causes data re-partitioning of a stream if and only if the stream was marked for re-partitioning (if both are marked, both are re-partitioned).**
+
+                Several variants of `outerJoin` exists, see the Javadocs for details.
+
+                ```java
+                import java.util.concurrent.TimeUnit;
+                KStream<String, Long> left = ...;
+                KStream<String, Double> right = ...;
+
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.outerJoin(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
+
+                // Java 7 example
+                KStream<String, String> joined = left.outerJoin(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    },
+                    JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
+                    Joined.with(
+                    Serdes.String(), /* key */
+                    Serdes.Long(),   /* left value */
+                    Serdes.Double())  /* right value */
+                );
+                ```
+
+                Detailed behavior:
+
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and window-based, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
+
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
+
+                    * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
+
+                * For each input record on one side that does not have any match on the other side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)` or `ValueJoiner#apply(null, rightRecord.value)`, respectively; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the OUTER JOIN column (unlike LEFT JOIN, `[null, x]` is possible, too, but no such example is shown in the table).
+
+                See the semantics overview at the bottom of this section for a detailed description.
 
 **Semantics of stream-stream joins:** The semantics of the various stream-stream join variants are explained below. To improve the readability of the table, assume that (1) all records have the same key (and thus the key in the table is omitted), (2) all records belong to a single join window, and (3) all records are processed in timestamp order. The columns INNER JOIN, LEFT JOIN, and OUTER JOIN denote what is passed as arguments to the user-supplied [ValueJoiner](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/ValueJoiner.html) for the ```join```, ```leftJoin```, and ```outerJoin``` methods, respectively, whenever a new input record is received on either side of the join. An empty table cell denotes that the ```ValueJoiner``` is not called at all.
 
@@ -1609,109 +1645,134 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
   );
 ```
 
-Transformation	Description
-Inner Join
+* **Transformation**
 
-(KTable, KTable) → KTable
-Performs an INNER JOIN of this table with another table. The result is an ever-updating KTable that represents the “current” result of the join. (details)
+    * **Inner Join**
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+        * (KTable, KTable) → KTable
 
-KTable<String, Long> left = ...;
-KTable<String, Double> right = ...;
+            * **Description**
 
-// Java 8+ example, using lambda expressions
-KTable<String, String> joined = left.join(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
-  );
+                Performs an INNER JOIN of this table with another table. The result is an ever-updating KTable that represents the “current” result of the join. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-// Java 7 example
-KTable<String, String> joined = left.join(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    });
-Detailed behavior:
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key.
+                ```java
+                KTable<String, Long> left = ...;
+                KTable<String, Double> right = ...;
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                // Java 8+ example, using lambda expressions
+                KTable<String, String> joined = left.join(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
+                );
 
-Input records with a null key are ignored and do not trigger the join.
-Input records with a null value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
-See the semantics overview at the bottom of this section for a detailed description.
+                // Java 7 example
+                KTable<String, String> joined = left.join(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    });
+                ```
 
-Left Join
+                Detailed behavior:
 
-(KTable, KTable) → KTable
-Performs a LEFT JOIN of this table with another table. (details)
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-KTable<String, Long> left = ...;
-KTable<String, Double> right = ...;
+                    * Input records with a `null` key are ignored and do not trigger the join.
 
-// Java 8+ example, using lambda expressions
-KTable<String, String> joined = left.leftJoin(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
-  );
+                    * Input records with a `null` value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
 
-// Java 7 example
-KTable<String, String> joined = left.leftJoin(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    });
-Detailed behavior:
+                See the semantics overview at the bottom of this section for a detailed description.
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key.
+    * **Left Join**
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+        * (KTable, KTable) → KTable
 
-Input records with a null key are ignored and do not trigger the join.
-Input records with a null value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
-For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null); this explains the row with timestamp=3 in the table below, which lists [A, null] in the LEFT JOIN column.
+            * **Description**
 
-See the semantics overview at the bottom of this section for a detailed description.
+                Performs a LEFT JOIN of this table with another table. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#leftJoin-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-Outer Join
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-(KTable, KTable) → KTable
-Performs an OUTER JOIN of this table with another table. (details)
+                ```java
+                KTable<String, Long> left = ...;
+                KTable<String, Double> right = ...;
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+                // Java 8+ example, using lambda expressions
+                KTable<String, String> joined = left.leftJoin(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
+                );
 
-KTable<String, Long> left = ...;
-KTable<String, Double> right = ...;
+                // Java 7 example
+                KTable<String, String> joined = left.leftJoin(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    });
+                ```
+                
+                Detailed behavior:
 
-// Java 8+ example, using lambda expressions
-KTable<String, String> joined = left.outerJoin(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
-  );
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-// Java 7 example
-KTable<String, String> joined = left.outerJoin(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    });
-Detailed behavior:
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key.
+                    * Input records with a `null` key are ignored and do not trigger the join.
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                    * Input records with a `null` value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
 
-Input records with a null key are ignored and do not trigger the join.
-Input records with a null value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
-For each input record on one side that does not have any match on the other side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null) or ValueJoiner#apply(null, rightRecord.value), respectively; this explains the rows with timestamp=3 and timestamp=7 in the table below, which list [A, null] and [null, b], respectively, in the OUTER JOIN column.
+                * For each input record on the left side that does not have any match on the right side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)`; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the LEFT JOIN column.
 
-See the semantics overview at the bottom of this section for a detailed description.
+                See the semantics overview at the bottom of this section for a detailed description.
+
+    * **Outer Join**
+
+        * (KTable, KTable) → KTable
+
+            * **Description**
+
+                Performs an OUTER JOIN of this table with another table. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#outerJoin-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
+
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
+
+                ```java
+                KTable<String, Long> left = ...;
+                KTable<String, Double> right = ...;
+
+                // Java 8+ example, using lambda expressions
+                KTable<String, String> joined = left.outerJoin(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
+                );
+
+                // Java 7 example
+                KTable<String, String> joined = left.outerJoin(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    });
+                ```
+
+                Detailed behavior:
+
+                * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
+
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
+
+                    * Input records with a `null` key are ignored and do not trigger the join.
+                
+                    * Input records with a `null` value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
+                
+                * For each input record on one side that does not have any match on the other side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)` or `ValueJoiner#apply(null, rightRecord.value)`, respectively; this explains the rows with timestamp=3 and timestamp=7 in the table below, which list `[A, null]` and `[null, b]`, respectively, in the OUTER JOIN column.
+
+                See the semantics overview at the bottom of this section for a detailed description.
 
 **Semantics of table-table joins:** The semantics of the various table-table join variants are explained below. To improve the readability of the table, you can assume that (1) all records have the same key (and thus the key in the table is omitted) and that (2) all records are processed in timestamp order. The columns INNER JOIN, LEFT JOIN, and OUTER JOIN denote what is passed as arguments to the user-supplied [ValueJoiner](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/ValueJoiner.html) for the ```join```, ```leftJoin```, and ```outerJoin``` methods, respectively, whenever a new input record is received on either side of the join. An empty table cell denotes that the ```ValueJoiner``` is not called at all.
 
@@ -1750,94 +1811,113 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
   );
 ```
 
-Transformation	Description
-Inner Join
+* **Transformation**
 
-(KStream, KTable) → KStream
-Performs an INNER JOIN of this stream with the table, effectively doing a table lookup. (details)
+    * **Inner Join**
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+        * (KStream, KTable) → KStream
 
-Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.
+            * **Description**
 
-Several variants of join exists, see the Javadocs for details.
+                Performs an INNER JOIN of this stream with the table, effectively doing a table lookup. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-KStream<String, Long> left = ...;
-KTable<String, Double> right = ...;
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.join(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
-    Joined.keySerde(Serdes.String()) /* key */
-      .withValueSerde(Serdes.Long()) /* left value */
-  );
+                **Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.**
 
-// Java 7 example
-KStream<String, String> joined = left.join(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    },
-    Joined.keySerde(Serdes.String()) /* key */
-      .withValueSerde(Serdes.Long()) /* left value */
-  );
-Detailed behavior:
+                Several variants of `join` exists, see the Javadocs for details.
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key.
+                ```java
+                KStream<String, Long> left = ...;
+                KTable<String, Double> right = ...;
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.join(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
+                    Joined.keySerde(Serdes.String()) /* key */
+                    .withValueSerde(Serdes.Long()) /* left value */
+                );
 
-Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
-Input records for the stream with a null key or a null value are ignored and do not trigger the join.
-Input records for the table with a null value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
-See the semantics overview at the bottom of this section for a detailed description.
+                // Java 7 example
+                KStream<String, String> joined = left.join(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    },
+                    Joined.keySerde(Serdes.String()) /* key */
+                    .withValueSerde(Serdes.Long()) /* left value */
+                );
+                ```
 
-Left Join
+                Detailed behavior:
 
-(KStream, KTable) → KStream
-Performs a LEFT JOIN of this stream with the table, effectively doing a table lookup. (details)
+                * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-Data must be co-partitioned: The input data for both sides must be co-partitioned.
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.
+                    * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
+                
+                    * Input records for the stream with a `null` key or a `null` value are ignored and do not trigger the join.
+                
+                    * Input records for the table with a `null` value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
 
-Several variants of leftJoin exists, see the Javadocs for details.
+                See the semantics overview at the bottom of this section for a detailed description.
 
-KStream<String, Long> left = ...;
-KTable<String, Double> right = ...;
+    * **Left Join**
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.leftJoin(right,
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
-    Joined.keySerde(Serdes.String()) /* key */
-      .withValueSerde(Serdes.Long()) /* left value */
-  );
+        * (KStream, KTable) → KStream
 
-// Java 7 example
-KStream<String, String> joined = left.leftJoin(right,
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    },
-    Joined.keySerde(Serdes.String()) /* key */
-      .withValueSerde(Serdes.Long()) /* left value */
-  );
-Detailed behavior:
+            * **Description**
 
-The join is key-based, i.e. with the join predicate leftRecord.key == rightRecord.key.
+                Performs a LEFT JOIN of this stream with the table, effectively doing a table lookup. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#leftJoin-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
-Input records for the stream with a null key or a null value are ignored and do not trigger the join.
-Input records for the table with a null value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
-For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null); this explains the row with timestamp=3 in the table below, which lists [A, null] in the LEFT JOIN column.
+                **Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.**
 
-See the semantics overview at the bottom of this section for a detailed description.
+                Several variants of `leftJoin` exists, see the Javadocs for details.
+
+                ```java
+                KStream<String, Long> left = ...;
+                KTable<String, Double> right = ...;
+
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.leftJoin(right,
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue, /* ValueJoiner */
+                    Joined.keySerde(Serdes.String()) /* key */
+                    .withValueSerde(Serdes.Long()) /* left value */
+                );
+
+                // Java 7 example
+                KStream<String, String> joined = left.leftJoin(right,
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    },
+                    Joined.keySerde(Serdes.String()) /* key */
+                    .withValueSerde(Serdes.Long()) /* left value */
+                );
+                ```
+
+                Detailed behavior:
+
+                * The join is key-based, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
+
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
+
+                    * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
+
+                    * Input records for the stream with a `null` key or a `null` value are ignored and do not trigger the join.
+
+                    * Input records for the table with a `null` value are interpreted as tombstones for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
+
+                For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null); this explains the row with timestamp=3 in the table below, which lists [A, null] in the LEFT JOIN column.
+
+                See the semantics overview at the bottom of this section for a detailed description.
 
 **Semantics of stream-table joins:** The semantics of the various stream-table join variants are explained below. To improve the readability of the table we assume that (1) all records have the same key (and thus we omit the key in the table) and that (2) all records are processed in timestamp order. The columns INNER JOIN and LEFT JOIN denote what is passed as arguments to the user-supplied [ValueJoiner](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/ValueJoiner.html) for the ```join``` and ```leftJoin``` methods, respectively, whenever a new input record is received on either side of the join. An empty table cell denotes that the ```ValueJoiner``` is not called at all.
 
@@ -1884,90 +1964,109 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
   );
 ```
 
-Transformation	Description
-Inner Join
+* **Transformation**
 
-(KStream, GlobalKTable) → KStream
-Performs an INNER JOIN of this stream with the global table, effectively doing a table lookup. (details)
+    * **Inner Join**
 
-The GlobalKTable is fully bootstrapped upon (re)start of a KafkaStreams instance, which means the table is fully populated with all the data in the underlying topic that is available at the time of the startup. The actual data processing begins only once the bootstrapping has completed.
+        * (KStream, GlobalKTable) → KStream
+	        
+            * **Description**
 
-Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.
+                Performs an INNER JOIN of this stream with the global table, effectively doing a table lookup. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.GlobalKTable-org.apache.kafka.streams.kstream.KeyValueMapper-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-KStream<String, Long> left = ...;
-GlobalKTable<Integer, Double> right = ...;
+                The `GlobalKTable` is fully bootstrapped upon (re)start of a `KafkaStreams` instance, which means the table is fully populated with all the data in the underlying topic that is available at the time of the startup. The actual data processing begins only once the bootstrapping has completed.
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.join(right,
-    (leftKey, leftValue) -> leftKey.length(), /* derive a (potentially) new key by which to lookup against the table */
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
-  );
+                **Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.**
 
-// Java 7 example
-KStream<String, String> joined = left.join(right,
-    new KeyValueMapper<String, Long, Integer>() { /* derive a (potentially) new key by which to lookup against the table */
-      @Override
-      public Integer apply(String key, Long value) {
-        return key.length();
-      }
-    },
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    });
-Detailed behavior:
+                ```java
+                KStream<String, Long> left = ...;
+                GlobalKTable<Integer, Double> right = ...;
 
-The join is indirectly key-based, i.e. with the join predicate KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key.
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.join(right,
+                    (leftKey, leftValue) -> leftKey.length(), /* derive a (potentially) new key by which to lookup against the table */
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
+                );
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                // Java 7 example
+                KStream<String, String> joined = left.join(right,
+                    new KeyValueMapper<String, Long, Integer>() { /* derive a (potentially) new key by which to lookup against the table */
+                    @Override
+                    public Integer apply(String key, Long value) {
+                        return key.length();
+                    }
+                    },
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    });
+                ```
 
-Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
-Input records for the stream with a null key or a null value are ignored and do not trigger the join.
-Input records for the table with a null value are interpreted as tombstones, which indicate the deletion of a record key from the table. Tombstones do not trigger the join.
-Left Join
+                Detailed behavior:
 
-(KStream, GlobalKTable) → KStream
-Performs a LEFT JOIN of this stream with the global table, effectively doing a table lookup. (details)
+                * The join is indirectly key-based, i.e. with the join predicate `KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key`.
 
-The GlobalKTable is fully bootstrapped upon (re)start of a KafkaStreams instance, which means the table is fully populated with all the data in the underlying topic that is available at the time of the startup. The actual data processing begins only once the bootstrapping has completed.
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.
+                    * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
+                
+                    * Input records for the stream with a `null` key or a `null` value are ignored and do not trigger the join.
+                
+                    * Input records for the table with a `null` value are interpreted as tombstones, which indicate the deletion of a record key from the table. Tombstones do not trigger the join.
 
-KStream<String, Long> left = ...;
-GlobalKTable<Integer, Double> right = ...;
+    * **Left Join**
 
-// Java 8+ example, using lambda expressions
-KStream<String, String> joined = left.leftJoin(right,
-    (leftKey, leftValue) -> leftKey.length(), /* derive a (potentially) new key by which to lookup against the table */
-    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
-  );
+        * (KStream, GlobalKTable) → KStream
+	        
+            * **Description**
 
-// Java 7 example
-KStream<String, String> joined = left.leftJoin(right,
-    new KeyValueMapper<String, Long, Integer>() { /* derive a (potentially) new key by which to lookup against the table */
-      @Override
-      public Integer apply(String key, Long value) {
-        return key.length();
-      }
-    },
-    new ValueJoiner<Long, Double, String>() {
-      @Override
-      public String apply(Long leftValue, Double rightValue) {
-        return "left=" + leftValue + ", right=" + rightValue;
-      }
-    });
-Detailed behavior:
+                Performs a LEFT JOIN of this stream with the global table, effectively doing a table lookup. (details)
 
-The join is indirectly key-based, i.e. with the join predicate KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key.
+                The `GlobalKTable` is fully bootstrapped upon (re)start of a `KafkaStreams` instance, which means the table is fully populated with all the data in the underlying topic that is available at the time of the startup. The actual data processing begins only once the bootstrapping has completed.
 
-The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied ValueJoiner will be called to produce join output records.
+                **Causes data re-partitioning of the stream if and only if the stream was marked for re-partitioning.**
 
-Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
-Input records for the stream with a null key or a null value are ignored and do not trigger the join.
-Input records for the table with a null value are interpreted as tombstones, which indicate the deletion of a record key from the table. Tombstones do not trigger the join.
-For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with ValueJoiner#apply(leftRecord.value, null).
+                ```java
+                KStream<String, Long> left = ...;
+                GlobalKTable<Integer, Double> right = ...;
+
+                // Java 8+ example, using lambda expressions
+                KStream<String, String> joined = left.leftJoin(right,
+                    (leftKey, leftValue) -> leftKey.length(), /* derive a (potentially) new key by which to lookup against the table */
+                    (leftValue, rightValue) -> "left=" + leftValue + ", right=" + rightValue /* ValueJoiner */
+                );
+
+                // Java 7 example
+                KStream<String, String> joined = left.leftJoin(right,
+                    new KeyValueMapper<String, Long, Integer>() { /* derive a (potentially) new key by which to lookup against the table */
+                    @Override
+                    public Integer apply(String key, Long value) {
+                        return key.length();
+                    }
+                    },
+                    new ValueJoiner<Long, Double, String>() {
+                    @Override
+                    public String apply(Long leftValue, Double rightValue) {
+                        return "left=" + leftValue + ", right=" + rightValue;
+                    }
+                    });
+                ```
+
+                Detailed behavior:
+
+                * The join is indirectly key-based, i.e. with the join predicate `KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key`.
+
+                * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
+
+                    * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
+                
+                    * Input records for the stream with a `null` key or a `null` value are ignored and do not trigger the join.
+                
+                    * Input records for the table with a `null` value are interpreted as tombstones, which indicate the deletion of a record key from the table. Tombstones do not trigger the join.
+
+                * For each input record on the left side that does not have any match on the right side, the ValueJoiner will be called with `ValueJoiner#apply(leftRecord.value, null)`.
 
 **Semantics of stream-table joins:** The join semantics are identical to [KStream-KTable joins](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-kstream-ktable). The only difference is that, for KStream-GlobalKTable joins, the left input record is first “mapped” with a user-supplied ```KeyValueMapper``` into the table’s keyspace prior to the table lookup.
 
@@ -2122,41 +2221,51 @@ Beyond the aforementioned [stateless](http://kafka.apache.org/11/documentation/s
 
 * **从其他工具迁移过来：**您正在从那些提供强制性API的其他流处理技术中迁移过来，并且将一些旧代码迁移到Processor API比立即完全迁移到DSL更快或更容易。
 
-Transformation	Description
-Process
+* **Transformation**
 
-KStream -> void
-Terminal operation. Applies a Processor to each record. process() allows you to leverage the Processor API from the DSL. (details)
+    * **Process**
 
-This is essentially equivalent to adding the Processor via Topology#addProcessor() to your processor topology.
+        * KStream -> void
 
-An example is available in the javadocs.
+	        * **Description**
 
-Transform
+                **Terminal operation.** Applies a `Processor` to each record. `process()` allows you to leverage the [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api) from the DSL. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-))
 
-KStream -> KStream
-Applies a Transformer to each record. transform() allows you to leverage the Processor API from the DSL. (details)
+                This is essentially equivalent to adding the `Processor` via `Topology#addProcessor()` to your [processor topology](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-processor-topology).
 
-Each input record is transformed into zero, one, or more output records (similar to the stateless flatMap). The Transformer must return null for zero output. You can modify the record’s key and value, including their types.
+                An example is available in the [javadocs](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#process-org.apache.kafka.streams.processor.ProcessorSupplier-java.lang.String...-).
 
-Marks the stream for data re-partitioning: Applying a grouping or a join after transform will result in re-partitioning of the records. If possible use transformValues instead, which will not cause data re-partitioning.
+    * **Transform**
 
-transform is essentially equivalent to adding the Transformer via Topology#addProcessor() to your processor topology.
+        * KStream -> KStream
 
-An example is available in the javadocs.
+	        * **Description**
 
-Transform (values only)
+                Applies a `Transformer` to each record. `transform()` allows you to leverage the [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api) from the DSL. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-))
 
-KStream -> KStream
-Applies a ValueTransformer to each record, while retaining the key of the original record. transformValues() allows you to leverage the Processor API from the DSL. (details)
+                Each input record is transformed into zero, one, or more output records (similar to the stateless `flatMap`). The Transformer must return null for zero output. You can modify the record’s key and value, including their types.
 
-Each input record is transformed into exactly one output record (zero output records or multiple output records are not possible). The ValueTransformer may return null as the new value for a record.
+                **Marks the stream for data re-partitioning:** Applying a grouping or a join after `transform` will result in re-partitioning of the records. If possible use `transformValues` instead, which will not cause data re-partitioning.
 
-transformValues is preferable to transform because it will not cause data re-partitioning.
+                `transform` is essentially equivalent to adding the `Transformer` via `Topology#addProcessor()` to your [processor topology](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-processor-topology).
 
-transformValues is essentially equivalent to adding the ValueTransformer via Topology#addProcessor() to your processor topology.
+                An example is available in the [javadocs](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#transform-org.apache.kafka.streams.kstream.TransformerSupplier-java.lang.String...-).
 
-An example is available in the javadocs.
+    * **Transform (values only)**
+
+        * KStream -> KStream
+
+	        * **Description**
+
+                Applies a `ValueTransformer` to each record, while retaining the key of the original record. `transformValues()` allows you to leverage the [Processor API](http://kafka.apache.org/11/documentation/streams/developer-guide/processor-api.html#streams-developer-guide-processor-api) from the DSL. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#transformValues-org.apache.kafka.streams.kstream.ValueTransformerSupplier-java.lang.String...-))
+
+                Each input record is transformed into exactly one output record (zero output records or multiple output records are not possible). The `ValueTransformer` may return `null` as the new value for a record.
+
+                `transformValues` is preferable to `transform` because it will not cause data re-partitioning.
+
+                `transformValues` is essentially equivalent to adding the `ValueTransformer` via `Topology#addProcessor()` to your [processor topology](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-processor-topology).
+
+                An example is available in the [javadocs](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#transformValues-org.apache.kafka.streams.kstream.ValueTransformerSupplier-java.lang.String...-).
 
 The following example shows how to leverage, via the ```KStream#process()``` method, a custom ```Processor``` that sends an email notification whenever a page view count reaches a predefined threshold.
 
@@ -2216,6 +2325,7 @@ In Java 8+, using lambda expressions:
 
 在Java 8+中，使用lambda表达式：
 
+```java
 KStream<String, GenericRecord> pageViews = ...;
 
 // Send an email notification when the view count of a page reaches one thousand.
@@ -2247,6 +2357,7 @@ pageViews.groupByKey().
                return new PopularPageEmailAlert("alerts@yourcompany.com");
              }
            });
+```
 
 ## WRITING STREAMS BACK TO KAFKA
 
@@ -2256,77 +2367,104 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
 任何流和表都可以（连续地）写回Kafka主题。正如我们下面将要详细描述的那样，根据具体情况，输出数据可能会在前往Kafka的途中重新分区。
 
-Writing to Kafka	Description
-To
+* **Writing to Kafka**
 
-KStream -> void
-Terminal operation. Write the records to a Kafka topic. (KStream details)
+    * **To**
 
-When to provide serdes explicitly:
+        * KStream -> void
 
-If you do not specify SerDes explicitly, the default SerDes from the configuration are used.
-You must specify SerDes explicitly via the Produced class if the key and/or value types of the KStream do not match the configured default SerDes.
-See Data Types and Serialization for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
-A variant of to exists that enables you to specify how the data is produced by using a Produced instance to specify, for example, a StreamPartitioner that gives you control over how output records are distributed across the partitions of the output topic.
+	        * **Description**
 
-KStream<String, Long> stream = ...;
-KTable<String, Long> table = ...;
+                **Terminal operation.** Write the records to a Kafka topic. ([KStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#to(java.lang.String)))
+
+                When to provide serdes explicitly:
+
+                * If you do not specify SerDes explicitly, the default SerDes from the [configuration](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-configuration) are used.
+
+                * You **must specify SerDes explicitly** via the `Produced` class if the key and/or value types of the `KStream` do not match the configured default SerDes.
+
+                * See [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes) for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
+
+                A variant of `to` exists that enables you to specify how the data is produced by using a `Produced` instance to specify, for example, a `StreamPartitioner` that gives you control over how output records are distributed across the partitions of the output topic.
+
+                ```java
+                KStream<String, Long> stream = ...;
+                KTable<String, Long> table = ...;
 
 
-// Write the stream to the output topic, using the configured default key
-// and value serdes of your `StreamsConfig`.
-stream.to("my-stream-output-topic");
+                // Write the stream to the output topic, using the configured default key
+                // and value serdes of your `StreamsConfig`.
+                stream.to("my-stream-output-topic");
 
-// Same for table
-table.to("my-table-output-topic");
+                // Same for table
+                table.to("my-table-output-topic");
 
-// Write the stream to the output topic, using explicit key and value serdes,
-// (thus overriding the defaults of your `StreamsConfig`).
-stream.to("my-stream-output-topic", Produced.with(Serdes.String(), Serdes.Long());
-Causes data re-partitioning if any of the following conditions is true:
+                // Write the stream to the output topic, using explicit key and value serdes,
+                // (thus overriding the defaults of your `StreamsConfig`).
+                stream.to("my-stream-output-topic", Produced.with(Serdes.String(), Serdes.Long());
+                ```
 
-If the output topic has a different number of partitions than the stream/table.
-If the KStream was marked for re-partitioning.
-If you provide a custom StreamPartitioner to explicitly control how to distribute the output records across the partitions of the output topic.
-If the key of an output record is null.
-Through
+                **Causes data re-partitioning if any of the following conditions is true:**
 
-KStream -> KStream
-KTable -> KTable
-Write the records to a Kafka topic and create a new stream/table from that topic. Essentially a shorthand for KStream#to() followed by StreamsBuilder#stream(), same for tables. (KStream details)
+                1. If the output topic has a different number of partitions than the stream/table.
+                
+                2. If the KStream was marked for re-partitioning.
+                
+                3. If you provide a custom StreamPartitioner to explicitly control how to distribute the output records across the partitions of the output topic.
+                
+                4. If the key of an output record is null.
 
-When to provide SerDes explicitly:
+    * **Through**
 
-If you do not specify SerDes explicitly, the default SerDes from the configuration are used.
-You must specify SerDes explicitly if the key and/or value types of the KStream or KTable do not match the configured default SerDes.
-See Data Types and Serialization for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
-A variant of through exists that enables you to specify how the data is produced by using a Produced instance to specify, for example, a StreamPartitioner that gives you control over how output records are distributed across the partitions of the output topic.
+        * KStream -> KStream
 
-StreamsBuilder builder = ...;
-KStream<String, Long> stream = ...;
-KTable<String, Long> table = ...;
+        * KTable -> KTable
 
-// Variant 1: Imagine that your application needs to continue reading and processing
-// the records after they have been written to a topic via ``to()``.  Here, one option
-// is to write to an output topic, then read from the same topic by constructing a
-// new stream from it, and then begin processing it (here: via `map`, for example).
-stream.to("my-stream-output-topic");
-KStream<String, Long> newStream = builder.stream("my-stream-output-topic").map(...);
+	        * **Description**
 
-// Variant 2 (better): Since the above is a common pattern, the DSL provides the
-// convenience method ``through`` that is equivalent to the code above.
-// Note that you may need to specify key and value serdes explicitly, which is
-// not shown in this simple example.
-KStream<String, Long> newStream = stream.through("user-clicks-topic").map(...);
+                Write the records to a Kafka topic and create a new stream/table from that topic. Essentially a shorthand for `KStream#to()` followed by `StreamsBuilder#stream()`, same for tables. ([KStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#through(java.lang.String)))
 
-// ``through`` is also available for tables
-KTable<String, Long> newTable = table.through("my-table-output-topic").map(...);
-Causes data re-partitioning if any of the following conditions is true:
+                When to provide SerDes explicitly:
 
-If the output topic has a different number of partitions than the stream/table.
-If the KStream was marked for re-partitioning.
-If you provide a custom StreamPartitioner to explicitly control how to distribute the output records across the partitions of the output topic.
-If the key of an output record is null.
+                * If you do not specify SerDes explicitly, the default SerDes from the [configuration](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-configuration) are used.
+                
+                * You **must specify SerDes explicitly** if the key and/or value types of the `KStream` or `KTable` do not match the configured default SerDes.
+                
+                * See [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes) for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
+
+                A variant of `through` exists that enables you to specify how the data is produced by using a `Produced` instance to specify, for example, a `StreamPartitioner` that gives you control over how output records are distributed across the partitions of the output topic.
+
+                ```java
+                StreamsBuilder builder = ...;
+                KStream<String, Long> stream = ...;
+                KTable<String, Long> table = ...;
+
+                // Variant 1: Imagine that your application needs to continue reading and processing
+                // the records after they have been written to a topic via ``to()``.  Here, one option
+                // is to write to an output topic, then read from the same topic by constructing a
+                // new stream from it, and then begin processing it (here: via `map`, for example).
+                stream.to("my-stream-output-topic");
+                KStream<String, Long> newStream = builder.stream("my-stream-output-topic").map(...);
+
+                // Variant 2 (better): Since the above is a common pattern, the DSL provides the
+                // convenience method ``through`` that is equivalent to the code above.
+                // Note that you may need to specify key and value serdes explicitly, which is
+                // not shown in this simple example.
+                KStream<String, Long> newStream = stream.through("user-clicks-topic").map(...);
+
+                // ``through`` is also available for tables
+                KTable<String, Long> newTable = table.through("my-table-output-topic").map(...);
+                ```
+
+                **Causes data re-partitioning if any of the following conditions is true:**
+
+                1. If the output topic has a different number of partitions than the stream/table.
+                
+                2. If the KStream was marked for re-partitioning.
+                
+                3. If you provide a custom StreamPartitioner to explicitly control how to distribute the output records across the partitions of the output topic.
+                
+                4. If the key of an output record is null.
 
 ### Note
 
