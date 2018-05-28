@@ -1,9 +1,38 @@
 /* 设置文档的两端对齐 */
 body{
     text-align: justify;
+    word-wrap: break-word;
+    word-break: break-all; /*单词允许分割*/
+    overflow-wrap: break-word;
 }
 /* 表格的表头样式 */
-table thead tr th{
+/*table thead tr th{
     background-color: black;
     color: white;
+}*/
+table {
+	margin-top:15px;
+	border-collapse:collapse;
+    border-style: solid;
+    border-color: #E5E5E5;
+    border-width: 0 .5rem;
+    width:100%;
+    word-wrap: break-word;
+    word-break: break-all; /*单词允许分割*/
+    overflow-wrap: break-word;
+    table-layout: fixed;/*每一列宽度相同*/
+    white-space: normal;
+}
+table th {
+	vertical-align:baseline;
+	padding:5px 15px 5px 6px;
+	background-color:#000;
+	border:1px solid #3F3F3F;
+	text-align:left;
+    color:#fff;
+}
+table td {
+	vertical-align:text-top;
+	padding:6px 15px 6px 6px;
+    border:1px solid #aaa;
 }
