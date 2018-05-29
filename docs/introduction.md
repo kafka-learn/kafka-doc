@@ -68,9 +68,12 @@ To understand how Kafka does these things, let's dive in and explore Kafka's cap
 
 * The [Connector API](https://kafka.apache.org/documentation.html#connect) allows building and running reusable producers or consumers that connect Kafka topics to existing applications or data systems. For example, a connector to a relational database might capture every change to a table.
 
-    [Connector API](./documentations/apis/connect.md)允许构建并运行可重复使用的生产者或消费者,它们可以把Kafka的主题连接到已存在的应用或数据系统中。例如，一个链接到关系数据库的Kafka主题可能会捕获数据库表的任意变化。
+    [Connector API](./documentations/apis/connect.md)允许构建并运行可重复使用的生产者或消费者,它们可以把Kafka的主题链接到已存在的应用或数据系统中。例如，一个链接到关系数据库的Kafka主题可能会捕获数据库表的任意变化。
 
-![](imgs/Kafka-apis.png)
+<div align="center">
+<img src="imgs/Kafka-apis.png" height="450" width="530" >
+</div>
+
 
 In Kafka the communication between the clients and the servers is done with a simple, high-performance, language agnostic [TCP protocol](https://kafka.apache.org/protocol.html). This protocol is versioned and maintains backwards compatibility with older version. We provide a Java client for Kafka, but clients are available in [many languages](https://cwiki.apache.org/confluence/display/KAFKA/Clients).
 
@@ -93,7 +96,9 @@ For each topic, the Kafka cluster maintains a partitioned log that looks like th
 
 对每一个主题, Kafka 集群维护如下的一个分区日志：
 
-![](./imgs/log_anatomy.png)
+<div align="center">
+<img src="./imgs/log_anatomy.png" height="330" width="530" >
+</div>
 
 Each partition is an ordered, immutable sequence of records that is continually appended to—a structured commit log. The records in the partitions are each assigned a sequential id number called the offset that uniquely identifies each record within the partition.
 
@@ -103,11 +108,14 @@ The Kafka cluster durably persists all published records—whether or not they h
 
 Kafka 集群保存所有已经发布出去的消息，直到它们过期，不论消息是否已经被消费掉。例如，如果保存的策略设置为两天，那么消息发布出去的两天内可以消费，两天之后，这些消息将被丢弃以腾出空间。Kafka的性能是常数级别的，不论数据大小，所以能对数据存储很长一段时间。
 
-![](./imgs/log_consumer.png)
+<div align="center">
+<img src="./imgs/log_consumer.png" height="330" width="530" >
+</div>
+
 
 In fact, the only metadata retained on a per-consumer basis is the offset or position of that consumer in the log. This offset is controlled by the consumer: normally a consumer will advance its offset linearly as it reads records, but, in fact, since the position is controlled by the consumer it can consume records in any order it likes. For example a consumer can reset to an older offset to reprocess data from the past or skip ahead to the most recent record and start consuming from "now".
 
-实际上，每个消费者所持有的唯一元数据就是每个消费的日志偏移或具体位置。这个偏移量由消费者控制：通常当消费者读取消息后会线性的增加他的偏移量。但是，事实上，由于位置是由消费者控制的，消费者是可以在任何次序消费消息的。例如，一个消费者可以重新设置偏移量，忽略某些数据然后重新开始消费。
+实际上，每个消费者所持有的唯一元数据就是每个消费的日志偏移或具体位置。这个偏移量由消费者控制：通常当消费者读取消息后会线性的增加他的偏移量。但是，事实上，由于位置是由消费者控制的，消费者是可以在任何次序消费消息的。例如，一个消费者可以重置偏移量以便重新处理历史数据，或者是直接跳到最新的消息然后从最新的消息开始消费。
 
 This combination of features means that Kafka consumers are very cheap—they can come and go without much impact on the cluster or on other consumers. For example, you can use our command line tools to "tail" the contents of any topic without changing what is consumed by any existing consumers.
 
@@ -127,7 +135,7 @@ The partitions of the log are distributed over the servers in the Kafka cluster 
 
 Each partition has one server which acts as the "leader" and zero or more servers which act as "followers". The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster.
 
-每个分区都有一个服务器充当“leader”，零个或多个服务器充当“follower”。leader处理对分区所有的读写请求，follower就会被动复制这个leader。如果leader宕机，其中一个follower会被推举为新的leader。一台服务器可以同时是一个分区的leader，另一个分区的follower，这样可以平衡负载，避免所有请求都只让一台或者某几台处理。
+每个分区都有一个服务器充当“leader”，零个或多个服务器充当“follower”。leader处理对分区所有的读写请求，follower就会被动复制这个leader。如果leader宕机，其中一个follower会被推举为新的leader。一台服务器可以同时是一个分区的leader，另一个分区的follower，这样可以平衡负载，避免所有请求都只让一台或者某几台服务器处理。
 
 ## Geo-Replication
 
@@ -161,7 +169,10 @@ If all the consumer instances have different consumer groups, then each record w
 
 如果所有的消费者实例在不同的消费者组中，那么每一条消息将会被广播给所有的消费者处理，此时消息模型变成了发布-订阅模型。
 
-![](./imgs/consumer-groups.png)
+
+<div align="center">
+<img src="./imgs/consumer-groups.png" height="280" width="520" >
+</div>
 
 A two server Kafka cluster hosting four partitions (P0-P3) with two consumer groups. Consumer group A has two consumer instances and group B has four.
 
@@ -237,7 +248,7 @@ Kafka与传统的消息模型相比，其能更好的确保消息的顺序。
 
 A traditional queue retains records in-order on the server, and if multiple consumers consume from the queue then the server hands out records in the order they are stored. However, although the server hands out records in order, the records are delivered asynchronously to consumers, so they may arrive out of order on different consumers. This effectively means the ordering of the records is lost in the presence of parallel consumption. Messaging systems often work around this by having a notion of "exclusive consumer" that allows only one process to consume from a queue, but of course this means that there is no parallelism in processing.
 
-传统的队列在服务器上按次序的保存消息，如果很多消费者一起从队列中消费数据，服务器将按起存储的数据次序进行处理。然而，尽管服务器能按次序处理，消息是异步到达消费者的，所以对于某个消费者将不会确保数据的有序。这意味着对于并发消费的场景，消息会出现丢失现象。 所以消息系统通常设定一个排他的消费者进程进行消费，而不允许其它消费者进行消费，当然者意味着这种场景将不再是并发的。
+传统的队列在服务器上按次序的保存消息，如果很多消费者一起从队列中消费数据，服务器将按其存储的数据次序进行处理。然而，尽管服务器能按次序处理，消息是异步到达消费者的，所以对于某个消费者将不会确保数据的有序。这意味着对于并发消费的场景，消息会出现丢失现象。 所以消息系统通常设定一个排他的消费者进程进行消费，而不允许其它消费者进行消费，当然这意味着这种场景将不再是并发的。
 
 Kafka does it better. By having a notion of parallelism—the partition—within the topics, Kafka is able to provide both ordering guarantees and load balancing over a pool of consumer processes. This is achieved by assigning the partitions in the topic to the consumers in the consumer group so that each partition is consumed by exactly one consumer in the group. By doing this we ensure that the consumer is the only reader of that partition and consumes the data in order. Since there are many partitions this still balances the load over many consumer instances. Note however that there cannot be more consumer instances in a consumer group than partitions.
 
