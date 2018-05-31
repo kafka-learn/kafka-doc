@@ -12,7 +12,7 @@ It would have to have high-throughput to support high volume event streams such 
 
 It would need to deal gracefully with large data backlogs to be able to support periodic data loads from offline systems.
 
-它需要优雅地处理大量的数据积压，以支持定期地装载来自离线系统的数据。
+它需要优雅地处理大量的数据积压(backlogs)，以支持定期地装载来自离线系统的数据。
 
 It also meant the system would have to handle low-latency delivery to handle more traditional messaging use-cases.
 
@@ -20,12 +20,12 @@ It also meant the system would have to handle low-latency delivery to handle mor
 
 We wanted to support partitioned, distributed, real-time processing of these feeds to create new, derived feeds. This motivated our partitioning and consumer model.
 
-我们希望支持分区的，分布式的，实时的处理这些新的，派生的摘要（feeds）。这激发了分区和消费者模式。
+我们希望能对这些数据种子(feeds)支持分区的、分布式的、实时的处理，以创造出新的、衍生的数据种子。这促使我们构造了分区和消费者模式。
 
 Finally in cases where the stream is fed into other data systems for serving, we knew the system would have to be able to guarantee fault-tolerance in the presence of machine failures.
 
-最后，在流被送入到其他数据系统中以提供服务的情况下，我们知道系统必须能够在机器故障时保证容错能力。
+最后，对于数据流被送入到其他数据系统中去提供服务的这些场景，我们的系统必须能够在机器故障时保证容错能力。
 
 Supporting these uses led us to a design with a number of unique elements, more akin to a database log than a traditional messaging system. We will outline some elements of the design in the following sections.
 
-支持的这些用途引导我们去设计一些独特的元素，比起传统的消息系统，其更像数据库日志。我们将在下一节介绍一些设计元素。
+为了支持这些用途，我们设计了一些独特的元素，比起传统的消息系统，Kafka更像是一个数据库日志系统。我们将在后面的章节中介绍这些设计的元素。
