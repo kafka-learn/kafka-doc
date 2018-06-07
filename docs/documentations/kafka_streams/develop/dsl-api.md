@@ -2,7 +2,7 @@
 
 The Kafka Streams DSL (Domain Specific Language) is built on top of the Streams Processor API. It is the recommended for most users, especially beginners. Most data processing operations can be expressed in just a few lines of DSL code.
 
-Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这是推荐大多数用户使用的，特别是初学者。大部分数据处理操作都可以用几行DSL代码表示。
+Kafka Streams DSL（Domain Specific Language）构建在Streams Processor API之上。这是推荐大多数用户使用的，特别是初学者。大部分数据处理操作都可以用几行DSL代码表示。
 
 ### Table of Contents
 
@@ -86,7 +86,7 @@ Kafka Streams DSL（域特定语言）构建在Streams Processor API之上。这
 
 * [Writing streams back to Kafka](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#writing-streams-back-to-kafka)
 
-* [将流(streams)写回到卡夫卡](dsl-api.md)
+* [将流(streams)写回到Kafka](dsl-api.md)
 
 ## OVERVIEW
 
@@ -102,11 +102,11 @@ In comparison to the [Processor API](http://kafka.apache.org/documentation/strea
 
 * Declarative, functional programming style with [stateless transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateless) (e.g. ```map``` and ```filter```) as well as [stateful transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateful) such as [aggregations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-aggregating) (e.g. ```count``` and ```reduce```), [joins](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins) (e.g. ```leftJoin```), and [windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-windowing) (e.g. [session windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing-session)).
 
-* 具有无状态转换（例如```map```和 ```filter```）以及诸如聚合（例如```count```和 ```reduce```），连接（例如```leftJoin```）和窗口（例如会话窗口（session windows））这些特征的有状态转换的声明性和函数式编程风格。
+* 具有[无状态转换](dsl-api.md)（例如```map```和 ```filter```）或诸如[聚合](dsl-api.md)（例如```count```和 ```reduce```）、[连接](dsl-api.md)（例如```leftJoin```）和[窗口](dsl-api.md)（例如[会话窗口](dsl-api.md)（session windows））这些特征的[有状态转换](dsl-api.md)的声明性和函数式编程风格。
 
 With the DSL, you can define [processor topologies](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-processor-topology) (i.e., the logical processing plan) in your application. The steps to accomplish this are:
 
-您可以在应用程序中通过DSL来定义[处理器拓扑](../concepts.md)（即逻辑处理计划）。完成此计划的步骤是：
+您可以在应用程序中通过DSL来定义[处理器拓扑](../concepts.md)（即逻辑处理计划）。完成此定义的步骤是：
 
 1. Specify [one or more input streams that are read from Kafka topics](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-sources).
 
@@ -194,7 +194,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 Reads the specified Kafka input topic into a [KTable](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-ktable). The topic is interpreted as a changelog stream, where records with the same key are interpreted as UPSERT aka INSERT/UPDATE (when the record value is not `null`) or as DELETE (when the value is `null`) for that key. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
 
-                将指定的Kafka输入主题读入`KTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT又名INSERT/UPDATE（当消息值不为空时）或DELETE（当值为null时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
+                将指定的Kafka输入主题读入`KTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT即INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
 
                 In the case of a KStream, the local KStream instance of every application instance will be populated with data from only **a subset** of the partitions of the input topic. Collectively, across all application instances, all input topic partitions are read and processed.
 
@@ -202,7 +202,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 You must provide a name for the table (more precisely, for the internal [state store](http://kafka.apache.org/11/documentation/streams/architecture.html#streams-architecture-state) that backs the table). This is required for supporting [interactive queries](http://kafka.apache.org/11/documentation/streams/developer-guide/interactive-queries.html#streams-developer-guide-interactive-queries) against the table. When a name is not provided the table will not queryable and an internal name will be provided for the state store.
 
-                您必须为该表提供一个名称（更确切地说，是为支持该表的内部[状态存储器](../architecture.md)提供）。这对于支持表的[交互式查询](interactive-queries.md)是必需的。如果没有提供名称，表将不可查询，并且将为状态存储器提供内部名称。
+                您必须为该表提供一个名称（更确切地说，是为支持该表的内部[状态存储器](../architecture.md)提供）。这对于支持表的[交互式查询](interactive-queries.md)是必需的。如果没有提供名称，表将不可查询，那么会为表提供一个内部名称以便进行状态存储。
 
                 If you do not specify SerDes explicitly, the default SerDes from the [configuration](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-configuration) are used.
 
@@ -224,7 +224,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 Reads the specified Kafka input topic into a [GlobalKTable](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-globalktable). The topic is interpreted as a changelog stream, where records with the same key are interpreted as UPSERT aka INSERT/UPDATE (when the record value is not `null`) or as DELETE (when the value is `null`) for that key. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
 
-                将指定的Kafka输入主题读入`GlobalKTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT又名INSERT/UPDATE（当消息值不为`null`时）或DELETE（当值为`null`时）该关键字。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
+                将指定的Kafka输入主题读入`GlobalKTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT又名INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
 
                 In the case of a GlobalKTable, the local GlobalKTable instance of every application instance will be populated with data from **all** the partitions of the input topic.
 
@@ -273,7 +273,7 @@ Some KStream transformations may generate one or more KStream objects, for examp
 
 Some others may generate a KTable object, for example an aggregation of a KStream also yields a KTable. This allows Kafka Streams to continuously update the computed value upon arrivals of [late records](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-aggregations) after it has already been produced to the downstream transformation operators.
 
-其他的可能会生成KTable对象，例如KStream的聚合也会生成KTable。这允许Kafka Streams在给下游转化操作符生产好的[迟到消息(late records)](../concepts.md)到达时连续不断地更新计算值。
+其他的可能会生成KTable对象，例如KStream的聚合也会生成KTable。当下游转换操作符生产好[迟到消息(late records)](../concepts.md)后，Kafka Streams能对这些到达的迟到消息不断地更新计算值。
 
 All KTable transformation operations can only generate another KTable. However, the Kafka Streams DSL does provide a special function that converts a KTable representation into a KStream. All of these transformation methods can be chained together to compose a complex processor topology.
 
@@ -392,6 +392,7 @@ Stateless transformations do not require state for processing and they do not re
                     }
                     });
                 ```
+                
     * **FlatMap**
 
         * KStream → KStream
@@ -495,11 +496,11 @@ Stateless transformations do not require state for processing and they do not re
 
                 Grouping is a prerequisite for [aggregating a stream or a table](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-aggregating) and ensures that data is properly partitioned (“keyed”) for subsequent operations.
 
-                分组是[聚合一个流或表](dsl-api.md)的先决条件，并确保数据正确分区（“键控”）以供后续操作使用。
+                分组是[聚合一个流或表](dsl-api.md)的先决条件，并确保数据正确分区（“keyed”）以供后续操作使用。
 
                 **When to set explicit SerDes:** Variants of `groupByKey` exist to override the configured default SerDes of your application, which **you must do** if the key and/or value types of the resulting `KGroupedStream` do not match the configured default SerDes.
 
-                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupByKey`的变体，如果生成的`KGroupedStream`的键和/或值类型与配置的默认SerDes不匹配，则必须执行此操作。
+                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupByKey`的变体，如果生成的`KGroupedStream`的键和、或值类型与配置的默认SerDes不匹配，则必须执行此操作。
 
                 **Note**
 
@@ -543,11 +544,11 @@ Stateless transformations do not require state for processing and they do not re
 
                 Grouping is a prerequisite for [aggregating a stream or a table](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-aggregating) and ensures that data is properly partitioned (“keyed”) for subsequent operations.
 
-                分组是[聚合一个流或表](dsl-api.md)的先决条件，并确保数据正确分区（“键控”）以供后续操作使用。
+                分组是[聚合一个流或表](dsl-api.md)的先决条件，并确保数据正确分区（“keyed”）以供后续操作使用。
 
                 **When to set explicit SerDes:** Variants of `groupBy` exist to override the configured default SerDes of your application, which **you must do** if the key and/or value types of the resulting `KGroupedStream` or `KGroupedTable` do not match the configured default SerDes.
 
-                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupBy`的变体，如果生成的`KGroupedStream`或`KGroupedTable`的键和/或值类型与配置的默认SerDes不匹配，则必须执行此操作。
+                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupBy`的变体，如果生成的`KGroupedStream`或`KGroupedTable`的键和、或值类型与配置的默认SerDes不匹配，则必须执行此操作。
 
                 **Note**
 
@@ -796,7 +797,7 @@ Stateless transformations do not require state for processing and they do not re
 
 Stateful transformations depend on state for processing inputs and producing outputs and require a [state store](http://kafka.apache.org/11/documentation/streams/architecture.html#streams-architecture-state) associated with the stream processor. For example, in aggregating operations, a windowing state store is used to collect the latest aggregation results per window. In join operations, a windowing state store is used to collect all of the records received so far within the defined window boundary.
 
-有状态转换依赖于处理输入和产生输出的状态，并且需要与流处理器相关联的[状态存储器](../architecture.md)。例如，在聚合（aggregation）操作中，使用窗口状态存储器来收集每个窗口的最新聚合结果。在连接（join）操作中，窗口状态存储器用于收集迄今为止在定义的窗口边界内收到的所有消息。
+有状态转换依赖于处理输入和产生输出的状态，并且需要与流处理器相关联的[状态存储器](../architecture.md)。例如，在聚合（aggregation）操作中，使用窗口状态存储器来收集每个窗口的最新聚合结果。在连接（join）操作中，窗口状态存储器用于收集到当前为止能接受到的在定义的窗口边界内收到的所有消息。
 
 Note, that state stores are fault-tolerant. In case of failure, Kafka Streams guarantees to fully restore all state stores prior to resuming the processing. See [Fault Tolerance](http://kafka.apache.org/11/documentation/streams/architecture.html#streams-architecture-fault-tolerance) for further information.
 
@@ -1009,7 +1010,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 * 带有`null`键的输入消息被忽略。
 
-                * 当第一次接收到消息的键时，初始化程序被调用（并在adder之前被调用）。
+                * 当第一次接收到消息的键时，initializer被调用（并在adder之前被调用）。
 
                 * 每当收到一个值为非`null`的消息时，就调用adder。
 
@@ -1028,15 +1029,15 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
                 * When a tombstone record – i.e. a record with a `null` value – is received for a key (e.g., DELETE), then only the subtractor is called. Note that, whenever the subtractor returns a `null` value itself, then the corresponding key is removed from the resulting `KTable`. If that happens, any next input record for that key will trigger the initializer again.
 
 
-                * 键为`null`的输入被忽略。
+                * 键为`null`的输入消息会被忽略。
 
-                * 当第一次接收到消息的键时，初始化程序被调用（并在adder和subtractor之前调用）。请注意，与`KGroupedStream`相比，随着时间的推移，初始化程序可能因为接收到该键的输入逻辑删除消息（参见下文）而针对某个键被调用一次以上。
+                * 当第一次接收到消息的键时，initializer被调用（并在adder和subtractor之前调用）。请注意，与`KGroupedStream`相比，随着时间的推移，initializer可能因为接收到该键的输入逻辑删除消息（参见下文）而针对某个键被调用一次以上。
 
                 * 当接收到一个键的第一个非`null`值（例如，INSERT）时，则只调用adder。
 
                 * 当接收到一个键（例如UPDATE）的后续非`null`值时，则（1）对存储在表中的旧值调用subtractor，（2）对刚刚收到的输入消息的新值调用adder。subtractor和adder的执行顺序是不确定的。
 
-                * 当接收到一个键的消息删除逻辑（即具有`null`值的消息）时（例如DELETE），则仅调用subtractor。请注意，每当subtractor本身返回一个`null`值时，相应的键就从生成的`KTable`中移除。如果发生这种情况，该键的下一个输入消息无论是什么都会再次触发初始化程序。
+                * 当接收到一个键的消息删除逻辑（即具有`null`值的消息）时（例如DELETE），则仅调用subtractor。请注意，每当subtractor本身返回一个`null`值时，相应的键就从生成的`KTable`中移除。如果发生这种情况，该键的下一个输入消息无论是什么都会再次触发initializer。
 
                 See the example at the bottom of this section for a visualization of the aggregation semantics.
 
@@ -1054,7 +1055,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 You must provide an initializer (e.g., `aggValue = 0`), “adder” aggregator (e.g., `aggValue + curValue`), and a window. When windowing based on sessions, you must additionally provide a “session merger” aggregator (e.g., `mergedAggValue = leftAggValue + rightAggValue`).
 
-                您必须提供一个初始化程序（例如，`aggValue = 0`），“adder”聚合器（例如，`aggValue + curValue`）和一个窗口。当根据会话进行窗口化时，还必须提供“会话合并”聚合器（例如，`mergedAggValue = leftAggValue + rightAggValue`）。 
+                您必须提供一个initializer（例如，`aggValue = 0`），“adder”聚合器（例如，`aggValue + curValue`）和一个窗口。当根据会话进行窗口化时，还必须提供“会话合并”聚合器（例如，`mergedAggValue = leftAggValue + rightAggValue`）。 
 
                 The windowed `aggregate` turns a `TimeWindowedKStream<K, V>` or `SessionWindowdKStream<K, V>` into a windowed `KTable<Windowed<K>, V>`.
 
@@ -1151,7 +1152,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 * 一般情况下，输入的键为null的消息将被忽略。
 
-                * 当给定窗口首次接收到消息的键时，初始化程序会被调用（并在adder之前被调用）。
+                * 当给定窗口首次接收到消息的键时，initializer会被调用（并在adder之前被调用）。
 
                 * 每当给定窗口接收到具有非null值的消息时，就调用adder。
 
@@ -1194,7 +1195,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 * Input records with `null` keys or values are ignored.
 
-                * 输入的键或值为`null`的消息将被忽略。
+                * 键或值为`null`的输入消息将被忽略。
 
                 Detailed behavior for `KGroupedTable`:
 
@@ -1347,7 +1348,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 * 当接收到一个键（例如UPDATE）的后续非`null`值时，则（1）对存储在表中的旧值调用subtractor，（2）对刚刚收到的输入消息的新值调用adder。subtractor和adder的执行顺序是不确定的。
 
-                * 当接收到一个键的消息删除逻辑（即具有`null`值的消息）时（例如DELETE），则仅调用subtractor。请注意，每当subtractor本身返回一个`null`值时，相应的键就从生成的`KTable`中移除。如果发生这种情况，该键的下一个输入消息无论是什么都会再次触发初始化程序。 
+                * 当接收到一个键的消息删除逻辑（即具有`null`值的消息）时（例如DELETE），则仅调用subtractor。请注意，每当subtractor本身返回一个`null`值时，相应的键就从生成的`KTable`中移除。如果发生这种情况，该键的下一个输入消息无论是什么都会再次触发initializer。 
 
                 See the example at the bottom of this section for a visualization of the aggregation semantics.
 
@@ -1361,7 +1362,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
                 **Windowed aggregation.** Combines the values of records, [per window](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-windowing), by the grouped key. The current record value is combined with the last reduced value, and a new reduced value is returned. Records with `null` key or value are ignored. The result value type cannot be changed, unlike `aggregate`. ([TimeWindowedKStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/TimeWindowedKStream.html), [SessionWindowedKStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/SessionWindowedKStream.html))
 
-                **窗口聚合。** 通过分组的键组合[每个窗口](dsl-api.md)的消息值。当前消息值与最后一个减少的值结合在一起，并返回一个新的减少的值。键或值为`null`的消息被忽略。与`aggregate`不同，结果值的类型不能更改。（[TimeWindowedKStream细节](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/TimeWindowedKStream.html)，[SessionWindowedKStream细节]((http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/SessionWindowedKStream.html))）
+                **窗口聚合。** 通过分组的键组合[每个窗口](dsl-api.md)的消息值。当前消息值与最后一个减少的值结合在一起，并返回一个新的减少的值。键或值为`null`的输入消息被忽略。与`aggregate`不同，结果值的类型不能更改。（[TimeWindowedKStream细节](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/TimeWindowedKStream.html)，[SessionWindowedKStream细节]((http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/SessionWindowedKStream.html))）
 
                 The windowed `reduce` turns a turns a `TimeWindowedKStream<K, V>` or a `SessionWindowedKStream<K, V>` into a windowed `KTable<Windowed<K>, V>`.
 
@@ -1762,7 +1763,7 @@ Each case is explained in more detail in the subsequent sections.
 
 Input data must be co-partitioned when joining. This ensures that input records with the same key, from both sides of the join, are delivered to the same stream task during processing. **It is the responsibility of the user to ensure data co-partitioning when joining.**
 
-连接时必须对输入数据进行共分区（co-partitioned）。这确保了在处理期间，要连接的两侧的具有相同键的输入消息被传送到相同的流任务。**加入时确保数据共分区是用户的责任。**
+连接时必须对输入数据进行共分区（co-partitioned）。这确保了在处理期间，要连接的两侧的具有相同键的输入消息被传送到相同的流任务。**用户需要确保连接的数据是共分区的。**
 
 ### Tip
 
@@ -2163,7 +2164,7 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 Performs an INNER JOIN of this table with another table. The result is an ever-updating KTable that represents the “current” result of the join. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-                对另一个表执行此表的INNER JOIN操作。结果是一个不断更新的KTable，它代表了“当前”连接的结果。[（细节）]((http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-))
+                结合另一个表，对此表执行INNER JOIN操作。结果是一个不断更新的KTable，它代表了“当前”连接的结果。[（细节）]((http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-))
 
                 **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
@@ -2388,7 +2389,7 @@ KStream-KTable连接始终是*非窗口*连接。它们允许您在接收到来�
 
 Join output records are effectively created as follows, leveraging the user-supplied ```ValueJoiner```:
 
-通过用户提供的`ValueJoiner`，可以有有效地连接输出消息，如下所示：
+通过用户提供的`ValueJoiner`，可以有效地连接输出消息，如下所示：
 
 ```java
 KeyValue<K, LV> leftRecord = ...;
@@ -2624,7 +2625,7 @@ At a high-level, KStream-GlobalKTable joins are very similar to [KStream-KTable 
 
 * 他们允许高效的“星形连接”；即将大规模的“事实”（facts）流与“维度”（dimension）表结合起来
 
-* 他们允许连接抵抗外键（against foreign keys）；即可以在表中不仅仅通过流中消息的键来查找数据，还可以通过消息的值中的数据来查找。
+* 他们允许在连接的时候不管外键（against foreign keys）；即可以在表中不仅仅通过流中消息的键来查找数据，还可以通过消息的值中的数据来查找。
 
 * 您有时必须处理严重倾斜的数据，因此会受到热分区的困扰，而它们使得这样的许多用例可行。
 
@@ -2805,11 +2806,11 @@ Windowing lets you control how to group records that have the same key for state
 
 A related operation is [grouping](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateless), which groups all records that have the same key to ensure that data is properly partitioned (“keyed”) for subsequent operations. Once grouped, windowing allows you to further sub-group the records of a key.
 
-相关的操作是[分组](dsl-api.md)，将具有相同键的所有消息分组以确保数据被正确分区（“键入（keyed）”）来用于后续操作。一旦分组以后，窗口允许您进一步分组一个键的消息。
+相关的操作是[分组](dsl-api.md)，将具有相同键的所有消息分组以确保数据被正确分区（“keyed”）来用于后续操作。一旦分组以后，窗口允许您进一步分组一个键的消息。
 
 For example, in join operations, a windowing state store is used to store all the records received so far within the defined window boundary. In aggregating operations, a windowing state store is used to store the latest aggregation results per window. Old records in the state store are purged after the specified [window retention period](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-windowing). Kafka Streams guarantees to keep a window for at least this specified time; the default value is one day and can be changed via ```Windows#until()``` and ```SessionWindows#until()```.
 
-例如，在连接操作中，窗口状态存储器用于存储迄今收到的所有在定义的窗口边界内的消息。在聚合操作中，窗口状态存储器用于存储每个窗口的最新聚合结果。在指定的[窗口保留期限](../concepts.md)后清除状态存储器中的旧消息。Kafka Streams保证至少在这个特定时间内保持一个窗口；默认值是一天，可以通过`Windows#until()`和`SessionWindows#until()`来更改。
+例如，在连接操作中，窗口状态存储器用于存储到当前为止能接受到的所有在定义的窗口边界内的消息。在聚合操作中，窗口状态存储器用于存储每个窗口的最新聚合结果。在指定的[窗口保留期限](../concepts.md)后清除状态存储器中的旧消息。Kafka Streams保证至少在这个特定时间内保持一个窗口；默认值是一天，可以通过`Windows#until()`和`SessionWindows#until()`来更改。
 
 The DSL supports the following types of windows:
 
@@ -2835,7 +2836,7 @@ Window name | Behavior | Short description
 
 Tumbling time windows are a special case of hopping time windows and, like the latter, are windows based on time intervals. They model fixed-size, non-overlapping, gap-less windows. A tumbling window is defined by a single property: the window’s size. A tumbling window is a hopping window whose window size is equal to its advance interval. Since tumbling windows never overlap, a data record will belong to one and only one window.
 
-翻转时间窗口是跳跃时间窗口的特例，并且像后者一样，是基于时间间隔的窗口。他们基于固定大小，不重叠，无间隙的窗口。翻转窗口由单个属性定义：窗口的*大小*。翻转窗口是窗口大小等于其提前间隔的跳跃窗口。由于翻转窗口不会重叠，因此消息数据将属于一个且仅有一个窗口。
+翻转时间窗口是跳跃时间窗口的特例，并且像后者一样，是基于时间间隔的窗口。他们基于固定大小，不重叠，无间隙的窗口。翻转窗口由单个属性定义：窗口的*大小*。翻转窗口是窗口大小等于其提前间隔的跳跃窗口。由于翻转窗口不会重叠，因此消息数据将属于一个且仅属于一个窗口。
 
 ![](../../../imgs/streams-time-windows-tumbling.png)
 
@@ -2927,7 +2928,7 @@ A sliding window models a fixed-size window that slides continuously over the ti
 
 Session windows are used to aggregate key-based events into so-called sessions, the process of which is referred to as sessionization. Sessions represent a **period of activity** separated by a defined **gap of inactivity** (or “idleness”). Any events processed that fall within the inactivity gap of any existing sessions are merged into the existing sessions. If an event falls outside of the session gap, then a new session will be created.
 
-会话窗口用于将基于键的事件聚合到所谓的会话中，其过程称为会话。会话表示被一个确定的**不活动（或“闲置”）的间隔**分开的**一段时间的活动**。任何处于任何现有会话的不活动间隔内的事件都会合并到现有会话中。如果一个事件超出了会话间隔，那么将创建一个新的会话。
+会话窗口用于将基于键的事件聚合到所谓的会话中，该处理过程称为会话(sessionization)。会话表示被一个确定的**不活动（或“闲置”）的间隔**分开的**一段时间的活动**。任何处于任何现有会话的不活动间隔内的事件都会合并到现有会话中。如果一个事件超出了会话间隔，那么将创建一个新的会话。
 
 Session windows are different from the other window types in that:
 
@@ -3187,7 +3188,7 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
                 * You **must specify SerDes explicitly** via the `Produced` class if the key and/or value types of the `KStream` do not match the configured default SerDes.
 
-                * 如果`KStream`的键和/或值的类型与配置的默认SerDes不匹配，则**必须通过`Produced`类明确指定SerDes**。
+                * 如果`KStream`的键和、或值的类型与配置的默认SerDes不匹配，则**必须通过`Produced`类明确指定SerDes**。
 
                 * See [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes) for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
 
@@ -3215,7 +3216,7 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
                 // Write the stream to the output topic, using explicit key and value serdes,
                 // (thus overriding the defaults of your `StreamsConfig`).
 
-                // 使用显式的键和值serdes将流写入输出主题（因此覆盖“StreamsConfig”的默认值）。
+                // 使用明确的键和值serdes将流写入输出主题（因此覆盖“StreamsConfig”的默认值）。
                 stream.to("my-stream-output-topic", Produced.with(Serdes.String(), Serdes.Long());
                 ```
 
@@ -3249,7 +3250,7 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
                 Write the records to a Kafka topic and create a new stream/table from that topic. Essentially a shorthand for `KStream#to()` followed by `StreamsBuilder#stream()`, same for tables. ([KStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#through(java.lang.String)))
 
-                将消息写入Kafka主题，并根据该主题创建新的流/表。基本上是`KStream#to()`后跟`StreamsBuilder#stream()`的简写，对于表来说是相同的。（[KStream细节](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#through(java.lang.String))）
+                将消息写入Kafka主题，并根据该主题创建新的流/表。对于流，基本上是`KStream#to()`后跟`StreamsBuilder#stream()`的简写，对于表也类似。（[KStream细节](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#through(java.lang.String))）
 
                 When to provide SerDes explicitly:
 
@@ -3261,7 +3262,7 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
                 
                 * You **must specify SerDes explicitly** if the key and/or value types of the `KStream` or `KTable` do not match the configured default SerDes.
 
-                * 如果`KStream`或`KTable`的键和/或值的类型与配置中默认SerDes不匹配，则**必须明确指定SerDes**。
+                * 如果`KStream`或`KTable`的键和、或值的类型与配置中默认SerDes不匹配，则**必须明确指定SerDes**。
                 
                 * See [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes) for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
 
@@ -3269,7 +3270,7 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
                 A variant of `through` exists that enables you to specify how the data is produced by using a `Produced` instance to specify, for example, a `StreamPartitioner` that gives you control over how output records are distributed across the partitions of the output topic.
         
-                `through`的一个变体，它使您能够指定如何使用`Produced`实例来指定数据，例如指定一个`StreamPartitioner`，以便控制输出在输出主题的分区间的分布方式。
+                `through`的一个变体，它使您能够指定如何使用`Produced`实例来指定数据，例如指定一个`StreamPartitioner`，以便控制输出消息在输出主题的分区间的分布方式。
 
                 ```java
                 StreamsBuilder builder = ...;
@@ -3328,4 +3329,4 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
 **When you want to write to systems other than Kafka:** Besides writing the data back to Kafka, you can also apply a [custom processor](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-process) as a stream sink at the end of the processing to, for example, write to external databases. First, doing so is not a recommended pattern – we strongly suggest to use the [Kafka Connect API](http://kafka.apache.org/11/documentation/connect/index.html#kafka-connect) instead. However, if you do use such a sink processor, please be aware that it is now your responsibility to guarantee message delivery semantics when talking to such external systems (e.g., to retry on delivery failure or to prevent message duplication).
 
-**当您要写入除Kafka以外的系统时：**除了将数据写回Kafka之外，还可以在处理结束时将[定制处理器](dsl-api.md)作为流接收器应用于如外部数据库等。首先，这样做不是推荐模式——我们强烈建议使用[Kafka Connect API](../../kafka_connect.md)。但是，如果您确实使用了这样的接收处理器，请注意，现在与此类外部系统交互时您将有责任去保证消息传递语义（例如，重试交付失败或防止消息重复）。
+**当您要将消息写入其它系统而非Kafka时：**除了将数据写回Kafka之外，还可以在处理结束时将[定制处理器](dsl-api.md)作为流接收器应用于如外部数据库等。首先，这样做是不推荐的——我们强烈建议使用[Kafka Connect API](../../kafka_connect.md)。但是，如果您确实使用了这样的接收处理器，请注意，现在与此类外部系统交互时您将有责任去保证消息传递语义（例如，重试交付失败或防止消息重复）。
