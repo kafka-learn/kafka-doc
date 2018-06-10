@@ -1,8 +1,6 @@
-## 3. CONFIGURATION
+# 3.1 Broker Conifgs
 
-### 3.1 Broker Conifg 
-
-### 3.1 代理配置
+# 3.1 代理配置
 
 The essential configurations are the following:
 
@@ -378,9 +376,9 @@ More details about broker configuration can be found in the scala class `kafka.s
 
 关于代理配置的更多细节可以去查阅scala类的kafka.server.KafkaConfig的配置文件。
 
-#### 3.1.1 Updating Broker Configs
+## 3.1.1 Updating Broker Configs
 
-#### 3.1.1 更新代理配置信息
+## 3.1.1 更新代理配置信息
 
 From Kafka version 1.1 onwards, some of the broker configs can be updated without restarting the broker. See the Dynamic Update Mode column in Broker Configs for the update mode of each broker config.
 

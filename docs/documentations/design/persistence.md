@@ -1,6 +1,6 @@
-# Persistence
+# 4.2 Persistence
 
-# 持久性
+# 4.2 持久性
 
 ## Don't fear the filesystem!
 

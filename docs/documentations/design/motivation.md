@@ -1,6 +1,6 @@
-# Motivation
+# 4.1 Motivation
 
-# 动机
+# 4.1 动机
 
 We designed Kafka to be able to act as a unified platform for handling all the real-time data feeds [a large company might have](http://kafka.apache.org/documentation/#introduction). To do this we had to think through a fairly broad set of use cases.
 

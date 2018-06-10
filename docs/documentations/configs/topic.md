@@ -1,4 +1,4 @@
-# Topic-Level Configs
+# 3.2 Topic-Level Configs
 
 Configurations pertinent to topics have both a server default as well an optional per-topic override. If no per-topic configuration is given the server default is used. The override can be set at topic creation time by giving one or more ```--config``` options.This example creates a topic named my-topic with a custom max message size and flush rate:
 

@@ -1,11 +1,11 @@
-# GETTING STARTED
+# 1. GETTING STARTED
 
 ## 1.1 [Introduction](../introduction.md)
 
 ## 1.2 [Use Cases](../usercase.md)
-    
+
 ## 1.3 [Quick Start](../quickstart.md)
-    
+
 ## 1.4 Ecosystem
 
 There are a plethora of tools that integrate with Kafka outside the main distribution. The [ecosystem page](https://cwiki.apache.org/confluence/display/KAFKA/Ecosystem) lists many of these, including stream processing systems, Hadoop integration, monitoring, and deployment tools.
