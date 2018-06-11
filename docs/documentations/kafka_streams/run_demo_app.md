@@ -4,7 +4,7 @@
 
 This tutorial assumes you are starting fresh and have no existing Kafka or ZooKeeper data. However, if you have already started Kafka and ZooKeeper, feel free to skip the first two steps.
 
-本教程假定您是新手并且没有现成的Kafka和Zookeeper数据。反之，如果您已经使用过Kafka和Zookeeper，请随时跳过前两个步骤。
+本教程假定您是新手且本地不存在Kafka和Zookeeper数据。反之，如果您已经使用过Kafka和Zookeeper，请随时跳过前两个步骤。
 
 Kafka Streams is a client library for building mission-critical real-time applications and microservices, where the input and/or output data is stored in Kafka clusters. Kafka Streams combines the simplicity of writing and deploying standard Java and Scala applications on the client side with the benefits of Kafka's server-side cluster technology to make these applications highly scalable, elastic, fault-tolerant, distributed, and much more.
 
@@ -19,27 +19,27 @@ This quickstart example will demonstrate how to run a streaming application code
 // 字符串和长整形类型的序列化器/反序列化器（serde）
 final Serde<String> stringSerde = Serdes.String();
 final Serde<Long> longSerde = Serdes.Long();
- 
+
 // Construct a `KStream` from the input topic "streams-plaintext-input", where message values
 // represent lines of text (for the sake of this example, we ignore whatever may be stored
 // in the message keys).
 // 从输入主题“streams-plaintext-input”中构造一个'KStream`，其中消息值表示文本行（在本示例中，我们忽略可能存储在消息键中的任何内容）。
 KStream<String, String> textLines = builder.stream("streams-plaintext-input",
     Consumed.with(stringSerde, stringSerde);
- 
+
 KTable<String, Long> wordCounts = textLines
     // Split each text line, by whitespace, into words.
     // 将每个文本行按空格拆分为单词。
     .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
- 
+
     // Group the text words as message keys
     // 将文本字词分组为消息键
     .groupBy((key, value) -> value)
- 
+
     // Count the occurrences of each word (message key).
     // 统计每个单词的出现次数（消息键）。
     .count()
- 
+
 // Store the running counts as a changelog stream to the output topic.
 // 将运行计数值作为更新日志流存储到输出主题。
 wordCounts.toStream().to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
@@ -62,16 +62,16 @@ As the first step, we will start Kafka (unless you already have it started) and 
 [下载](https://www.apache.org/dyn/closer.cgi?path=/kafka/1.1.0/kafka_2.11-1.1.0.tgz)1.1.0版本并将它解压缩。请注意，有多个可下载的Scala版本，我们选择在这里使用推荐版本（2.11）：
 
 ```bash
-> tar -xzf kafka_2.11-1.1.0.tgz 
+> tar -xzf kafka_2.11-1.1.0.tgz
 > cd kafka_2.11-1.1.0
 ```
-	
+
 ## Step 2: Start the Kafka server
 
 ## 第二步：启动kafka服务器
- 
+
 Kafka uses [ZooKeeper](https://zookeeper.apache.org/) so you need to first start a ZooKeeper server if you don't already have one. You can use the convenience script packaged with kafka to get a quick-and-dirty single-node ZooKeeper instance.
-	
+
 Kafka依赖[Zookeeper](https://zookeeper.apache.org/)，因此您需要先启动一个Zookeeper服务器。您可以使用与kafka打包在一起的便捷脚本来获得快速且简单的单节点ZooKeeper实例。
 
 ```bash
@@ -154,7 +154,7 @@ The demo application will read from the input topic **streams-plaintext-input**,
 Now we can start the console producer in a separate terminal to write some input data to this topic:
 
 现在我们可以在一个单独的终端中启动控制台生产者来为该主题写入一些输入数据：
-	
+
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
 ```
@@ -162,7 +162,7 @@ Now we can start the console producer in a separate terminal to write some input
 and inspect the output of the WordCount demo application by reading from its output topic with the console consumer in a separate terminal:
 
 并通过在独立终端中使用控制台消费者读取其输出主题来检查WordCount演示应用程序的输出：
-	
+
 ```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \ 
     --topic streams-wordcount-output \
@@ -199,13 +199,13 @@ This message will be processed by the Wordcount application and the following ou
     --property print.key=true \
     --property print.value=true \
     --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
-    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
+    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
 
-all     1 
-streams 1 
-lead    1 
-to      1 
-kafka   1 
+all     1
+streams 1
+lead    1
+to      1
+kafka   1
 ```
 
 Here, the first column is the Kafka message key in `java.lang.String` format and represents a word that is being counted, and the second column is the message value in `java.lang.Long` format, representing the word's latest count.
@@ -215,7 +215,7 @@ Here, the first column is the Kafka message key in `java.lang.String` format and
 Now let's continue writing one more message with the console producer into the input topic **streams-plaintext-input**. Enter the text line "hello kafka streams" and hit &lt;RETURN&gt;. Your terminal should look as follows:
 
 现在让我们继续通过控制台生产者往输入主题**streams-plaintext-input**中再写一条消息。输入文本行“hello kafka streams”并按&lt;RETURN&gt;键。您的终端应该如下所示：
-	
+
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
 all streams lead to kafka
@@ -226,7 +226,7 @@ In your other terminal in which the console consumer is running, you will observ
 
 在您的另一个运行着控制台消费者的终端，您将观察到WordCount应用程序已经写入了新的输出数据：
 
-```bash	
+```bash
 > bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
     --topic streams-wordcount-output \
     --from-beginning \
@@ -236,20 +236,20 @@ In your other terminal in which the console consumer is running, you will observ
     --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
     --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
 
-all     1 
-streams 1 
-lead    1 
-to      1 
-kafka   1 
-hello   1 
-kafka   2 
-streams 2 
+all     1
+streams 1
+lead    1
+to      1
+kafka   1
+hello   1
+kafka   2
+streams 2
 ```
 
 Here the last printed lines **kafka 2** and **streams 2** indicate updates to the keys **kafka** and **streams** whose counts have been incremented from **1** to **2**. Whenever you write further input messages to the input topic, you will observe new messages being added to the **streams-wordcount-output** topic, representing the most recent word counts as computed by the WordCount application. Let's enter one final input text line "join kafka summit" and hit &lt;RETURN&gt; in the console producer to the input topic **streams-wordcount-input** before we wrap up this quickstart:
 
 这里最后打印的行**Kafka 2**和**streams 2**表示键**Kafka**和**streams**的更新，其计数值已经从**1**增加到**2**。每当您向输入主题写入更多输入消息时，您都会观察到被添加到**streams-wordcount-output**主题的新消息，表示由WordCount应用程序计算出的最新单词数。让我们在结束这个快速入门之前，在控制台生产者中最后输入一行文本“join kafka summit”，然后按&lt;RETURN&gt;键，使其传送到输入主题**streams-wordcount-input**中：
-	
+
 ```bash
 > bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-wordcount-input
 all streams lead to kafka
@@ -271,16 +271,16 @@ The **streams-wordcount-output** topic will subsequently show the corresponding 
     --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
     --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer 
 
-all     1 
-streams 1 
-lead    1 
-to      1 
+all     1
+streams 1
+lead    1
+to      1
 kafka   1  
 hello   1  
-kafka   2 
-streams 2 
-join    1 
-kafka   3 
+kafka   2
+streams 2
+join    1
+kafka   3
 summit  1
 ```
 
