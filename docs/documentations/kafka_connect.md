@@ -1,8 +1,8 @@
-# KAFKA CONNECT
+# 8 KAFKA CONNECT
 
-## Overview
+## 8.1 Overview
 
-## 概况
+## 8.1 概况
 
 Kafka Connect is a tool for scalably and reliably streaming data between Apache Kafka and other systems. It makes it simple to quickly define connectors that move large collections of data into and out of Kafka. Kafka Connect can ingest entire databases or collect metrics from all your application servers into Kafka topics, making the data available for stream processing with low latency. An export job can deliver data from Kafka topics into secondary storage and query systems or into batch systems for offline analysis.
 
@@ -37,9 +37,9 @@ Kafka Connect 的特点包括：
 
 * **流/批处理整合** - 基于Kafka现有的功能，Kafka Connect是桥接流和批量数据系统的理想解决方案
 
-## User Guide
+## 8.2 User Guide
 
-## 用户指南
+## 8.2 用户指南
 
 The quickstart provides a brief example of how to run a standalone version of Kafka Connect. This section describes how to configure, run, and manage Kafka Connect in more detail.
 
@@ -643,9 +643,9 @@ Kafka Connect还提供了用于获取有关connector插件信息的REST API:
 * ```GET /connector-plugins``` - 返回安装在Kafka Connect集群中的connector插件列表。请注意，该API仅检查能处理请求的工作线程上的connector，这意味着如果添加新的connector jar，您可能会看到不一致的结果，尤其是在滚动升级期间。
 * ```PUT /connector-plugins/{connector-type}/config/validate``` - 根据配置定义验证提供的配置值。此API执行每个配置验证，在验证期间返回建议值和错误消息。
 
-## Connector Development Guide
+## 8.3 Connector Development Guide
 
-## Connector 开发指南
+## 8.3 Connector 开发指南
 
 This guide describes how developers can write new connectors for Kafka Connect to move data between Kafka and other systems. It briefly reviews a few key concepts and then describes how to create a simple connector.
 

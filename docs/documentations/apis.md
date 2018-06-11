@@ -1,4 +1,4 @@
-# APIS
+# 2. APIS
 
 Kafka includes five core apis:
 
@@ -30,9 +30,7 @@ Kafka exposes all its functionality over a language independent protocol which h
 
 Kafka公开了其所有功能性协议，这些协议与语言无关，且Kafka提供了多种编程语言的客户端。然而，只有Java客户端作为Kafka项目的一部分被维护，其他客户端作为独立的开源项目。[这里](https://cwiki.apache.org/confluence/display/KAFKA/Clients)是非Java客户端的列表。
 
-## Producer API
-
-## 生产者API
+## 2.1 Producer API
 
 The Producer API allows applications to send streams of data to topics in the Kafka cluster.
 
@@ -54,9 +52,7 @@ To use the producer, you can use the following maven dependency:
 </dependency>
 ```
 
-## Consumer API
-
-## 消费者API
+## 2.2 Consumer API
 
 The Consumer API allows applications to read streams of data from topics in the Kafka cluster.
 
@@ -78,9 +74,7 @@ To use the consumer, you can use the following maven dependency:
 </dependency>
 ```
 
-## Streams API
-
-## 流API
+## 2.3 Streams API
 
 The [Streams](http://kafka.apache.org/documentation/#streamsapi) API allows transforming streams of data from input topics to output topics.
 
@@ -106,9 +100,7 @@ To use Kafka Streams you can use the following maven dependency:
 </dependency>
 ```
 
-## Connect API
-
-## 连接器API
+## 2.4 Connect API
 
 The Connect API allows implementing connectors that continually pull from some source data system into Kafka or push from Kafka into some sink data system.
 
@@ -122,13 +114,11 @@ Those who want to implement custom connectors can see the [javadoc](http://kafka
 
 欲实现自定义的连接器，可以参考这个[Java文档](http://kafka.apache.org/11/javadoc/overview-summary.html)。
 
-## AdminClient API
-
-## 管理员客户端API
+## 2.5 AdminClient API
 
 The AdminClient API supports managing and inspecting topics, brokers, acls, and other Kafka objects.
 
-AdminClient API允许管理、检查主题(topics)，代理和其他Kafka对象。
+AdminClient API允许管理、检查主题(topic)，代理和其他Kafka对象。
 
 To use the AdminClient API, add the following Maven dependency:
 
@@ -146,10 +136,7 @@ For more information about the AdminClient APIs, see the [javadoc](http://kafka.
 
 更多关于AdminClient APIs的信息，参见[Java文档](http://kafka.apache.org/11/javadoc/index.html?org/apache/kafka/clients/admin/AdminClient.html)。
 
-
-## Legacy APIs
-
-## 遗留Apis
+## 2.6 Legacy APIs
 
 A more limited legacy producer and consumer api is also included in Kafka. These old Scala APIs are deprecated and only still available for compatibility purposes. Information on them can be found [here](http://kafka.apache.org/081/documentation.html#producerapi).
 
