@@ -4,7 +4,7 @@
 
 The easiest way to write mission-critical real-time applications and microservices
 
-Kafka Steam时编写关键任务实时应用程序和微服务的最简单方法
+Kafka Steam是编写关键任务的实时应用程序和微服务的最简单方法
 
 Kafka Streams is a client library for building applications and microservices, where the input and output data are stored in Kafka clusters. It combines the simplicity of writing and deploying standard Java and Scala applications on the client side with the benefits of Kafka's server-side cluster technology.
 
