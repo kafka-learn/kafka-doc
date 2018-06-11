@@ -24,13 +24,14 @@ Kafka 的消息传输层用于储存和运输它分区的数据。Kafka Streams 
 
 * Each stream partition is a totally ordered sequence of data records and maps to a Kafka topic partition.
 
-* 每个流分区都是完全有序的数据记录序列，并映射到Kafka主题分区。
-
 * A data record in the stream maps to a Kafka message from that topic.
+
+* The keys of data records determine the partitioning of data in both Kafka and Kafka Streams, i.e., how data is routed to specific partitions within topics.
+
 
 * 流中的数据记录映射到该主题的Kafka消息。
 
-* The keys of data records determine the partitioning of data in both Kafka and Kafka Streams, i.e., how data is routed to specific partitions within topics.
+* 每个流分区都是完全有序的数据记录序列，并映射到Kafka主题分区。
 
 * 数据记录的 `keys` 决定了Kafka和Kafka Stream中数据的分区，即数据如何路由到主题中的特定分区。
 
@@ -40,7 +41,7 @@ An application's processor topology is scaled by breaking it into multiple tasks
 
 It is important to understand that Kafka Streams is not a resource manager, but a library that "runs" anywhere its stream processing application runs. Multiple instances of the application are executed either on the same machine, or spread across multiple machines and tasks can be distributed automatically by the library to those running application instances. The assignment of partitions to tasks never changes; if an application instance fails, all its assigned tasks will be automatically restarted on other instances and continue to consume from the same stream partitions.
 
-Kafka Streams不是一个资源管理器，而是一个库（library）,可以使用该库在任何地方进行流处理应用。应用程序的多个实例可以在同一台机器上执行，也可以分布在多台机器上，任务可以由库自动分配给正在运行的应用程序实例。分配给任务的分区不会改变; 如果应用程序实例失败，则其所有分配的任务将在其他实例上自动重新启动，并继续从相同的流分区中使用。
+弄清Kafka Streams不是一个资源管理器，而是一个库（library）是非常重要的，可以使用该库在任何地方进行流处理应用。应用程序的多个实例可以在同一台机器上执行，也可以分布在多台机器上，任务可以由库自动分配给正在运行的应用程序实例。分配给任务的分区不会改变; 如果应用程序实例失败，则其所有分配的任务将在其他实例上自动重新启动，并继续从相同的流分区中使用。
 
 The following diagram shows two tasks each assigned with one partition of the input streams.
 
