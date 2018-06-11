@@ -1,6 +1,6 @@
-# Kafka Connect Configs
+# 3.5 Kafka Connect Configs
 
-# Kafka Connect 配置
+# 3.5 Kafka Connect 配置
 
 以下是Kafka Connect框架的配置。
 

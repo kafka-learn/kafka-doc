@@ -66,7 +66,6 @@ Many users of Kafka process data in processing pipelines consisting of multiple 
 
 [事件采集](https://martinfowler.com/eaaDev/EventSourcing.html)是一种应用程序设计风格，其状态的变化会根据时间顺序记录下来。Kafka支持大量的日志数据存储，使得它成为以这种风格构建的应用程序的一种优秀后端。
 
-
 ## Commit Log
 
 ## 提交日志

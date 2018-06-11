@@ -24,17 +24,17 @@ Prior releases: [0.7.x](http://kafka.apache.org/07/documentation.html), [0.8.0](
 
 2. APIS
 
-    * [2.1 Producer API](./documentations/apis.md#producer-api)
+    * [2.1 Producer API](./documentations/apis.md#21-producer-api)
 
-    * [2.2 Consumer API](./documentations/apis.md#consumer-api)
+    * [2.2 Consumer API](./documentations/apis.md#22-consumer-api)
 
-    * [2.3 Streams API](./documentations/apis.md#streams-api)
+    * [2.3 Streams API](./documentations/apis.md#23-streams-api)
 
-    * [2.4 Connect API](./documentations/apis.md#connect-api)
+    * [2.4 Connect API](./documentations/apis.md#24-connect-api)
 
-    * [2.5 AdminClient API](./documentations/apis.md#adminclient-api)
+    * [2.5 AdminClient API](./documentations/apis.md#25-adminclient-api)
 
-    * [2.6 Legacy APIs](./documentations/apis.md#legacy-apis)
+    * [2.6 Legacy APIs](./documentations/apis.md#26-legacy-apis)
 
 3. CONFIGURATION
 

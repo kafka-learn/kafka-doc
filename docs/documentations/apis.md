@@ -32,8 +32,6 @@ Kafka公开了其所有功能性协议，这些协议与语言无关，且Kafka�
 
 ## 2.1 Producer API
 
-## 2.1 生产者API
-
 The Producer API allows applications to send streams of data to topics in the Kafka cluster.
 
 生产者API允许应用发送数据流到Kafka集群中的主题（topics）
@@ -56,8 +54,6 @@ To use the producer, you can use the following maven dependency:
 
 ## 2.2 Consumer API
 
-## 2.2 消费者API
-
 The Consumer API allows applications to read streams of data from topics in the Kafka cluster.
 
 消费者API允许应用从Kafka集群的主题(topics)中获取数据流。
@@ -79,8 +75,6 @@ To use the consumer, you can use the following maven dependency:
 ```
 
 ## 2.3 Streams API
-
-## 2.3 流API
 
 The [Streams](http://kafka.apache.org/documentation/#streamsapi) API allows transforming streams of data from input topics to output topics.
 
@@ -108,8 +102,6 @@ To use Kafka Streams you can use the following maven dependency:
 
 ## 2.4 Connect API
 
-## 2.4 连接器API
-
 The Connect API allows implementing connectors that continually pull from some source data system into Kafka or push from Kafka into some sink data system.
 
 连接器API允许实现连接器，它不断的从一些源数据（source data system）系统或应用拉取数据到Kafka，或者从Kafka推送数据到一些汇聚系统（sink system）或应用。
@@ -124,11 +116,9 @@ Those who want to implement custom connectors can see the [javadoc](http://kafka
 
 ## 2.5 AdminClient API
 
-## 2.5 管理员客户端API
-
 The AdminClient API supports managing and inspecting topics, brokers, acls, and other Kafka objects.
 
-AdminClient API允许管理、检查主题(topics)，代理和其他Kafka对象。
+AdminClient API允许管理、检查主题(topic)，代理和其他Kafka对象。
 
 To use the AdminClient API, add the following Maven dependency:
 

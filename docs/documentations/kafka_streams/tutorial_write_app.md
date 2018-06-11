@@ -63,11 +63,11 @@ It's coding time now! Feel free to open your favorite IDE and import this Maven 
 
 ```java
 package myapps;
- 
+
 public class Pipe {
- 
+
     public static void main(String[] args) throws Exception {
- 
+
     }
 }
 ```
@@ -101,7 +101,7 @@ For a full list of configurations of Kafka Streams please refer to this table.
 有关Kafka Streams的完整配置列表，请参阅此表。
 
 Next we will define the computational logic of our Streams application. In Kafka Streams this computational logic is defined as a ```topology``` of connected processor nodes. We can use a topology builder to construct such a topology,
-	
+
 接下来我们将定义Streams应用程序的计算逻辑。在Kafka Streams中，这种计算逻辑被定义为连接处理器节点的```拓扑结构```。我们可以使用拓扑构建器来构建这样的拓扑，
 
 ```java
@@ -111,7 +111,7 @@ final StreamsBuilder builder = new StreamsBuilder();
 And then create a source stream from a Kafka topic named ```streams-plaintext-input``` using this topology builder:
 
 然后使用此拓扑构建器从名为```streams-plaintext-input```的Kafka主题创建source stream：
-	
+
 ```java
 KStream<String, String> source = builder.stream("streams-plaintext-input");
 ```
@@ -127,13 +127,13 @@ source.to("streams-pipe-output");
 Note that we can also concatenate the above two lines into a single line as:
 
 请注意，我们也可以将上面两行连接成一行，如下所示：
-	
+
 ```java
 builder.stream("streams-plaintext-input").to("streams-pipe-output");
 ```
 
 We can inspect what kind of ```topology``` is created from this builder by doing the following:
-	
+
 我们可以通过执行以下操作来检查此构建器创建的```拓扑结构```的类型：
 
 ```java
@@ -144,14 +144,14 @@ And print its description to standard output as:
 
 并将其打印到标准输出中，如下：
 
-```java	
+```java
 System.out.println(topology.describe());
 ```
 
 If we just stop here, compile and run the program, it will output the following information:
 
 如果我们停在这里，编译并运行程序，它会输出以下信息：
-	
+
 ```bash
 > mvn clean package
 > mvn exec:java -Dexec.mainClass=myapps.Pipe
@@ -168,7 +168,7 @@ As shown above, it illustrates that the constructed topology has two processor n
 如上所示，它说明构建的拓扑具有两个处理器节点，source节点```KSTREAM-SOURCE-0000000000```和sink节点```KSTREAM-SINK-0000000001```。```KSTREAM-SOURCE-0000000000```连续读取来自Kafka主题```streams-plaintext-input```的消息并将它们传送到其下游节点```KSTREAM-SINK-0000000001```; ```KSTREAM-SINK-0000000001```会将其接收到的每条消息写入另一个Kafka主题```streams-pipe-output```（```-->```和```<--```箭头指示该节点的下游和上游处理器节点，即在拓扑图中的“子节点”和“父节点”）。它还说明，这种简单的拓扑没有与之相关联的全局状态存储（我们将在后面的章节中更多地讨论状态存储）。
 
 Note that we can always describe the topology as we did above at any given point while we are building it in the code, so as a user you can interactively "try and taste" your computational logic defined in the topology until you are happy with it. Suppose we are already done with this simple topology that just pipes data from one Kafka topic to another in an endless streaming manner, we can now construct the Streams client with the two components we have just constructed above: the configuration map and the topology object (one can also construct a ```StreamsConfig``` object from the ```props``` map and then pass that object to the constructor, ```KafkaStreams``` have overloaded constructor functions to takes either type).
-	
+
 请注意，当我们在代码中构建拓扑结构的时候，总是可以像上面那样在任何给定的点上描述它。因此作为用户，您可以交互式地“尝试并品尝”拓扑中定义的计算逻辑，直到您满意为止。假设我们已经完成了这个只以一种无尽的流式方式将数据从一个Kafka主题通过管道传输到另一个主题的简单的拓扑结构，我们现在就可以使用我们刚刚构建的两个组件：配置映射和拓扑对象来构建Streams客户端（也可以从```props```映射构造一个```StreamsConfig```对象，然后将该对象传递给构造函数，```KafkaStreams```已经重载了构造函数以接受其中的任一类型）。
 
 ```java
@@ -181,7 +181,7 @@ By calling its ```start()``` function we can trigger the execution of this clien
 
 ```java
 final CountDownLatch latch = new CountDownLatch(1);
- 
+
 // attach shutdown handler to catch control-c
 // 附加关闭处理程序来捕获control-c
 Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
@@ -191,7 +191,7 @@ Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
         latch.countDown();
     }
 });
- 
+
 try {
     streams.start();
     latch.await();
@@ -205,36 +205,36 @@ The complete code so far looks like this:
 
 到目前为止，完整的代码如下所示：
 
-```java	
+```java
 package myapps;
- 
+
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
- 
+
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
- 
+
 public class Pipe {
- 
+
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
- 
+
         final StreamsBuilder builder = new StreamsBuilder();
- 
+
         builder.stream("streams-plaintext-input").to("streams-pipe-output");
- 
+
         final Topology topology = builder.build();
- 
+
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);
- 
+
         // attach shutdown handler to catch control-c
         Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
             @Override
@@ -243,7 +243,7 @@ public class Pipe {
                 latch.countDown();
             }
         });
- 
+
         try {
             streams.start();
             latch.await();
@@ -262,7 +262,7 @@ If you already have the Kafka broker up and running at ```localhost:9092```, and
 ```bash
         > mvn clean package
         > mvn exec:java -Dexec.mainClass=myapps.Pipe
-``` 
+```
 
 For detailed instructions on how to run a Streams application and observe its computing results, please read the [Play with a Streams Application](run_demo_app.md) section. We will not talk about this in the rest of this section.
 
@@ -278,7 +278,7 @@ We have learned how to construct a Streams client with its two key components: t
 
 ```bash
         > cp src/main/java/myapps/Pipe.java src/main/java/myapps/LineSplit.java
-``` 
+```
 
 And change its class name as well as the application id config to distinguish with the original program:
 
@@ -286,7 +286,7 @@ And change its class name as well as the application id config to distinguish wi
 
 ```java
 public class LineSplit {
- 
+
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-linesplit");
@@ -299,7 +299,7 @@ Since each of the source stream's record is a ```String``` typed key-value pair,
 
 由于每个source stream的消息都是一个```String```类型的键值对，因此让我们将值字符串视为文本行，并使用```FlatMapValues```运算符将其分成单词：
 
-```java	
+```java
 KStream<String, String> source = builder.stream("streams-plaintext-input");
 KStream<String, String> words = source.flatMapValues(new ValueMapper<String, Iterable<String>>() {
             @Override
@@ -312,14 +312,14 @@ KStream<String, String> words = source.flatMapValues(new ValueMapper<String, Ite
 The operator will take the ```source``` stream as its input, and generate a new stream named ```words``` by processing each record from its source stream in order and breaking its value string into a list of words, and producing each word as a new record to the output ```words``` stream. This is a stateless operator that does not need to keep track of any previously received records or processed results. Note if you are using JDK 8 you can use lambda expression and simplify the above code as:
 
 该运算符将把```source```stream作为输入，并通过按顺序处理source stream中的每条消息，将其值字符串分解为一个单词列表，生成以每个单词作为输出```words```的新消息，从而生成一个名为```words```的新stream。这是一个无需跟踪以前收到的任何消息或处理结果的无状态运算符。请注意，如果您使用的是JDK 8，则可以使用lambda表达式来简化上面的代码：
-	
+
 ```java
 KStream<String, String> source = builder.stream("streams-plaintext-input");
 KStream<String, String> words = source.flatMapValues(value -> Arrays.asList(value.split("\\W+")));
 ```
 
 And finally we can write the word stream back into another Kafka topic, say ```streams-linesplit-output```. Again, these two steps can be concatenated as the following (assuming lambda expression is used):
-	
+
 最后，我们可以将单词流写回另一个Kafka主题，比如说```stream-linesplit-output```。同样的，这两个步骤可以如下所示连接（假设使用lambda表达式）：
 
 ```java
@@ -331,7 +331,7 @@ source.flatMapValues(value -> Arrays.asList(value.split("\\W+")))
 If we now describe this augmented topology as ```System.out.println(topology.describe())```, we will get the following:
 
 如果我们现在将此扩展拓扑描述为```System.out.println(topology.describe())```，我们将得到以下结果：
-	
+
 ```bash
 > mvn clean package
 > mvn exec:java -Dexec.mainClass=myapps.LineSplit
@@ -354,37 +354,37 @@ The complete code looks like this (assuming lambda expression is used):
 
 ```java
 package myapps;
- 
+
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
- 
+
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
- 
+
 public class LineSplit {
- 
+
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-linesplit");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
- 
+
         final StreamsBuilder builder = new StreamsBuilder();
- 
+
         KStream<String, String> source = builder.stream("streams-plaintext-input");
         source.flatMapValues(value -> Arrays.asList(value.split("\\W+")))
               .to("streams-linesplit-output");
- 
+
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);
- 
+
         // ... same as Pipe.java above
         // ...与上面的Pipe.java相同
     }
@@ -401,7 +401,7 @@ Let's now take a step further to add some "stateful" computations to the topolog
 
 ```java
 public class WordCount {
- 
+
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount");
@@ -427,7 +427,7 @@ In order to do the counting aggregation we have to first specify that we want to
 
 为了进行计数聚合，我们必须首先指定我们想要使用```groupBy```运算符来将值字符串上的流（即小写字母）键入。该运算符生成一个新的分组流，然后可以由一个```count```运算符汇总，该运算符在每个分组的键上生成一个运行中的计数值：
 
-```java	
+```java
 KTable<String, Long> counts =
 source.flatMapValues(new ValueMapper<String, Iterable<String>>() {
             @Override
@@ -456,7 +456,7 @@ We can also write the ```counts``` KTable's changelog stream back into another K
 
 我们还可以将```计数值```KTable的更新日志流写回到另一个Kafka主题中，例如```streams-wordcount-output```。由于结果是更新日志流，因此应该启用日志压缩来配置输出主题```streams-wordcount-output```。请注意，这次值类型不再是```String```而是```Long```，所以默认的序列化类不再可用于将它写入Kafka。我们需要为```Long```类型提供重写的序列化方法，否则将引发runtime exception：
 
-```java	
+```java
 counts.toStream().to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
 ```
 
@@ -464,7 +464,7 @@ Note that in order to read the changelog stream from topic ```streams-wordcount-
 
 请注意，为了从```streams-wordcount-output```主题中读取更新日志流，需要将值反序列化设置为```org.apache.kafka.common.serialization.LongDeserializer```。有关详细信息，请参见[使用Streams应用程序](run_demo_app.md)部分。假设可以使用来自JDK 8的lambda表达式，上面的代码可以简化为：
 
-```java	
+```java
 KStream<String, String> source = builder.stream("streams-plaintext-input");
 source.flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
       .groupBy((key, value) -> value)
@@ -510,41 +510,41 @@ The complete code looks like this (assuming lambda expression is used):
 
 ```java
 package myapps;
- 
+
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
- 
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
- 
+
 public class WordCount {
- 
+
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
- 
+
         final StreamsBuilder builder = new StreamsBuilder();
- 
+
         KStream<String, String> source = builder.stream("streams-plaintext-input");
         source.flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
               .groupBy((key, value) -> value)
               .count(Materialized.<String, Long, KeyValueStore<Bytes, byte[]>>as("counts-store"))
               .toStream()
               .to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long());
- 
+
         final Topology topology = builder.build();
         final KafkaStreams streams = new KafkaStreams(topology, props);
         final CountDownLatch latch = new CountDownLatch(1);
- 
+
         // ... same as Pipe.java above
     }
 }
