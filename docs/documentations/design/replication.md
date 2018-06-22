@@ -12,7 +12,7 @@ Other messaging systems provide some replication-related features, but, in our (
 
 The unit of replication is the topic partition. Under non-failure conditions, each partition in Kafka has a single leader and zero or more followers. The total number of replicas including the leader constitute the replication factor. All reads and writes go to the leader of the partition. Typically, there are many more partitions than brokers and the leaders are evenly distributed among brokers. The logs on the followers are identical to the leader's log—all have the same offsets and messages in the same order (though, of course, at any given time the leader may have a few as-yet unreplicated messages at the end of its log).
 
-备份的单位是主题分区(topic partition)。在没有错误的情况下，Kafka中的每个分区都有一个单独的leader和零个或多个follower。包括leader在内的备份（replicas）总数构成了复制因子。所有读取和写入操作都需分区的leader处理。通常，分区数量比代理数量要多，并且leader会在代理中分布。follower的日志与leader的日志相同 - 都具有相同的顺序的偏移量和消息（当然，在任何给定时间，leader日志的末尾可能有几条尚未复制的消息）。
+备份的单位是主题分区(topic partition)。在没有错误的情况下，Kafka中的每个分区都有一个单独的leader和零个或多个follower。包括leader在内的副本（replicas）总数构成了复制因子。所有读取和写入操作都需分区的leader处理。通常，分区数量比代理数量要多，并且leader会均匀地分布在代理中。follower的日志与leader的日志相同 - 都具有相同的顺序相同的偏移量和消息（当然，在任何给定时间，leader日志的末尾可能有几条尚未复制的消息）。
 
 Followers consume messages from the leader just as a normal Kafka consumer would and apply them to their own log. Having the followers pull from the leader has the nice property of allowing the follower to naturally batch together log entries they are applying to their log.
 
@@ -26,20 +26,20 @@ As with most distributed systems automatically handling failures requires having
 2. If it is a slave it must replicate the writes happening on the leader and not fall "too far" behind
 
 
-1. 节点必须能够维护与ZooKeeper的会话（通过ZooKeeper的心跳机制）
+1. 节点必须能够维持与ZooKeeper的会话（通过ZooKeeper的心跳机制）
 2. 如果它是一个从属节点，它必须要备份leader上的写操作，该从属节点不能落后leader“太远”
 
 We refer to nodes satisfying these two conditions as being "in sync" to avoid the vagueness of "alive" or "failed". The leader keeps track of the set of "in sync" nodes. If a follower dies, gets stuck, or falls behind, the leader will remove it from the list of in sync replicas. The determination of stuck and lagging replicas is controlled by the replica.lag.time.max.ms configuration.
 
-我们将满足这两个条件的节点称为处于“同步（in sync）”中的，以避免“活着”或“失败”的模糊性。leader跟踪“同步“节点集。如果一个follower死亡，阻塞或落后于leader，leader会将其从同步副本列表中删除。确定一个副本是阻塞或落后于leader是由replica.lag.time.max.ms配置控制的。
+我们将满足这两个条件的节点称为处于“同步（in sync）”中的，以区分节点是“活着”还是“故障”。leader跟踪“同步“节点集。如果一个follower死亡，阻塞或落后于leader，leader会将其从同步副本列表中删除。确定一个副本是阻塞或落后于leader是由replica.lag.time.max.ms配置控制的。
 
 In distributed systems terminology we only attempt to handle a "fail/recover" model of failures where nodes suddenly cease working and then later recover (perhaps without knowing that they have died). Kafka does not handle so-called "Byzantine" failures in which nodes produce arbitrary or malicious responses (perhaps due to bugs or foul play).
 
-在分布式系统术语中，我们只尝试处理节点突然停止工作然后恢复（可能不知道它们已经死亡）的“失败/恢复”模式。Kafka不处理所谓的“Byzantine”故障，在该故障中，节点会产生随意的或恶意的响应（可能是因为bug或不合理行为）。
+在分布式系统术语中，我们只尝试处理节点突然停止工作然后恢复（可能不知道它们已经发生故障了）的“故障/恢复”模式。Kafka不处理节点产生的随意的或恶意的响应（可能是因为bug或不合理行为），即所谓的“Byzantine”故障。
 
 We can now more precisely define that a message is considered committed when all in sync replicas for that partition have applied it to their log. Only committed messages are ever given out to the consumer. This means that the consumer need not worry about potentially seeing a message that could be lost if the leader fails. Producers, on the other hand, have the option of either waiting for the message to be committed or not, depending on their preference for tradeoff between latency and durability. This preference is controlled by the acks setting that the producer uses. Note that topics have a setting for the "minimum number" of in-sync replicas that is checked when the producer requests acknowledgment that a message has been written to the full set of in-sync replicas. If a less stringent acknowledgement is requested by the producer, then the message can be committed, and consumed, even if the number of in-sync replicas is lower than the minimum (e.g. it can be as low as just the leader).
 
-现在我们可以更准确地定义，当该分区的所有同步副本将消息应用于其日志时，就认为该消息已被提交。只有提交的消息会被分发给消费者。这意味着消费者不必担心由于leader失败会看到可能丢失的消息。另一方面，生产者可以选择是否等待消息的提交，这具体取决于其在延迟与持久性之间的权衡。此首选项由生产者使用的acks设置控制。请注意，主题有一个对同步副本集的“最小数量的”设置，该设置会在生产者请求确认消息已写入完整的同步副本集时检查。如果生产者请求是不严格的确认，则即使同步副本的数量低于最小值（例如，它可以仅只有leader），该消息也可以被提交并消费。
+现在我们可以更准确地定义，当该分区的所有同步副本将消息应用于其日志时，就认为该消息已被提交。只有提交的消息会被分发给消费者。这意味着消费者不必担心由于leader故障会看到可能丢失的消息。另一方面，生产者可以选择是否等待消息的提交，这具体取决于其在延迟与持久性之间的权衡。此首选项由生产者使用的acks设置控制。请注意，主题有一个对同步副本集的“最小数量的”设置，该设置会在生产者请求确认消息已写入完整的同步副本集时检查。如果生产者要求不严格，则即使同步副本的数量低于最小值（例如，它可以仅只有leader），该消息也可以被提交并消费。
 
 The guarantee that Kafka offers is that a committed message will not be lost, as long as there is at least one in sync replica alive, at all times.
 
@@ -113,16 +113,16 @@ However a practical system needs to do something reasonable when all the replica
 2. Choose the first replica (not necessarily in the ISR) that comes back to life as the leader.
 
 
-1. 等待ISR中的一个备份恢复并选择这个备份作为leader（希望它仍然拥有其所有数据）。
-2. 选择第一个恢复的备份（不一定在ISR中）作为leader。
+1. 等待ISR中的一个副本恢复并选择这个副本作为leader（希望它仍然拥有其所有数据）。
+2. 选择第一个恢复的副本（不一定在ISR中）作为leader。
 
 This is a simple tradeoff between availability and consistency. If we wait for replicas in the ISR, then we will remain unavailable as long as those replicas are down. If such replicas were destroyed or their data was lost, then we are permanently down. If, on the other hand, a non-in-sync replica comes back to life and we allow it to become leader, then its log becomes the source of truth even though it is not guaranteed to have every committed message. By default from version 0.11.0.0, Kafka chooses the first strategy and favor waiting for a consistent replica. This behavior can be changed using configuration property unclean.leader.election.enable, to support use cases where uptime is preferable to consistency.
 
-这是可用性和一致性之间的简单折衷。如果我们在ISR中等待副本，那么只要这些副本是死亡的，我们就一直保持不可用状态。如果这些副本被毁坏或者他们的数据丢失了，那么我们会永久失败。另一方面，如果一个非同步副本恢复了，并且我们允许它成为leader，那么它的日志成为真实的数据来源，即使它不能保证拥有每一个提交的消息。默认情况下，从0.11.0.0版本开始，Kafka选择第一种策略，并倾向于等待一致的副本。此行为可以使用配置属性unclean.leader.election.enable进行更改，以支持正常运行时间比一致性更好的用例。
+这是可用性和一致性之间的简单折衷。如果我们在ISR中等待副本，那么只要这些副本是不可用的，我们就一直保持不可用状态。如果这些副本被毁坏或者他们的数据丢失了，那么我们会永久不可用。另一方面，如果一个非同步副本恢复了，并且我们允许它成为leader，那么它的日志成为真实的数据来源，即使它不能保证拥有每一个提交的消息。默认情况下，从0.11.0.0版本开始，Kafka选择第一种策略，并倾向于等待一致的副本。此行为可以使用配置属性unclean.leader.election.enable进行更改，以支持停机优先于一致性的情况。
 
 This dilemma is not specific to Kafka. It exists in any quorum-based scheme. For example in a majority voting scheme, if a majority of servers suffer a permanent failure, then you must either choose to lose 100% of your data or violate consistency by taking what remains on an existing server as your new source of truth.
 
-这种困境并不只是存在于Kafka。它存在于任何基于仲裁(quorum-based)的设计中。例如，在多数投票方式中，如果大多数服务器遭遇永久性故障，那么您必须选择丢失100％的数据，或者通过将现有服务器上剩下的内容作为新的真实数据来源来破坏一致性。
+这种困境并不只是存在于Kafka。它存在于任何基于仲裁(quorum-based)的设计中。例如，在多数投票方式中，如果大多数服务器遭遇永久性故障，那么您必须选择丢失100％的数据，或者破坏一致性，将现有服务器上剩下的内容作为新的真实数据来源。
 
 ## Availability and Durability Guarantees
 
@@ -149,4 +149,4 @@ The above discussion on replicated logs really covers only a single log, i.e. on
 
 It is also important to optimize the leadership election process as that is the critical window of unavailability. A naive implementation of leader election would end up running an election per partition for all partitions a node hosted when that node failed. Instead, we elect one of the brokers as the "controller". This controller detects failures at the broker level and is responsible for changing the leader of all affected partitions in a failed broker. The result is that we are able to batch together many of the required leadership change notifications which makes the election process far cheaper and faster for a large number of partitions. If the controller fails, one of the surviving brokers will become the new controller.
 
-优化leader的选举过程也很重要，因为这是不可接触到的关键窗口。leader选举的执行最终会针对该节点失败时托管的节点的每个分区运行一次选举。相反，我们选择其中一个代理作为“控制者”。该控制器检测代理级别的故障，并负责更改故障代理中所有受影响的分区的负责人。结果是我们可以将许多所需的领导层变更通知批量化，这使得大量分区的选举过程更便宜，更快捷。如果控制器失败，其中一个幸存的代理将成为新的控制者。
+优化leader选举过程也很重要，因为这是不可用的关键窗口。leader选举的执行最终会针对该节点失败时托管的节点的每个分区运行一次选举。相反，我们选择其中一个代理作为“控制者”。该控制器检测代理级别的故障，并负责更改故障代理中所有受影响的分区的leader。结果是我们可以批量处理需要进行leader变更的分区，这使得大量分区的选举过程更廉价，更快捷。如果控制器失败，其中一个幸存的代理将成为新的控制器。
