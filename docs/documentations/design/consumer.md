@@ -1,5 +1,7 @@
 # 4.5 The Consumer
 
+# 4.5 消费者
+
 The Kafka consumer works by issuing "fetch" requests to the brokers leading the partitions it wants to consume. The consumer specifies its offset in the log with each request and receives back a chunk of log beginning from that position. The consumer thus has significant control over this position and can rewind it to re-consume data if need be.
 
 kafka消费者通过向希望消费的分区的代理发出"fetch(获取)"请求进行工作。消费者在每个请求的日志中指定其偏移量，并从该位置接收一段反馈日志。因此，消费者对这个偏移位置具有重要的控制权，并且可以重新指向它以在需要时重新消费数据。
