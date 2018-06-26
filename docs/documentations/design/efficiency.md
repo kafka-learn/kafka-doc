@@ -4,11 +4,11 @@
 
 We have put significant effort into efficiency. One of our primary use cases is handling web activity data, which is very high volume: each page view may generate dozens of writes. Furthermore, we assume each message published is read by at least one consumer (often many), hence we strive to make consumption as cheap as possible.
 
-我们已经为效率付出了很大的努力。我们的主要用例之一是处理网络活动数据，该数据体量很大：每个页面视图可能会产生数十个写入操作。此外，我们假设发布的每条消息都被至少一个消费者（通常是很多消费者）读取，因此我们努力使消费尽可能的便宜。
+我们已经为效率付出了很大的努力。我们的主要用例之一是处理网络活动数据，该数据体量很大：每个页面视图可能会产生上百个写入操作。此外，我们假设发布的每条消息都被至少一个消费者（通常是很多消费者）读取，因此我们努力使消费尽可能的便宜。
 
 We have also found, from experience building and running a number of similar systems, that efficiency is a key to effective multi-tenant operations. If the downstream infrastructure service can easily become a bottleneck due to a small bump in usage by the application, such small changes will often create problems. By being very fast we help ensure that the application will tip-over under load before the infrastructure. This is particularly important when trying to run a centralized service that supports dozens or hundreds of applications on a centralized cluster as changes in usage patterns are a near-daily occurrence.
 
-我们还发现，从建立和运行一系列类似系统的经验来看，效率是实现multi-tenant(多租户)有效运营的关键。如果下游基础设施服务由于应用程序使用量小而容易成为瓶颈，那么这些小的更改往往会产生问题。通过非常快的速度，我们可以帮助确保在基础架构之前应用程序在负载下崩溃。当尝试运行支持集中式成百上千个应用程序的集中式服务时，这一点尤其重要，因为使用模式的变化几乎每天都在发生。
+我们还发现，从建立和运行一系列类似系统的经验来看，效率是实现multi-tenant(多租户)有效运营的关键。如果下游基础设施服务由于应用程序使用量小而容易成为瓶颈，那么这些小的更改往往会产生问题。通过非常快的速度，我们可以帮助确保在基础架构之前应用程序在负载下崩溃。当尝试运行支持集中式的、成百上千个应用程序的集中式服务时，这一点尤其重要，因为使用模式的变化几乎每天都在发生。
 
 We discussed disk efficiency in the previous section. Once poor disk access patterns have been eliminated, there are two common causes of inefficiency in this type of system: too many small I/O operations, and excessive byte copying.
 
@@ -16,7 +16,7 @@ We discussed disk efficiency in the previous section. Once poor disk access patt
 
 The small I/O problem happens both between the client and the server and in the server's own persistent operations.
 
-教小的I/O问题发生在客户端和服务器之间以及服务器自己的持久操作中。
+较小的I/O问题发生在客户端和服务器之间以及服务器自己的持久操作中。
 
 To avoid this, our protocol is built around a "message set" abstraction that naturally groups messages together. This allows network requests to group messages together and amortize the overhead of the network roundtrip rather than sending a single message at a time. The server in turn appends chunks of messages to its log in one go, and the consumer fetches large linear chunks at a time.
 
@@ -28,11 +28,11 @@ This simple optimization produces orders of magnitude speed up. Batching leads t
 
 The other inefficiency is in byte copying. At low message rates this is not an issue, but under load the impact is significant. To avoid this we employ a standardized binary message format that is shared by the producer, the broker, and the consumer (so data chunks can be transferred without modification between them).
 
-另一个低效率是在字节复制中。在低消息速率下，这不是问题，但是在负载情况下，这种影响是显着的。为了避免这种情况，我们使用由生产者，代理和消费者共享的标准二进制消息格式（因此数据块可以在它们之间进行无需修改的传输）。
+另一个低效率是在字节复制中。在低消息速率下，这不是问题，但是在负载情况下，这种影响是显著的。为了避免这种情况，我们使用由生产者，代理和消费者共享的标准的二进制消息格式（因此数据块可以在它们之间进行无需修改的传输）。
 
 The message log maintained by the broker is itself just a directory of files, each populated by a sequence of message sets that have been written to disk in the same format used by the producer and consumer. Maintaining this common format allows optimization of the most important operation: network transfer of persistent log chunks. Modern unix operating systems offer a highly optimized code path for transferring data out of pagecache to a socket; in Linux this is done with the [sendfile system call](http://man7.org/linux/man-pages/man2/sendfile.2.html).
 
-由代理维护的消息日志本身就是一个文件目录，每个文件都由一系列消息集合填充，这些消息集合以生产者和消费者使用的相同格式写入磁盘。保持这种通用格式可以优化最重要的操作：持久日志块的网络传输。现代unix操作系统提供高度优化的代码路径，用于将数据从页面缓存传输到套接字; 在Linux中，这是通过[sendfile系统调用](http://man7.org/linux/man-pages/man2/sendfile.2.html)完成的。
+由代理维护的消息日志本身就是一个文件目录，每个文件都由一系列消息集合填充，这些消息集合以生产者和消费者使用的相同格式写入磁盘。保持这种通用格式可以优化最重要的操作：持久日志块的网络传输。现代unix操作系统提供高度优化的代码路径，用于将数据从页面缓存传输到套接字；在Linux系统中，这是通过[sendfile系统调用](http://man7.org/linux/man-pages/man2/sendfile.2.html)完成的。
 
 To understand the impact of sendfile, it is important to understand the common data path for transfer of data from file to socket:
 
@@ -46,15 +46,16 @@ To understand the impact of sendfile, it is important to understand the common d
 
 1. 操作系统从磁盘读取数据到内核空间的pagecache中
 2. 应用程序从内核空间读取数据到用户空间缓冲区中
-3. 应用程序将数据写回内核空间到套接字缓冲区
+3. 应用程序将数据写回内核空间的套接字缓冲区中
 4. 操作系统将数据从套接字缓冲区复制到通过网络发送的NIC缓冲区
 
 This is clearly inefficient, there are four copies and two system calls. Using sendfile, this re-copying is avoided by allowing the OS to send the data from pagecache to the network directly. So in this optimized path, only the final copy to the NIC buffer is needed.
 
-这显然是低效的，有四个副本和两个系统调用。使用sendfile，通过允许操作系统将数据从页面缓存直接发送到网络，可以避免重新复制。所以在这个优化的路径中，只需要最终拷贝到NIC缓冲区。
+这显然是低效的，有四次拷贝操作和两个系统调用。使用sendfile，通过允许操作系统将数据从页面缓存直接发送到网络，可以避免重新拷贝。所以在这个优化的路径中，只需要最终拷贝到NIC缓冲区。
 
 We expect a common use case to be multiple consumers on a topic. Using the zero-copy optimization above, data is copied into pagecache exactly once and reused on each consumption instead of being stored in memory and copied out to user-space every time it is read. This allows messages to be consumed at a rate that approaches the limit of the network connection.
-消费者。使用上面的零拷贝优化，数据被复制到pagecache中一次，并在每次使用时重用，而不是存储在内存中，并且每次读取时都将其复制到用户空间。这允许消息以接近网络连接限制的速率消耗。
+
+我们期望一个常见的用例在一个主题上成为多个消费者。使用上面的零拷贝优化，数据被复制到pagecache中一次，并在每次使用时重用，而不是存储在内存中，并且每次读取时都将其复制到用户空间。这允许消息以接近网络连接限制的速率消耗。
 
 This combination of pagecache and sendfile means that on a Kafka cluster where the consumers are mostly caught up you will see no read activity on the disks whatsoever as they will be serving data entirely from cache.
 
@@ -78,4 +79,4 @@ Kakfa以高效的批处理格式支持这一点。一批消息可以压缩在一
 
 Kafka supports GZIP, Snappy and LZ4 compression protocols. More details on compression can be found [here](https://cwiki.apache.org/confluence/display/KAFKA/Compression).
 
-Kafka支持GZIP，Snappy和LZ4压缩协议。有关压缩的更多细节可以在[这里](https://cwiki.apache.org/confluence/display/KAFKA/Compression)中找到。
+Kafka支持GZIP，Snappy和LZ4压缩协议。有关压缩的更多细节可以在[这里](https://cwiki.apache.org/confluence/display/KAFKA/Compression)找到。
