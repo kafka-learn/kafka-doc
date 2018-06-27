@@ -2,11 +2,19 @@
 
 Kafka uses Yammer Metrics for metrics reporting in the server and Scala clients. The Java clients use Kafka Metrics, a built-in metrics registry that minimizes transitive dependencies pulled into client applications. Both expose metrics via JMX and can be configured to report stats using pluggable stats reporters to hook up to your monitoring system.
 
+Kafka在服务器和Scala客户端使用Yammer指标进行度量报告。 Java客户端使用Kafka度量标准，这是一种内置的度量标准注册表，可最大限度地减少传递到客户端应用程序中的依赖关系。 两者都通过JMX公开度量标准，并且可以配置为使用可插入的统计记录器来报告统计信息以连接到您的监控系统。
+
 All Kafka rate metrics have a corresponding cumulative count metric with suffix ```-total```. For example, ```records-consumed-rate``` has a corresponding metric named ```records-consumed-total```.
+
+所有Kafka费率指标都有一个相应的累计计数度量标准，其后缀为``-total```。 例如，```records-consumed-rate```有一个名为```records-consumed-total``的相应度量。
 
 The easiest way to see the available metrics is to fire up jconsole and point it at a running kafka client or server; this will allow browsing all metrics with JMX.
 
+查看可用指标的最简单方法是启动jconsole并将其指向正在运行的kafka客户端或服务器; 这将允许浏览JMX的所有指标。
+
 We do graphing and alerting on the following metrics:
+
+我们对以下指标进行图形化和提醒：
 
 | Description | Mbean name | Normal value |
 | :- | :- | :- |
@@ -55,6 +63,8 @@ We do graphing and alerting on the following metrics:
 
 The following metrics are available on producer/consumer/connector/streams instances. For specific metrics, please see following sections.
 
+以下度量标准适用于生产者/消费者/连接器/流实例。有关具体指标，请参阅以下部分。
+
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
 | connection-close-rate | Connections closed per second in the window. | kafka.[producer&#124;consumer&#124;connect]:type=[producer&#124;consumer&#124;connect]-metrics,client-id=([-.\w]+) |
@@ -79,6 +89,8 @@ The following metrics are available on producer/consumer/connector/streams insta
 
 The following metrics are available on producer/consumer/connector/streams instances. For specific metrics, please see following sections.
 
+以下度量标准适用于生产者/消费者/连接器/流实例。有关具体指标，请参阅以下部分。
+
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
 | outgoing-byte-rate | The average number of outgoing bytes sent per second for a node. | kafka.producer:type=[consumer&#124;producer&#124;connect]-node-metrics,client-id=([-.\w]+),node-id=([0-9]+) |
@@ -93,6 +105,8 @@ The following metrics are available on producer/consumer/connector/streams insta
 ## Producer monitoring
 
 The following metrics are available on producer instances.
+
+以下度量标准适用于生产者实例。
 
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
@@ -267,6 +281,8 @@ kafka.producer:type=producer-metrics,client-id="{client-id}"
 
 The following metrics are available on new consumer instances.
 
+以下度量标准适用于新的客户实例。
+
 ### Consumer Group Metrics
 
 | Metric/Attribute name | Description | Mbean name |
@@ -368,6 +384,8 @@ The following metrics are available on new consumer instances.
 ## Connect Monitoring
 
 A Connect worker process contains all the producer and consumer metrics as well as metrics specific to Connect. The worker process itself has a number of metrics, while each connector and task have additional metrics.
+
+Connect工作流程包含所有生产者和消费者指标以及特定于Connect的指标。 工作进程本身有很多指标，而每个连接器和任务都有其他指标。
 
 <table class="data-table"><tbody>
 <tr>
@@ -532,9 +550,15 @@ A Connect worker process contains all the producer and consumer metrics as well 
 
 A Kafka Streams instance contains all the producer and consumer metrics as well as additional metrics specific to streams. By default Kafka Streams has metrics with two recording levels: debug and info. The debug level records all metrics, while the info level records only the thread-level metrics.
 
+Kafka Streams实例包含所有生产者和消费者指标以及特定于流的其他指标。 默认情况下，Kafka Streams具有两个记录级别的指标：调试和信息。 调试级别记录所有度量标准，而信息级别仅记录线程级别度量标准。
+
 Note that the metrics have a 3-layer hierarchy. At the top level there are per-thread metrics. Each thread has tasks, with their own metrics. Each task has a number of processor nodes, with their own metrics. Each task also has a number of state stores and record caches, all with their own metrics.
 
+请注意，这些指标具有三层结构。 顶层有每线程指标。 每个线程都有自己的指标的任务。 每个任务都有许多处理器节点，并有各自的指标。 每个任务还包含许多状态存储和记录缓存，所有这些都有自己的指标。
+
 Use the following configuration option to specify which metrics you want collected:
+
+使用以下配置选项来指定您希望收集哪些指标：
 
 ```
 metrics.recording.level="info"
@@ -543,6 +567,8 @@ metrics.recording.level="info"
 ### Thread Metrics
 
 All the following metrics have a recording level of ``info``:
+
+以下所有指标的记录级别都是``info``：
 
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
@@ -566,6 +592,8 @@ All the following metrics have a recording level of ``info``:
 
 All the following metrics have a recording level of ``debug``:
 
+以下所有指标都具有``调试``的记录级别：
+
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
 | commit-latency-avg | The average commit time in ns for this task.  | kafka.streams:type=stream-task-metrics,client-id=([-.\w]+),task-id=([-.\w]+) |
@@ -575,6 +603,8 @@ All the following metrics have a recording level of ``debug``:
 ### Processor Node Metrics
 
 All the following metrics have a recording level of ``debug``:
+
+以下所有指标都具有``debug``的记录级别：
 
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
@@ -595,6 +625,8 @@ All the following metrics have a recording level of ``debug``:
 ### State Store Metrics
 
 All the following metrics have a recording level of ``debug``:
+
+以下所有指标都具有``debug``的记录级别：
 
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
@@ -630,6 +662,8 @@ All the following metrics have a recording level of ``debug``:
 
 All the following metrics have a recording level of ``debug``:
 
+以下所有指标都具有``debug``的记录级别：
+
 | Metric/Attribute name | Description | Mbean name |
 | :- | :- | :- |
 | hitRatio-avg | The average cache hit ratio defined as the ratio of cache read hits over the total cache read requests.  | kafka.streams:type=stream-record-cache-metrics,client-id=([-.\w]+),task-id=([-.\w]+),record-cache-id=([-.\w]+) |
@@ -640,6 +674,10 @@ All the following metrics have a recording level of ``debug``:
 
 We recommend monitoring GC time and other stats and various server stats such as CPU utilization, I/O service time, etc. On the client side, we recommend monitoring the message/byte rate (global and per topic), request rate/size/time, and on the consumer side, max lag in messages among all partitions and min fetch request rate. For a consumer to keep up, max lag needs to be less than a threshold and min fetch rate needs to be larger than 0.
 
+我们建议监控GC时间和其他统计数据以及各种服务器状态，例如CPU利用率，I / O服务时间等。在客户端，我们建议监控消息/字节速率（全局和每个主题），请求速率/大小/ 时间，在消费者方面，所有分区之间的消息的最大滞后和最小提取请求率。 对于消费者来说，最大滞后需要小于阈值，并且最小读取率需要大于0。
+
 ## Audit
 
 The final alerting we do is on the correctness of the data delivery. We audit that every message that is sent is consumed by all consumers and measure the lag for this to occur. For important topics we alert if a certain completeness is not achieved in a certain time period. The details of this are discussed in KAFKA-260.
+
+我们所做的最终警报是关于数据交付的正确性。 我们审计发送的每条消息都被所有消费者消费，并衡量发生这种情况的时滞。 对于重要的话题，如果在某个时间段内没有达到某种完整性，我们会提醒。 这些细节在KAFKA-260中讨论。
