@@ -14,30 +14,13 @@ Kafka Streams DSL（Domain Specific Language）构建在Streams Processor API之
 
 * [Transform a stream](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#transform-a-stream)
 
-
-* [概述](dsl-api.md)
-
-* [从Kafka创建source流](dsl-api.md)
-
-* [转换流](dsl-api.md)
-
     * [Stateless transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateless-transformations)
 
     * [Stateful transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#stateful-transformations)
 
-
-    * [无状态的转换](dsl-api.md)
-
-    * [有状态的转换](dsl-api.md)
-
         * [Aggregating](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#aggregating)
 
         * [Joining](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#joining)
-
-
-        * [聚合](dsl-api.md)
-
-        * [连接](dsl-api.md)
 
             * [Join co-partitioning requirements](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#join-co-partitioning-requirements)
 
@@ -49,6 +32,34 @@ Kafka Streams DSL（Domain Specific Language）构建在Streams Processor API之
 
             * [KStream-GlobalKTable Join](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#kstream-globalktable-join)
 
+        * [Windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
+
+            * [Tumbling time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#tumbling-time-windows)
+
+            * [Hopping time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#hopping-time-windows)
+
+            * [Sliding time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#sliding-time-windows)
+
+            * [Session Windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#session-windows)
+            
+    * [Applying processors and transformers (Processor API integration)](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration)
+
+* [Writing streams back to Kafka](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#writing-streams-back-to-kafka)
+
+
+* [概述](dsl-api.md)
+
+* [从Kafka创建source流](dsl-api.md)
+
+* [转换流](dsl-api.md)
+
+    * [无状态的转换](dsl-api.md)
+
+    * [有状态的转换](dsl-api.md)
+
+        * [聚合](dsl-api.md)
+
+        * [连接](dsl-api.md)
 
             * [连接共分区(co-partitioning)要求](dsl-api.md)
 
@@ -60,17 +71,7 @@ Kafka Streams DSL（Domain Specific Language）构建在Streams Processor API之
 
             * [KStream-GlobalKTable连接](dsl-api.md)
 
-        * [Windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
-
         * [窗口](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing)
-            * [Tumbling time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#tumbling-time-windows)
-
-            * [Hopping time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#hopping-time-windows)
-
-            * [Sliding time windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#sliding-time-windows)
-
-            * [Session Windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#session-windows)
-
 
             * [翻转时间窗口](dsl-api.md)
 
@@ -80,11 +81,7 @@ Kafka Streams DSL（Domain Specific Language）构建在Streams Processor API之
 
             * [会话窗口](dsl-api.md)
 
-    * [Applying processors and transformers (Processor API integration)](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#applying-processors-and-transformers-processor-api-integration)
-
     * [使用处理器和转换器(处理器API集成)](dsl-api.md)
-
-* [Writing streams back to Kafka](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#writing-streams-back-to-kafka)
 
 * [将流(streams)写回到Kafka](dsl-api.md)
 
@@ -98,9 +95,10 @@ In comparison to the [Processor API](http://kafka.apache.org/documentation/strea
 
 * Built-in abstractions for [streams and tables](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-duality) in the form of [KStream](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-kstream), [KTable](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-ktable), and [GlobalKTable](http://kafka.apache.org/documentation/streams/concepts.html#streams-concepts-globalktable). Having first-class support for streams and tables is crucial because, in practice, most use cases require not just either streams or databases/tables, but a combination of both. For example, if your use case is to create a customer 360-degree view that is updated in real-time, what your application will be doing is transforming many input streams of customer-related events into an output table that contains a continuously updated 360-degree view of your customers.
 
-* 内置抽象的[KStream](../concepts.md)，[KTable](../concepts.md)和[GlobalKTable](../concepts.md)形式的[流和表(streams and tables)](../concepts.md)。对流和表(streams and tables)提供一流的支持是非常重要的，因为在实践中，大多数用例不仅需要流或数据库/表，而且还需要两者的组合。例如，如果您的用例是创建实时更新的360度的客户视图，那么您的应用程序将要做的是将许多与客户相关的事件输入流转换为包含不断更新的360度的客户视图的输出表。
-
 * Declarative, functional programming style with [stateless transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateless) (e.g. ```map``` and ```filter```) as well as [stateful transformations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-transformations-stateful) such as [aggregations](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-aggregating) (e.g. ```count``` and ```reduce```), [joins](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins) (e.g. ```leftJoin```), and [windowing](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-windowing) (e.g. [session windows](http://kafka.apache.org/documentation/streams/developer-guide/dsl-api.html#windowing-session)).
+
+
+* 内置抽象的[KStream](../concepts.md)，[KTable](../concepts.md)和[GlobalKTable](../concepts.md)形式的[流和表(streams and tables)](../concepts.md)。对流和表(streams and tables)提供一流的支持是非常重要的，因为在实践中，大多数用例不仅需要流或数据库/表，而且还需要两者的组合。例如，如果您的用例是创建实时更新的360度的客户视图，那么您的应用程序将要做的是将许多与客户相关的事件输入流转换为包含不断更新的360度的客户视图的输出表。
 
 * 具有[无状态转换](dsl-api.md)（例如```map```和 ```filter```）或诸如[聚合](dsl-api.md)（例如```count```和 ```reduce```）、[连接](dsl-api.md)（例如```leftJoin```）和[窗口](dsl-api.md)（例如[会话窗口](dsl-api.md)（session windows））这些特征的[有状态转换](dsl-api.md)的声明性和函数式编程风格。
 
@@ -151,11 +149,11 @@ You can easily read data from Kafka topics into your application. The following 
 
                 Creates a [KStream](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-kstream) from the specified Kafka input topics and interprets the data as a [record stream](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-kstream). A `KStream` represents a partitioned record stream. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#stream(java.lang.String))
 
-                根据指定的Kafka输入主题创建`KStream`，并将数据解释为`消息流`。 `KStream`表示分区的消息流。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#stream(java.lang.String))
+                根据指定的Kafka输入主题创建[KStream](../concepts.md)，并将数据解释为[消息流](../concepts.md)。`KStream`表示分区的消息流。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#stream(java.lang.String))
                 
                 In the case of a KStream, the local KStream instance of every application instance will be populated with data from only **a subset** of the partitions of the input topic. Collectively, across all application instances, all input topic partitions are read and processed.
 
-                在KStream的情况下，每个应用程序实例的本地KStream实例将仅填充来自输入主题分区的`子集`的数据。总而言之，在所有应用程序实例中，都会读取和处理所有的输入主题分区。
+                在KStream的情况下，每个应用程序实例的本地KStream实例将仅填充来自输入主题分区的**子集**的数据。总而言之，在所有应用程序实例中，都会读取和处理所有的输入主题分区。
 
                 ```java
                 import org.apache.kafka.common.serialization.Serdes;
@@ -194,7 +192,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 Reads the specified Kafka input topic into a [KTable](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-ktable). The topic is interpreted as a changelog stream, where records with the same key are interpreted as UPSERT aka INSERT/UPDATE (when the record value is not `null`) or as DELETE (when the value is `null`) for that key. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
 
-                将指定的Kafka输入主题读入`KTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT即INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
+                将指定的Kafka输入主题读入[KTable](../concepts.md)。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT即INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#table-java.lang.String(java.lang.String))
 
                 In the case of a KStream, the local KStream instance of every application instance will be populated with data from only **a subset** of the partitions of the input topic. Collectively, across all application instances, all input topic partitions are read and processed.
 
@@ -212,7 +210,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 如果Kafka输入主题中消息的键或值的类型与配置的默认SerDes不匹配，则**必须明确指定SerDes**。有关配置默认的SerDes，可用的SerDes和实现自己的自定义SerDes的信息，请参阅[数据类型和序列化](datatypes.md)。
 
-                Several variants of `table` exist, for example to specify the `auto.offset.reset` policy to be used when reading from the input topic. 
+                Several variants of `table` exist, for example to specify the `auto.offset.reset` policy to be used when reading from the input topic.
 
                 存在多种`表`的变体，例如，指定从输入主题读取时使用的`auto.offset.reset`策略。
     
@@ -224,7 +222,7 @@ You can easily read data from Kafka topics into your application. The following 
 
                 Reads the specified Kafka input topic into a [GlobalKTable](http://kafka.apache.org/11/documentation/streams/concepts.html#streams-concepts-globalktable). The topic is interpreted as a changelog stream, where records with the same key are interpreted as UPSERT aka INSERT/UPDATE (when the record value is not `null`) or as DELETE (when the value is `null`) for that key. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
 
-                将指定的Kafka输入主题读入`GlobalKTable`。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT又名INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
+                将指定的Kafka输入主题读入[GlobalKTable](../concepts.md)。该主题被解释为更新日志流，其中具有相同键的消息被解释为UPSERT又名INSERT/UPDATE（当消息值不为`null`时）或DELETE（当消息值为`null`时）该键。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/StreamsBuilder.html#globalTable-java.lang.String(java.lang.String))
 
                 In the case of a GlobalKTable, the local GlobalKTable instance of every application instance will be populated with data from **all** the partitions of the input topic.
 
@@ -298,7 +296,8 @@ These transformation operations are described in the following subsections:
 
 Stateless transformations do not require state for processing and they do not require a state store associated with the stream processor. Kafka 0.11.0 and later allows you to materialize the result from a stateless ```KTable``` transformation. This allows the result to be queried through [interactive queries](http://kafka.apache.org/11/documentation/streams/developer-guide/interactive-queries.html#streams-developer-guide-interactive-queries). To materialize a ```KTable```, each of the below stateless operations [can be augmented](http://kafka.apache.org/11/documentation/streams/developer-guide/interactive-queries.html#streams-developer-guide-interactive-queries-local-key-value-stores) with an optional ```queryableStoreName``` argument.
 
-无状态转换不需要进行状态处理，并且不需要与流处理器关联的状态存储器。Kafka 0.11.0和更高版本允许您实现无状态KTable的转换。这将允许您通过[交互式查询](interactive-queries.md)来查询结果。为了实现```KTable```，下面的每个无状态操作都可以使用可选的```queryableStoreName```参数[进行扩充](interactive-queries.md)。
+
+无状态转换不需要进行状态处理，并且不需要与流处理器关联的状态存储器。Kafka 0.11.0和更高版本允许您实现无状态```KTable```的转换。这将允许您通过[交互式查询](interactive-queries.md)来查询结果。为了实现```KTable```，下面的每个无状态操作都可以使用可选的```queryableStoreName```参数[进行扩充](interactive-queries.md)。
 
 * **Transformation**
 
@@ -306,7 +305,7 @@ Stateless transformations do not require state for processing and they do not re
 
         * KStream → KStream[]
 
-            * **Description**   
+            * **Description**
 
                 Branch (or split) a `KStream` based on the supplied predicates into one or more `KStream` instances. ([details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#branch-org.apache.kafka.streams.kstream.Predicate...-))
 
@@ -500,7 +499,7 @@ Stateless transformations do not require state for processing and they do not re
 
                 **When to set explicit SerDes:** Variants of `groupByKey` exist to override the configured default SerDes of your application, which **you must do** if the key and/or value types of the resulting `KGroupedStream` do not match the configured default SerDes.
 
-                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupByKey`的变体，如果生成的`KGroupedStream`的键和、或值类型与配置的默认SerDes不匹配，则必须执行此操作。
+                **何时设置显式SerDes：** 存在用于覆盖应用程序中已配置的默认SerDes的`groupByKey`的变体，如果生成的`KGroupedStream`的键和、或值类型与配置的默认SerDes不匹配，则**必须**执行此操作。
 
                 **Note**
 
@@ -512,7 +511,7 @@ Stateless transformations do not require state for processing and they do not re
 
                 **Causes data re-partitioning if and only if the stream was marked for re-partitioning.** `groupByKey` is preferable to `groupBy` because it re-partitions data only if the stream was already marked for re-partitioning. However, `groupByKey` does not allow you to modify the key or key type like `groupBy` does.
 
-                **当且仅当流被标记为重分区时，会导致数据重分区。**`groupByKey`优于`groupBy`，因为它仅在流已标记为重分区时重分区数据。然而，`groupByKey`不允许您像`groupBy`那样修改键或键的类型。
+                **当且仅当流被标记为重分区时，会导致数据重分区。** `groupByKey`优于`groupBy`，因为它仅在流已标记为重分区时重分区数据。然而，`groupByKey`不允许您像`groupBy`那样修改键或键的类型。
 
                 ```java
                 KStream<byte[], String> stream = ...;
@@ -651,7 +650,7 @@ Stateless transformations do not require state for processing and they do not re
 
         * KTable → KTable
 
-            * **Description**             
+            * **Description**
 
                 Takes one record and produces one record, while retaining the key of the original record. You can modify the record value and the value type. ([KStream details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#groupBy-org.apache.kafka.streams.kstream.KeyValueMapper-), [KTable details](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#groupBy-org.apache.kafka.streams.kstream.KeyValueMapper-))
 
@@ -1445,7 +1444,7 @@ After records are [grouped](http://kafka.apache.org/11/documentation/streams/dev
 
 **Example of semantics for stream aggregations:** A ```KGroupedStream``` → ```KTable``` example is shown below. The streams and the table are initially empty. Bold font is used in the column for “KTable ```aggregated”``` to highlight changed state. An entry such as ```(hello, 1)``` denotes a record with key ```hello``` and value ```1```. To improve the readability of the semantics table you can assume that all records are processed in timestamp order.
 
-**流聚合的语义示例：**```KGroupedStream```→```KTable```示例如下所示。流和表最初是空的。粗体字用于“KTable```聚合```”列以突出显示更改的状态。诸如```(hello，1)```之类的条目表示具有键```hello```和值```1```的消息。为了提高语义表的可读性，您可以假设所有消息都按时间戳顺序处理。
+**流聚合的语义示例：** ```KGroupedStream```→```KTable```示例如下所示。流和表最初是空的。粗体字用于“KTable```聚合```”列以突出显示更改的状态。诸如```(hello，1)```之类的条目表示具有键```hello```和值```1```的消息。为了提高语义表的可读性，您可以假设所有消息都按时间戳顺序处理。
 
 ```java
 // Key: word, value: count
@@ -1570,7 +1569,7 @@ KTable<String, Integer> aggregated = groupedStream.aggregate(
 
 **Example of semantics for table aggregations:** A ```KGroupedTable``` → ```KTable``` example is shown below. The tables are initially empty. Bold font is used in the column for “KTable ```aggregated```” to highlight changed state. An entry such as ```(hello, 1)``` denotes a record with key ```hello``` and value ```1```. To improve the readability of the semantics table you can assume that all records are processed in timestamp order.
 
-**表聚合的语义示例：**```KGroupedTable```→```KTable```示例如下所示。表最初是空的。粗体字用于“KTable```聚合```”列以突出显示更改的状态。诸如```(hello，1)```之类的条目表示具有键```hello```和值```1```的消息。为了提高语义表的可读性，您可以假设所有消息都按时间戳顺序处理。
+**表聚合的语义示例：** ```KGroupedTable```→```KTable```示例如下所示。表最初是空的。粗体字用于“KTable```聚合```”列以突出显示更改的状态。诸如```(hello，1)```之类的条目表示具有键```hello```和值```1```的消息。为了提高语义表的可读性，您可以假设所有消息都按时间戳顺序处理。
 
 ```java
 // Key: username, value: user region (abbreviated to "E" for "Europe", "A" for "Asia")
@@ -1779,9 +1778,10 @@ The requirements for data co-partitioning are:
 
 * The input topics of the join (left side and right side) must have the **same number of partitions.**
 
-* 连接的输入主题（左侧和右侧）必须具有**相同数量的分区**。
-
 * All applications that write to the input topics must have the **same partitioning strategy** so that records with the same key are delivered to same partition number. In other words, the keyspace of the input data must be distributed across partitions in the same manner. This means that, for example, applications that use Kafka’s [Java Producer API](http://kafka.apache.org/11/documentation/clients/index.html#kafka-clients) must use the same partitioner (cf. the producer setting ```"partitioner.class"``` aka ```ProducerConfig.PARTITIONER_CLASS_CONFIG```), and applications that use the Kafka’s Streams API must use the same ```StreamPartitioner``` for operations such as ```KStream#to()```. The good news is that, if you happen to use the default partitioner-related settings across all applications, you do not need to worry about the partitioning strategy.
+
+
+* 连接的输入主题（左侧和右侧）必须具有**相同数量的分区**。
 
 * 所有写入输入主题的应用程序必须具有**相同的分区策略**，以便将具有相同键的消息传送到相同的分区号。换句话说，输入数据的键空间必须以相同的方式分布在分区中。这意味着，例如，使用Kafka的[Java Producer API](../../../clients.md)的应用程序必须使用相同的分区程序（参见生产者设置中的```"partitioner.class"```，也就是```ProducerConfig.PARTITIONER_CLASS_CONFIG```），而使用Kafka的Streams API的应用程序必须使用相同的```StreamPartitioner```诸如```KStream＃to()```之类的操作。好消息是，如果您碰巧在所有应用程序中使用默认的与分区相关的设置，则无需担心分区策略。
 
@@ -1807,35 +1807,34 @@ The only exception are [KStream-GlobalKTable joins](http://kafka.apache.org/11/d
 
 1. Identify the input KStream/KTable in the join whose underlying Kafka topic has the smaller number of partitions. Let’s call this stream/table “SMALLER”, and the other side of the join “LARGER”. To learn about the number of partitions of a Kafka topic you can use, for example, the CLI tool ```bin/kafka-topics``` with the ```--describe``` option.
 
-1. 识别连接中输入的KStream/KTable，其底层Kafka主题的分区数量较少。我们把这个流/表称为“SMALLER”，相反的，将分区数量较多的连接称为“LARGER”。要了解Kafka主题的分区数量，可以使用CLI工具`bin/kafka-topics`和`--describe`选项。
-
 2. Pre-create a new Kafka topic for “SMALLER” that has the same number of partitions as “LARGER”. Let’s call this new topic “repartitioned-topic-for-smaller”. Typically, you’d use the CLI tool ```bin/kafka-topics``` with the ```--create``` option for this.
-
-2. 为“SMALLER”预先创建一个与“LARGER”的分区数相同的新Kafka主题。让我们称之为“repartitioned-topic-for-smaller”新主题。通常情况下，你可以使用CLI工具`bin/kafka-topics`和`--create`选项。
-
-3. Within your application, re-write the data of “SMALLER” into the new Kafka topic. You must ensure that, when writing the data with ```to``` or ```through```, the same partitioner is used as for “LARGER”.
 
 3. 在您的应用程序中，将“SMALLER”的数据重新写入新的Kafka主题。您必须确保在使用```to```或```through```写入数据时使用与“LARGER”相同的分区程序。
 
     * If “SMALLER” is a KStream: ```KStream#to("repartitioned-topic-for-smaller")```.
     * If “SMALLER” is a KTable: ```KTable#to("repartitioned-topic-for-smaller")```.
 
-
-    * 如果“SMALLER”是KStream：`KStream#to("repartitioned-topic-for-smaller")`。
-    * 如果“SMALLER”是KTable：`KTable＃#o("repartitioned-topic-for-smaller")`。
-
 4. Within your application, re-read the data in “repartitioned-topic-for-smaller” into a new KStream/KTable.
-
-4. 在您的应用程序中，重新读取“repartitioned-topic-for-smaller”中的数据到新的KStream/KTable中。
 
     * If “SMALLER” is a KStream: ```StreamsBuilder#stream("repartitioned-topic-for-smaller")```.
     * If “SMALLER” is a KTable: ```StreamsBuilder#table("repartitioned-topic-for-smaller")```.
 
+5. Within your application, perform the join between “LARGER” and the new stream/table.
+
+
+1. 识别连接中输入的KStream/KTable，其底层Kafka主题的分区数量较少。我们把这个流/表称为“SMALLER”，相反的，将分区数量较多的连接称为“LARGER”。要了解Kafka主题的分区数量，可以使用CLI工具`bin/kafka-topics`和`--describe`选项。
+
+2. 为“SMALLER”预先创建一个与“LARGER”的分区数相同的新Kafka主题。让我们称之为“repartitioned-topic-for-smaller”新主题。通常情况下，你可以使用CLI工具`bin/kafka-topics`和`--create`选项。
+
+3. Within your application, re-write the data of “SMALLER” into the new Kafka topic. You must ensure that, when writing the data with ```to``` or ```through```, the same partitioner is used as for “LARGER”.
+
+    * 如果“SMALLER”是KStream：`KStream#to("repartitioned-topic-for-smaller")`。
+    * 如果“SMALLER”是KTable：`KTable＃#o("repartitioned-topic-for-smaller")`。
+
+4. 在您的应用程序中，重新读取“repartitioned-topic-for-smaller”中的数据到新的KStream/KTable中。
 
     * 如果“SMALLER”是KStream：`StreamsBuilder#stream("repartitioned-topic-for-smaller")`。
     * 如果“SMALLER”是KTable：`StreamsBuilder#table("repartitioned-topic-for-smaller")`。
-
-5. Within your application, perform the join between “LARGER” and the new stream/table.
 
 5. 在你的应用程序中，执行“LARGER”和新的流/表之间的连接。
 
@@ -1923,13 +1922,14 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and *window-based*, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
 
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
-
                     * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
+
+
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * 具有`null`键或`null`值的输入消息将被忽略，并且不会触发连接操作。
 
@@ -1994,19 +1994,20 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 详细行为：
 
-                * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and *window-based*, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
-
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
+                * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and *window-based*, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.           
 
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
 
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
-
                     * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
 
-                    * 具有`null`键或`null`值的输入消息将被忽略，并且不会触发连接操作。
-
                 * For each input record on the left side that does not have any match on the right side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)`; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the LEFT JOIN column.
+
+
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
+
+                    * 具有`null`键或`null`值的输入消息将被忽略，并且不会触发连接操作。
 
                 * 对于左侧没有任何匹配的每个输入消息，`ValueJoiner`将调用`ValueJoiner#apply(leftRecord.value, null)`；这解释了下表中的timestamp = 3的行，其中列出了LEFT JOIN列中的`[A, null]`。
 
@@ -2073,17 +2074,18 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`, and *window-based*, i.e. two input records are joined if and only if their timestamps are “close” to each other as defined by the user-supplied `JoinWindows`, i.e. the window defines an additional join predicate over the record timestamps.
 
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义的`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
-
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * Input records with a `null` key or a `null` value are ignored and do not trigger the join.
 
-                    * 具有`null`键或`null`值的输入消息将被忽略，并且不会触发连接操作。
-
                 * For each input record on one side that does not have any match on the other side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)` or `ValueJoiner#apply(null, rightRecord.value)`, respectively; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the OUTER JOIN column (unlike LEFT JOIN, `[null, x]` is possible, too, but no such example is shown in the table).
+
+
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`和*基于窗口*的连接条件，即两个输入消息被连接，当且仅当它们的时间戳彼此“接近”时，由用户定义的`JoinWindows`，即窗口在消息时间戳上定义一个额外的连接条件。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
+
+                    * 具有`null`键或`null`值的输入消息将被忽略，并且不会触发连接操作。
 
                 * 对于每一个没有任何匹配的输入消息，`ValueJoiner`将分别通过`ValueJoiner#apply(leftRecord.value, null)`或`ValueJoiner#apply(null, rightRecord.value)`来调用；这解释了下表中的timestamp = 3的行，它在OUTER JOIN列中列出了`[A, null]`（不同于LEFT JOIN，`[null, x]`也是可能的，但表中没有显示这样的示例）。
 
@@ -2168,7 +2170,7 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
-                **数据必须共同分区：** 双方的输入数据必须共同分区。
+                **数据必须共同分区：**双方的输入数据必须共同分区。
 
                 ```java
                 KTable<String, Long> left = ...;
@@ -2195,16 +2197,16 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
-
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * Input records with a `null` key are ignored and do not trigger the join.
 
                     * Input records with a `null` value are interpreted as *tombstones* for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join. When an input tombstone is received, then an output tombstone is forwarded directly to the join result KTable if required (i.e. only if the corresponding key actually exists already in the join result KTable).
 
+
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * 带有`null`键的输入消息将被忽略，不会触发连接操作。
 
@@ -2223,7 +2225,6 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
                 Performs a LEFT JOIN of this table with another table. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#leftJoin-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
                 与另一个表执行此表的LEFT JOIN操作。[（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KTable.html#leftJoin-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
-
 
                 **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
@@ -2412,7 +2413,7 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 Performs an INNER JOIN of this stream with the table, effectively doing a table lookup. [(details)](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-)
 
-                对该表执行此流的INNER JOIN操作，从而有效地进行表查找。[（细节）]((http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-))
+                对该表执行此流的INNER JOIN操作，从而有效地进行表查找。([（细节）](http://kafka.apache.org/11/javadoc/org/apache/kafka/streams/kstream/KStream.html#join-org.apache.kafka.streams.kstream.KTable-org.apache.kafka.streams.kstream.ValueJoiner-))
 
                 **Data must be co-partitioned:** The input data for both sides must be [co-partitioned](http://kafka.apache.org/11/documentation/streams/developer-guide/dsl-api.html#streams-developer-guide-dsl-joins-co-partitioning).
 
@@ -2456,11 +2457,7 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
-
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
                 
@@ -2468,6 +2465,10 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
                 
                     * Input records for the table with a `null` value are interpreted as *tombstones* for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
 
+
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * 只有左侧（流）的输入消息触发连接。右侧（表）的输入消息仅更新内部右侧连接状态。
                     
@@ -2531,11 +2532,7 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is *key-based*, i.e. with the join predicate `leftRecord.key == rightRecord.key`.
 
-                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
-
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
 
                     * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
 
@@ -2544,12 +2541,16 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
                     * Input records for the table with a `null` value are interpreted as *tombstones* for the corresponding key, which indicate the deletion of the key from the table. Tombstones do not trigger the join.
 
 
+                * 连接是*基于键*的，即连接条件为`leftRecord.key == rightRecord.key`。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以连接输出消息。
+
                     * 只有左侧（流）的输入消息能触发连接操作。右侧（表格）的输入消息仅更新内部右侧连接状态。
 
                     * 具有`null`键或`null`值的流的输入消息将被忽略，并且不会触发连接操作。
 
                     * 具有`null`值的表的输入消息被解释为相应键的*删除逻辑*（tombstones），其指示从表中删除键。删除逻辑不会触发连接操作。
-
+                    
                 For each input record on the left side that does not have any match on the right side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)`; this explains the row with timestamp=3 in the table below, which lists `[A, null]` in the LEFT JOIN column.
 
                 对于每个左侧没有任何匹配的输入消息，`ValueJoiner`将调用`ValueJoiner#apply(leftRecord.value, null)`;这解释了下表中的timestamp = 3的行，其中列出了LEFT JOIN列中的`[A, null]`。
@@ -2766,25 +2767,26 @@ KeyValue<K, JV> joinOutputRecord = KeyValue.pair(
 
                 * The join is indirectly *key-based*, i.e. with the join predicate `KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key`.
 
-                * 这个连接是间接*基于键*的，即连接条件为`KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key`。
-
                 * The join will be triggered under the conditions listed below whenever new input is received. When it is triggered, the user-supplied `ValueJoiner` will be called to produce join output records.
-
-                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以产生连接输出消息。
 
                     * Only input records for the left side (stream) trigger the join. Input records for the right side (table) update only the internal right-side join state.
 
-                    * 只有左侧（流）的输入消息触发连接操作。右侧（表）的输入消息仅更新内部右侧连接状态。
-                
                     * Input records for the stream with a `null` key or a `null` value are ignored and do not trigger the join.
 
-                    * 具有`null`键或`null`值的流的输入消息将被忽略，并且不会触发连接。
-                
                     * Input records for the table with a `null` value are interpreted as *tombstones*, which indicate the deletion of a record key from the table. Tombstones do not trigger the join.
 
-                    * 具有`null`值的表的输入消息被解释为*删除逻辑*（tombstones），其指示从表中删除消息键。删除逻辑不会触发连接操作。
-
                 * For each input record on the left side that does not have any match on the right side, the `ValueJoiner` will be called with `ValueJoiner#apply(leftRecord.value, null)`.
+
+
+                * 这个连接是间接*基于键*的，即连接条件为`KeyValueMapper#apply(leftRecord.key, leftRecord.value) == rightRecord.key`。
+
+                * 每当收到新的输入时，连接将在下面列出的条件下触发。当它被触发时，用户提供的`ValueJoiner`将被调用以产生连接输出消息。
+
+                    * 只有左侧（流）的输入消息触发连接操作。右侧（表）的输入消息仅更新内部右侧连接状态。
+
+                    * 具有`null`键或`null`值的流的输入消息将被忽略，并且不会触发连接。
+
+                    * 具有`null`值的表的输入消息被解释为*删除逻辑*（tombstones），其指示从表中删除消息键。删除逻辑不会触发连接操作。
 
                 * 对于右侧没有任何匹配的在左侧输入的消息，`ValueJoiner`将调用`ValueJoiner#apply(leftRecord.value, null)`。
 
@@ -2834,7 +2836,7 @@ Window name | Behavior | Short description
 
 ### 翻转时间窗口
 
-Tumbling time windows are a special case of hopping time windows and, like the latter, are windows based on time intervals. They model fixed-size, non-overlapping, gap-less windows. A tumbling window is defined by a single property: the window’s size. A tumbling window is a hopping window whose window size is equal to its advance interval. Since tumbling windows never overlap, a data record will belong to one and only one window.
+Tumbling time windows are a special case of hopping time windows and, like the latter, are windows based on time intervals. They model fixed-size, non-overlapping, gap-less windows. A tumbling window is defined by a single property: the window’s *size*. A tumbling window is a hopping window whose window size is equal to its advance interval. Since tumbling windows never overlap, a data record will belong to one and only one window.
 
 翻转时间窗口是跳跃时间窗口的特例，并且像后者一样，是基于时间间隔的窗口。他们基于固定大小，不重叠，无间隙的窗口。翻转窗口由单个属性定义：窗口的*大小*。翻转窗口是窗口大小等于其提前间隔的跳跃窗口。由于翻转窗口不会重叠，因此消息数据将属于一个且仅属于一个窗口。
 
@@ -2846,7 +2848,7 @@ This diagram shows windowing a stream of data records with tumbling windows. Win
 
 Tumbling time windows are *aligned to the epoch*, with the lower interval bound being inclusive and the upper bound being exclusive. “Aligned to the epoch” means that the first window starts at timestamp zero. For example, tumbling windows with a size of 5000ms have predictable window boundaries ```[0;5000),[5000;10000),...``` — and **not** ```[1000;6000),[6000;11000),...``` or even something “random” like ```[1452;6452),[6452;11452),...```.
 
-翻转时间窗口与现实时间对齐，下限是包括在内的，而上限是不包括的。“与现实时间对齐”意味着第一个窗口从时间戳零开始。例如，大小为5000毫米的翻转窗口具有可预测的窗口边界`[0;5000),[5000;10000)...`而不是`[1000;6000),[6000;11000),...`，更有甚者，也不是某种 “随机”的间隔，如`[1452;6452),[6452;11452),...`。
+翻转时间窗口与现实时间对齐，下限是包括在内的，而上限是不包括的。“与现实时间对齐”意味着第一个窗口从时间戳零开始。例如，大小为5000毫米的翻转窗口具有可预测的窗口边界`[0;5000),[5000;10000)...`而**不是**`[1000;6000),[6000;11000),...`，更有甚者，也不是某种 “随机”的间隔，如`[1452;6452),[6452;11452),...`。
 
 The following code defines a tumbling window with a size of 5 minutes:
 
@@ -2871,7 +2873,7 @@ TimeWindows.of(windowSizeMs).advanceBy(windowSizeMs);
 
 Hopping time windows are windows based on time intervals. They model fixed-sized, (possibly) overlapping windows. A hopping window is defined by two properties: the window’s *size* and its *advance interval* (aka “hop”). The advance interval specifies by how much a window moves forward relative to the previous one. For example, you can configure a hopping window with a size 5 minutes and an advance interval of 1 minute. Since hopping windows can overlap – and in general they do – a data record may belong to more than one such windows.
 
-跳跃时间窗口是基于时间间隔的窗口操作。他们基于固定大小，（可能）重叠的窗口。跳跃窗口由两个属性定义：窗口的大小和提前间隔（又称“跳跃”）。提前间隔指定窗口相对于前一个窗口向前移动多少。例如，您可以配置大小为5分钟和提前间隔为1分钟的跳跃窗口。由于跳跃窗口可能重叠 - 并且通常来说它们都会这样 - 消息数据可能属于多个这样的窗口。
+跳跃时间窗口是基于时间间隔的窗口操作。他们基于固定大小，（可能）重叠的窗口。跳跃窗口由两个属性定义：窗口的*大小*和*提前间隔*（又称“跳跃”）。提前间隔指定窗口相对于前一个窗口向前移动多少。例如，您可以配置大小为5分钟和提前间隔为1分钟的跳跃窗口。由于跳跃窗口可能重叠 - 并且通常来说它们都会这样 - 消息数据可能属于多个这样的窗口。
 
 ### Note
 
@@ -2936,9 +2938,10 @@ Session windows are different from the other window types in that:
 
 * all windows are tracked independently across keys – e.g. windows of different keys typically have different start and end times
 
-* 所有窗口都是根据键来独立跟踪的——例如，不同键的窗口通常具有不同的开始和结束时间
-
 * their window sizes sizes vary – even windows for the same key typically have different sizes
+
+
+* 所有窗口都是根据键来独立跟踪的——例如，不同键的窗口通常具有不同的开始和结束时间
 
 * 他们的窗口大小不同——即使是键相同的窗口一般都具有不同的大小
 
@@ -2984,13 +2987,14 @@ Beyond the aforementioned [stateless](http://kafka.apache.org/11/documentation/s
 
 * **Customization:** You need to implement special, customized logic that is not or not yet available in the DSL.
 
-* **自定义：**您需要实现DSL中没有的或尚未提供的特殊自定义逻辑。
-
 * **Combining ease-of-use with full flexibility where it’s needed:** Even though you generally prefer to use the expressiveness of the DSL, there are certain steps in your processing that require more flexibility and tinkering than the DSL provides. For example, only the Processor API provides access to a record’s metadata such as its topic, partition, and offset information. However, you don’t want to switch completely to the Processor API just because of that.
 
-* **在需要时兼顾易用性(ease-of-use)和完全灵活性(full flexibility)**：尽管您通常更喜欢使用DSL的表达能力，但您的处理过程中有一些步骤需要提供比DSL更多的灵活性和纠错性。例如，只有Processor API可以访问消息的元数据，如主题，分区和偏移量信息。然而也正因如此，您不会希望完全切换到Processor API。
-
 * **Migrating from other tools:** You are migrating from other stream processing technologies that provide an imperative API, and migrating some of your legacy code to the Processor API was faster and/or easier than to migrate completely to the DSL right away.
+
+
+* **自定义：**您需要实现DSL中没有的或尚未提供的特殊自定义逻辑。
+
+* **在需要时兼顾易用性(ease-of-use)和完全灵活性(full flexibility)**：尽管您通常更喜欢使用DSL的表达能力，但您的处理过程中有一些步骤需要提供比DSL更多的灵活性和纠错性。例如，只有Processor API可以访问消息的元数据，如主题，分区和偏移量信息。然而也正因如此，您不会希望完全切换到Processor API。
 
 * **从其他工具迁移过来：**您正在从那些提供强制性API的其他流处理技术中迁移过来，并且将一些旧代码迁移到Processor API比立即完全迁移到DSL更快或更容易。
 
@@ -3184,19 +3188,20 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
                 * If you do not specify SerDes explicitly, the default SerDes from the [configuration](http://kafka.apache.org/11/documentation/streams/developer-guide/config-streams.html#streams-developer-guide-configuration) are used.
 
-                * 如果您没有明确指定SerDes，则使用[配置](config-streams.md)中的默认SerDes。
-
                 * You **must specify SerDes explicitly** via the `Produced` class if the key and/or value types of the `KStream` do not match the configured default SerDes.
-
-                * 如果`KStream`的键和、或值的类型与配置的默认SerDes不匹配，则**必须通过`Produced`类明确指定SerDes**。
 
                 * See [Data Types and Serialization](http://kafka.apache.org/11/documentation/streams/developer-guide/datatypes.html#streams-developer-guide-serdes) for information about configuring default SerDes, available SerDes, and implementing your own custom SerDes.
 
-                有关配置默认SerDes，可用SerDes和实现自己的自定义SerDes的信息，请参阅[数据类型和序列化](datatypes.md)。
+
+                * 如果您没有明确指定SerDes，则使用[配置](config-streams.md)中的默认SerDes。
+
+                * 如果`KStream`的键和、或值的类型与配置的默认SerDes不匹配，则**必须通过`Produced`类明确指定SerDes**。
+
+                * 有关配置默认SerDes，可用SerDes和实现自己的自定义SerDes的信息，请参阅[数据类型和序列化](datatypes.md)。
 
                 A variant of `to` exists that enables you to specify how the data is produced by using a `Produced` instance to specify, for example, a `StreamPartitioner` that gives you control over how output records are distributed across the partitions of the output topic.
 
-                `to`的变体，使您可以指定数据的生成方式，方法是使用`Produced`实例指定例如`StreamPartitioner`，以便控制输出消息在输出主题分区间的分布方式。
+                有一种`to`的变体，使您可以指定数据的生成方式，方法是使用`Produced`实例指定例如`StreamPartitioner`，以便控制输出消息在输出主题分区间的分布方式。
 
                 ```java
                 KStream<String, Long> stream = ...;
@@ -3226,17 +3231,18 @@ Any streams and tables may be (continuously) written back to a Kafka topic. As w
 
                 1. If the output topic has a different number of partitions than the stream/table.
 
-                1. 如果输出主题具有与流或表不同的分区数量。
-                
                 2. If the `KStream` was marked for re-partitioning.
-                
-                2. 如果`KStream`被标记为重分区。
 
                 3. If you provide a custom `StreamPartitioner` to explicitly control how to distribute the output records across the partitions of the output topic.
 
-                3.  如果您提供自定义`StreamPartitioner`以明确控制如何在输出主题的分区之间发布输出消息。
-                
                 4. If the key of an output record is `null`.
+
+
+                1. 如果输出主题具有与流或表不同的分区数量。
+
+                2. 如果`KStream`被标记为重分区。
+
+                3. 如果您提供自定义`StreamPartitioner`以明确控制如何在输出主题的分区之间发布输出消息。
 
                 4. 如果输出消息的键为`null`。
 
